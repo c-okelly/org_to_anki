@@ -1,0 +1,368 @@
+# Quick Anki notes
+
+* Put request
+** Puts file / resource at specific URL
+** If file ==> exists => replaces // !exist => creates
+** Request => idempotent
+* Post request
+** Sends data specific URL
+** Expects resource at URL to handle request
+* Idempotent methods 
+** Side effect of N>0 request => same as for single request
+** Last request is the only one that has lasting effect
+* What is a mime type
+** Way of identifying file types on the Internet without extensions
+* What is a java .jar file
+** package file format used => aggregate many java classes
+* What is the difference between .jar and .war files in java
+** .jar => contains libraries / resources / accessories files
+** .war => contain the web application => jsp / html / javascript / other files
+*** Need for web apps
+* What are Java Server pages
+** Tech for controlling => content / appearance of web  pages through use servlet or small programs
+* What is a Java Bean => standard
+** All properties are private
+** A public no arg constructor
+** Implements serializable
+* What is a cross cutting concern
+** Concerns representing functionals for secondary requirements
+** Concern => applicable throughout the application => affect entire application
+** E.g => logging / security / data transfer
+* What is the web.xml file used for in Java web project
+** Config file for web applications in Java
+** Specify => servlets / fileters / listeners / config parameters / error pages / welcome files / security
+* What are CRUD operations
+** Create / Read / Update / Delete
+* What is dependencies shading
+** Renaming package in order to manage when their is a dependencies conflict
+** eg => two third parties use different version of a lib
+* Diff between assume and assert in Java testing
+** Assume => means if not true test will not fail
+** Instead it is ignored
+* What is dirty checking (Javascript only?)
+** Checking if there have been any changes to variables
+** Without checking the variable itself
+* What is Aliasing (computing)
+** Situation => where date location in memory => can be accessed through different symbolic names in the program
+** Modifying via one name => implicitly modifies values associated with other names
+** E.g => buffer overflow
+* Linear type system => programming
+** Each variable is used exactly once
+** System => allows references but not aliases 
+** Allows system to safely deallocate object are use
+* Alias vs references => programming
+** Alias is another name => refers to same thing as first
+** Reference => address of the thing it references
+* Software fault isolation
+** Idea of enforcing process-like boundaries around program modules
+** Without relying on hardware protection
+* What are synchronized methods in Java
+** Not possible => two invocations of synchronized methods on same objects to interleave
+** When synchronized methods exits => automatically established => happens-before relationship with any subsequent invocation 
+* Rust => linear types
+** refers => being able to transfer the ownership of the object to exactly one recipient.
+* How to create string array in Java
+** String name[] = {"Value","Value2"}
+** String name[];
+*** name = new String[] {"Value","Value2"};
+* What is a relative url link
+** Will use http / https of whatever type you are already on
+* What is a javascript polyfill
+** A browser fall back => written in javascript
+** To support functionality in older browser => expected to be supported in newer ones
+* Difference between local and global npm package installation
+** Local install mean is available from node folder
+** Global places the library in shell path and installs man pages
+* How to chain bash command => always run / if / or / in background
+** A; B => always run
+** A && B => run B if A succeeds
+** A || B => run B if A fails
+** A & => run A in background
+* How to add local project as dependencies to gradle
+** Set compile project(":project name") => in build.gradle
+** settings.gradle
+*** include ":project name"
+*** project(":project name).projectDir = new File(settingsDir, "location")
+* Difference between parameter and argument
+** Parameters => variable which is part of method signature
+** Argument is an expression used when calling
+* What is a java factory method
+** A method that will return a specific object based on input parameters
+* What is the grave accent used for in JavaScript
+** Used to create template literals
+** Can contain place holders => indicated by ${var}
+* What is a fat jar
+** Jar => contains all the libraries and classes for the current project
+* What is Turing complete system
+** Can perform any calculation that an other programmable computer is capable of
+** impossible due to storage constraints
+** Roughly => physical machines / programming languages => universal if they had unlimited storage
+* what is git worktree?
+** Gives the abilty to have a differenet working tree attached to the same repo
+* How to set main class for jar file in gradle?
+** Jar { manifest { attributes 'Main-Class': "myClass" } }
+* Command to generate information about a given file?
+** file
+* List process by their network traffic (linux) ?
+** nethogs
+* sort processes by disk write / show how much and how frequecntly programs are writing to disk
+** iotop
+* list process by energy comsumption
+** powertop
+* Split output of program
+** tee
+* print process if of running process
+** pidof
+* kill something
+** kill PIDno
+* kill process matching pattern
+** pkill
+* see directories with depth of one
+** tree -d
+** tree -d -L 1
+* locate file
+** find
+* Good process monitor!
+** htop
+* change root
+** chroot
+* When should you use a static method in Java
+** To call the method without creating the object
+* what is an atomic long in java
+** Use to guarantee that value can be used in concurrent encironment
+** When don't need wrapper class => no autoboxing
+* What is the differance between functioncal and non functional requirements
+** functional requirements describe what a software system should do
+** non functioncal requirements describe how the system will do so
+** e.g func Must be able to send email
+** e.g nonFunc Email must be sent within 5 minutes
+* What are grave accents used for in Javascript?
+** Used to create template values can be insrted into
+** `string text ${expression} string text`
+* What is the diff between ./gradlew and gradle
+** gradlew use the wrapper that has previously been generated
+* what is a java bean
+** Java bean is a standard with the following
+** All properties are private
+** 1. All properties are private
+** 2. A public no args constructor
+** 3. Implements serializable
+* What is the singlton pattern
+** Means an object can only be instanciated once
+* What is require used for in Javascript
+** use to load modules
+* When should you not use the gradle deamon
+** when using a emphemeral environment e.g docker
+* How do you control memory of java program?
+** Use -X to set following options
+** -Xmx for heap size
+** -Xms specify inistal heap size
+** -Xss set thread stack size
+* what does three dots ... stand for in java?
+** Called vargs it is used to pass multiple of the same object to a function.
+** Must be last argument in the function
+* What is the socratic method?
+** A form of cooperative argumetative dialouge between individuals based on aksing and answering ququstions
+** goal is to stimulate critical thinking
+* Meaning of exit 0, exit 1 and exit 2 in a bash script
+** exit 0 successs
+** exit 1 General errors or miscellaneous errors
+** exit 2 misuse of shell builtins
+* How to rebase from a remote master?
+** Add upstream => git remote add upstream name@git
+** git fetch upstream
+** git rebase upstream/nameOfBranch
+* With java executor what is the differance between shutDown and shutDownNow
+** ShutDown tell service not to accept any more new tasks
+** ShutDownNow tells service the not to accpet any more new tasks and to try and cancel running tasks
+* Using steam how are items processed
+** Most item in stream unless statefull will progress through whole chain
+* What is a statefull operation in a stream
+** An operation that upon being reached will processes all the item in the collection before moving on
+** Example is sorted
+* Why is the order in which functions are called on a stream important
+** filtering early allows us to reduce the number of operations performed
+* Can you reuse streams in Java 8
+** no
+* Who do you reuse stream in Java 8
+** Need to create a stream supplier that creates a new stream object everytime called
+* What is collected use for in stream in Java
+** use to insert all the results into a collection
+* How would you find the stream of a stream in Java
+** Collected the result in a averagingInt collector
+* How can optionals be used to handle null checks
+** They are used by allowing us to return a optaional object that can then be checked if present
+* what is the syntactic diff between a function and macro in rust
+** ! - an exclamation mark
+* How to move to remote head after a rebase
+** git reset --hard origin/master
+* how does rust indent
+** with 4 spaces
+* How does rust handle errors in the case of io operations
+** It returns an enum that indicates if the operations was succesfull or not
+** It uses this return result to optionally call a function to handle the error
+** In the case of stdin this is caught be except
+* How are static methods called in rust
+** ::
+* What is the diff between vars and constants in rust
+** const must be annotated
+** const is always immutable
+** const can not be commputed at tun time
+* what is shadowing in rust
+** declaring a variable with the same name as a previosuly declared var
+* What is the differance between using let vs mut in rust
+** let allows us to declare a new var with the same name
+** This allows us to change it's type
+* how to write emails like a clearly. 3 points
+** subjects with keywords
+** Summary to start
+** be economical with language
+* how does gemfire enable service discovery
+** through the use of a locater
+* what does the locater in gemfire do?
+** enable server to discover other server
+** enable clients to locate server hosting data
+** provide server connection load rebalancing
+* What are the elements of the cap therom
+** consistency
+** availability
+** partition tolerance
+* what are the fallacies of distributed computing
+** The network is reliable
+** latency is zero
+** bandwidth is infinite
+** The network is secure
+** topology doesn't change
+** there is one admin
+** transport cost is zero
+** the network is homogenous
+* What is consistency in the CAP therom
+** read is guaranteed to return the most recent write for a given client
+* What is availability in the CAP therom
+** non failing node will return a reasonable response wtihin reasonable amount of time
+* What is partition tolerance in the CAP therom
+** System will continue to function when network partitions occour
+* cp vs ap in CAP
+** CP all node must be in sync before returning data
+** AP Returns most recent data even if cannot verify if it is the latest
+* What is the use case for partitioned regions in gemfire
+** Suitable for large data sets
+** provides data failover and high availability
+** When data is non-static. Changes a lot
+* when to use partitioned regions in gemfire
+** Data set is too large for single vm
+** When data will change a lot over time
+* when to use replciated regions in gemfire
+** read heavy data that is relatively small
+** Data set that will not change significantly over time
+** Not as common. Cannot horizontally scale
+* What is operator overloading
+** Different operators have different implmentations depending on their arguments
+* What is imperative programming
+** Programming paradigm that uses statements that change programs state
+** Focus on telling computer waht to do and how to do it
+** OOP is an extension of imperative programming
+* What is a scalar type in rust
+** integers, floats, boolean and charaters
+* signed vs unsigned int in Rust?
+** Signed ints start is i, unsigned start with u
+* How was the docker filysytem normally work?
+** Docker images are stored as a series of read only layers
+** When The contianter is started it creates a read-write on top.
+** Edits are stored in this topmost layers. This layers hides the udnerlying file.
+** Changes are lost when the images stops running
+* How do you store persistant information with docker
+** Through the use of volumes
+* Simplest way to crate volume in docker?
+** Through => -v /directoryPath
+* What is the name of the docker read-write / read only layer combination
+** union file system
+* Create volume from dockerFile
+** VOLUME
+* How to use -v flag for mount directory from host
+** -v /home/cokelly/path:/file/from/volume
+* How to share data between docker images
+** Use flag => --volumes-from vol-name
+* Create docker containers for data storage? Best practices?
+** Should not be done
+** Should use docker volumes
+* How to set permissions, ownership and default data for docker volume?
+** Must be done before the volume command in the docker file
+** As docker will copy any files from image into volume and set it correctly
+* When are docker volumes mounted to host directories deleted?
+** Never
+* When are normal docker volumes deleted?
+** When the parent container is deleted
+* What is the new syntax for docker volumes
+** Flag => --mount
+* How to make a add replication to partition regions in gemfire?
+** Add the attribute => redundant copies to non zero value
+* How to get client to connect to distributed system in Gemfire?
+** First specify host and port information for system
+** Specify names of regions
+* What is the free lunch theorem in respect to algorithmic performance?
+** if an algorithm performs well on a certain class of problems then it necessarily pays for that with degraded performance on the set of all remaining problems
+* How to write a if statement in Javascript
+** if (statemnet) {then this;}
+* What is temporal construal theory
+** The way in which we construe thing
+** The way in which we construe thing
+** The way we thing about a task eg - is it concrete or abstract
+* How should you think about task to avoid procrastination?
+** Think about think in a concrete rather then abstract way
+* How to deal with will power issues when doing a difficult task
+** Through value affirmation
+** Identifying why we are doing the task
+* Main take away from Tim Pychcel talk on procrastination (4)
+** Many of use have intentions => vague / weak
+** Goal => move from goal intentions => implementation intentions
+** Structuring a task makes it much easier to achieve 
+** Think about the task in an concrete way rather then abstract
+* Phrase for moving from goal to implementation intentions
+** In situation x => will do behaviour y => to archive sub-goal y
+* What is counterfactual thinking
+** Human tendency => create possible alternatives => life events => have already occurred
+* In bash => foo="dog". What happens if echo "$foo" and why?
+** Will output => dog
+** in double quotes the var is resolved
+* In bash => foo="dog". What happens if echo '$foo' and why?
+** Will output => $foo 
+** Output a string only the var is not resolved =>  'cannot be escaped
+* In bash => foo="dog". What happens if echo `$foo` and why?
+** Will output => command not found: dog
+** output linux => execute the contents of the variable and echo the output
+* How to reset a local branch to origin in git
+** git fetch origin
+** git reset --hard origin/master
+* Why can ISO 8601 date strings be compared?
+** Because the lexicographical ordering is identical to the chronological one
+* What is a good definition for a unit test?
+** Smallest amount of testable code
+** Should be fast to run
+* What is a good definition of functional test
+** Bigger then unit test / smaller then component 
+** Normally several classes working together 
+** Can be slow
+* What is a good definition of integration test
+** Testing one or more components working together
+* What is a good definition of component test
+** Testing of a single component
+* What is Aliasing in programming?
+** Situation where data in memory can be accessed throughout the program with differing symbolic names
+* What is little Endian and what is be Endian used for?
+** A format for specifying which byte hold which part of a pattern stored in memory
+* What is big Endian?
+** Big Endian - the most significant byte is placed at byte with lowest address
+* What is little Endian?
+** Little Endian - the least significant byte is placed at byte with lowest address
+** Read right to left
+* How to turn on regex mode on Vimium?
+** \r 
+* What is a linear function?
+** A function that consumes its argument exactly once
+* How to update GitHub forked repository? (4)
+** add the remote
+*** git remote add upstream "name"
+** fetch upstream
+** checkout master
+** git rebase upstream/master
