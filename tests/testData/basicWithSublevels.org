@@ -1,0 +1,4 @@
+* What is the difference between .jar and .war files in java
+** .jar => contains libraries / resources / accessories files
+** .war => contain the web application => jsp / html / javascript / other files
+*** Need for web apps

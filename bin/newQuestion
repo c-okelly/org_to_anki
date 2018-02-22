@@ -1,0 +1,4 @@
+#!/usr/bin/env python3
+
+print("Please type your question")
+# TODO take user input and add anki question to quick notes org file

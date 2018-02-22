@@ -9,5 +9,5 @@ setup(name='org_to_anki',
 		author_email='okellyconor@gmail.com',
 		url='https://github.com/c-okelly/org_to_anki',
 		scripts=['bin/joke'],
-		packages=[],
+		packages=[nosetests, urllib.request],
      )
