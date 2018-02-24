@@ -3,25 +3,47 @@ import json
 from AnkiQuestion import AnkiQuestion
 
 class AnkiConnectBridge:
-    def __init__(self, url="http://127.0.0.1:8765/", defaultDeck = "Org Notes"):
+    def __init__(self, url="http://127.0.0.1:8765/", defaultDeck = "0. Org Notes"):
         self.url = url
         self.defaultDeck = defaultDeck
+        self.currentDecks = []
 
     def uploadNewQuestions(self, questions):
         # Check the default deck exists
-        decks = self._getDeckNames()
-        if tagrgetDeck not in decks:
-            self._createDeck(defaultDeck)
+        self.currentDecks = self._getDeckNames()
+        if self.defaultDeck not in self.currentDecks:
+            self._createDeck(self.defaultDeck)
+
+
+        # Build new questions
+        notes = self._buildNotes(questions)
+        print(notes, "notes")
+
+        # Check decks exist for notes
+        decksNeeded = []
+        for i in questions:
+            if i.deckName not in self.currentDecks:
+                decksNeeded.append(i.deckName)
+        
+        # Create decks
+        print(decksNeeded)
+        for i in decksNeeded:
+            newSubDeck = self.defaultDeck + "::" + i
+            self._createDeck(newSubDeck)
+
 
         # TODO Get all question from that deck and use this to verify questions need to be uploaded
 
-        # Build new questions
         # Insert new question through the api
+        self._makeRequest("addNotes", notes)
+
 
 
     def _makeRequest(self, action, parmeters={}):
 
         payload = self._buildPayload(action, parmeters)
+        print("final payload", payload)
+        #TODO log payloads
         res = requests.post(self.url, payload)
 
         results = None
@@ -41,42 +63,56 @@ class AnkiConnectBridge:
         decks = self._makeRequest("createDeck", {"deck": deckName})
         return decks
 
-    def _buildNote(self, ankiQuestion, deckName=self.defaultDeck):
+    def _buildNotes(self, ankiQuestions):
+
+        notes = []
+        for i in ankiQuestions:
+            notes.append(self._buildNote(i))
+
+        # TODO clean up
+        x = {}
+        x["notes"] = notes
+        return x
+
+    def _buildNote(self, ankiQuestion): 
 
         if isinstance(ankiQuestion, AnkiQuestion):
+            # All decks stored under default deck
+            if ankiQuestion.deckName == "" or ankiQuestion.deckName == None:
+                # TODO log note was built on default deck
+                deckName = self.defaultDeck
+            else:
+                deckName = self.defaultDeck + "::" + ankiQuestion.deckName
+
             # Convert
             note = {"deckName": deckName, "modelName": "Basic"}
-            notes["tags"] = ankiQuestion.tags
+            note["tags"] = ankiQuestion.tags
 
             # Generate fields
             fields = {}
             fields["Front"] = ankiQuestion.question
             fields["Back"] = self._createAnswerString(ankiQuestion.answers)
 
+            note["fields"] = fields
+
         else:
             # TODO log issue
             raise Exception("Object %s is not an instance of AnkiQuestion and cannot be converted to note" % (ankiQuestion))
     
+        return note
+
     def _createAnswerString(self, answers, bulletPoints=False):
         result = ""
         if bulletPoints == False:
             for i in answers:
-                result += i + "\n"
+                result += "* " + i + "<br>" # HTML link break
         else:
+            # Can only can create single level of indetation
+            result += "<ul>"
             for i in answers:
-                result += "* " + i + "\n"
-
-
-    # TODO add card
-    # TODO add cards
-
-        # payload = {
-        #     "action": "notesInfo",
-        #     "version": "5",
-        #     "params": {
-        #         "notes": [1516380924790, 1516381006960]
-        #     }
-        # }
+                result += "<li>" + i + "</li>"
+            result += "</ul>"
+        return result
 
     def _buildPayload(self, action, params={}, version=5):
         payload = {}
@@ -87,10 +123,17 @@ class AnkiConnectBridge:
 
 if __name__ == "__main__":
 
-    print("start")
     b = AnkiConnectBridge()
-    b._getDeckNames()
-    q = AnkiQuestion("Test question")
-    q.addAnswer("First answer")
+    # b._getDeckNames()
+
+    # TestQuestion
+    q = AnkiQuestion("Test question", "Basic")
+    q.addAnswer("First answer edited")
     q.addAnswer("Second answer")
-    print(b._buildNote(q))
+    # a = AnkiQuestion("secon test question", "Basic")
+    # a.addAnswer("First answer")
+    # a.addAnswer("Second answer")
+
+    b.uploadNewQuestions([q])#, a])
+
+

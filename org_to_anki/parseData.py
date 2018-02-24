@@ -1,22 +1,21 @@
 # parse data into expected format
 from AnkiQuestion import AnkiQuestion
+import os
 
-def parse(fileName):
+def parse(filePath):
 
-    file = open(fileName, "r")
+    file = open(filePath, "r")
     data = file.read().split('\n')
-        
-    # Sort data
+    fileName = filePath.split("/")[-1].split(".")[0]
+
     comments, questions, badFormatting = _sortData(data)
     # TODO bad formatting should be correctly logged
-    
-    # Turn raw questions into formated objects
-    questions = _buildQuestions(questions)
-    
-    print(questions)
+
+    questions = _buildQuestions(questions, fileName)
+
     return questions
 
-def _buildQuestions(questions):
+def _buildQuestions(questions, deckName):
 
     # File identifer
     questionLine = 1
@@ -35,7 +34,7 @@ def _buildQuestions(questions):
             if currentQuestion != None:
                 formatedQuestions.append(currentQuestion)
             # Next Question
-            currentQuestion = AnkiQuestion(line)
+            currentQuestion = AnkiQuestion(line, deckName)
         elif noAstrics == answerLine:
             currentQuestion.addAnswer(line)
 
@@ -47,7 +46,7 @@ def _buildQuestions(questions):
 
 def _formatLine(line):
 
-    line = " ".join(line.split(" ")[1:]) # Remove leading astrics
+    line = " ".join(line.split(" ")[1:])  # Remove leading astrics
     line = line.capitalize()
     line = line.strip()
 
@@ -59,7 +58,7 @@ def _sortData(rawFileData):
     questions = []
     badFormatting = []
 
-    for i in range(0,len(rawFileData)):
+    for i in range(0, len(rawFileData)):
         currentItem = rawFileData[i]
         if len(currentItem) > 0:
             firstLetter = currentItem[0]
@@ -72,11 +71,8 @@ def _sortData(rawFileData):
 
     return (comments, questions, badFormatting)
 
-
-                
-
 if __name__ == "__main__":
 
     dir = os.path.dirname(__file__)
-    filename = os.path.join(dir, '../tests/testData/basic.org')
-    parse(fileName)
+    filePath = os.path.join(dir, '../tests/testData/basic.org')
+    parse(filePath)

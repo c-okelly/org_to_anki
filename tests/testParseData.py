@@ -7,7 +7,7 @@ def test_basic_parseData():
     filename = os.path.join(dir, 'testData/basic.org')
     actualQuestion = parseData.parse(filename)[0]
 
-    expectedQuestion = AnkiQuestion.AnkiQuestion("Put request")
+    expectedQuestion = AnkiQuestion.AnkiQuestion("Put request", "basic")
     expectedQuestion.addAnswer("Puts file / resource at specific url")
     expectedQuestion.addAnswer("If file ==> exists => replaces // !exist => creates")
     expectedQuestion.addAnswer("Request => idempotent")
