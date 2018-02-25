@@ -1,12 +1,15 @@
 import os
-from os.path import expanduser
+from org_to_anki import utils
 from org_to_anki.utils import createQuickNotesFile
 
 def quickNote():
 
-    home = expanduser("~")
-    filePath = home + "/orgNotes/quickNotes.org"
-    createQuickNotesFile()
+    # TODO set default save file globally
+    quickNotesFile = "quickNotes.org"
+    filePath = "/"
+
+    utils.createQuickNotesFile()
+
     with open(filePath, "a") as orgFile:
 
         newQuestion = ""

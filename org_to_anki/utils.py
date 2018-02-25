@@ -1,9 +1,17 @@
 import os
-from os.path import expanduser
 
 def createQuickNotesFile():
 
-    home = expanduser("~")
-    directory = home + "/orgNotes"
+    directory = getSavePath()
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+def getSavePath():
+
+    # TODO set a global vars
+    saveDirectory = "orgNotes"
+    saveLocation = "~"
+
+    home = os.path.expanduser(saveLocation)
+    savePath = home + "/" + saveDirectory
+    return savePath
