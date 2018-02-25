@@ -1,5 +1,5 @@
 # parse data into expected format
-from AnkiQuestion import AnkiQuestion
+from org_to_anki import AnkiQuestion
 import os
 
 def parse(filePath):
@@ -34,7 +34,7 @@ def _buildQuestions(questions, deckName):
             if currentQuestion != None:
                 formatedQuestions.append(currentQuestion)
             # Next Question
-            currentQuestion = AnkiQuestion(line, deckName)
+            currentQuestion = AnkiQuestion.AnkiQuestion(line, deckName)
         elif noAstrics == answerLine:
             currentQuestion.addAnswer(line)
 

@@ -1,16 +1,29 @@
 #!/usr/bin/env python3
-
-# Script to parse differnet formated org files and upload them to anki
+# Script to parse differnet formated org files and upload them to Anki
+import sys, os
+from org_to_anki import parseData
+from org_to_anki import ankiConnectBridge
 
 def main():
 	print("starting")
 
-def parse_and_upload_org_file(orgFile):
+def parse_and_upload_org_file(filePath=None):
 
-	print("Start prase of org file")
+	if filePath == None:
+		firstArg = sys.argv[1:2]
+		if len(firstArg) < 1:
+			print("File was not given. Will upload default file.")
+			filePath = "/Users/cokelly/orgNotes/quickNotes.org"
+		else:
+			filePath = filePath[0]
+		
+	questions = parseData.parse(filePath)
+	
+	connector = ankiConnectBridge.AnkiConnectBridge()
+	connector.uploadNewQuestions(questions)
 
 def test():
 	print("starting")
 
 if __name__ == "__main__":
-	print("Start")
+	parse_and_upload_org_file("/Users/cokelly/Desktop/Personal_Dev/org_to_anki/orgNotes/quickNotes.org")

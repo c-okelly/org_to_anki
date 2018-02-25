@@ -1,6 +1,6 @@
 import requests
 import json
-from AnkiQuestion import AnkiQuestion
+from org_to_anki import AnkiQuestion
 
 class AnkiConnectBridge:
     def __init__(self, url="http://127.0.0.1:8765/", defaultDeck = "0. Org Notes"):
@@ -69,14 +69,13 @@ class AnkiConnectBridge:
         for i in ankiQuestions:
             notes.append(self._buildNote(i))
 
-        # TODO clean up
-        x = {}
-        x["notes"] = notes
-        return x
+        finalNotes = {}
+        finalNotes["notes"] = notes
+        return finalNotes
 
     def _buildNote(self, ankiQuestion): 
 
-        if isinstance(ankiQuestion, AnkiQuestion):
+        if isinstance(ankiQuestion, AnkiQuestion.AnkiQuestion):
             # All decks stored under default deck
             if ankiQuestion.deckName == "" or ankiQuestion.deckName == None:
                 # TODO log note was built on default deck
@@ -101,14 +100,14 @@ class AnkiConnectBridge:
     
         return note
 
-    def _createAnswerString(self, answers, bulletPoints=False):
+    def _createAnswerString(self, answers, bulletPoints=True):
         result = ""
         if bulletPoints == False:
             for i in answers:
-                result += "* " + i + "<br>" # HTML link break
+                result += i + "<br>" # HTML link break
         else:
-            # Can only can create single level of indetation
-            result += "<ul>"
+            # Can only can create single level of indentation. Align bulletpoints.
+            result += "<ul style='list-style-position: inside;'>"
             for i in answers:
                 result += "<li>" + i + "</li>"
             result += "</ul>"
@@ -127,13 +126,12 @@ if __name__ == "__main__":
     # b._getDeckNames()
 
     # TestQuestion
-    q = AnkiQuestion("Test question", "Basic")
-    q.addAnswer("First answer edited")
-    q.addAnswer("Second answer")
-    # a = AnkiQuestion("secon test question", "Basic")
+    # q = AnkiQuestion("Test question", "Basic")
+    # q.addAnswer("First answer edited")
+    # q.addAnswer("Second answer")
+    # a = AnkiQuestion("second test question", "Basic")
     # a.addAnswer("First answer")
     # a.addAnswer("Second answer")
-
-    b.uploadNewQuestions([q])#, a])
+    # b.uploadNewQuestions([q])#, a])
 
 
