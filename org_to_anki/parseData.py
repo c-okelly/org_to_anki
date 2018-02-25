@@ -1,5 +1,5 @@
 # parse data into expected format
-from org_to_anki import AnkiQuestion
+import AnkiQuestion
 import os
 
 
@@ -19,6 +19,8 @@ def parse(filePath):
 
 def _buildQuestions(questions, deckName):
 
+    # TODO identify file type from comments or assume is basic
+    # Build properites file
     # File identifer
     questionLine = 1
     answerLine = 2
@@ -29,6 +31,7 @@ def _buildQuestions(questions, deckName):
 
     for line in questions:
         noAstrics = line.split(' ')[0].count('*', 0, 10)
+        # TODO lines of differnt type need different formatting
         line = _formatLine(line)
 
         if noAstrics == questionLine:

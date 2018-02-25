@@ -1,6 +1,7 @@
+# from org_to_anki import AnkiQuestion
+import AnkiQuestion
 import requests
 import json
-from org_to_anki import AnkiQuestion
 
 
 class AnkiConnectBridge:
@@ -8,6 +9,10 @@ class AnkiConnectBridge:
         self.url = url
         self.defaultDeck = defaultDeck
         self.currentDecks = []
+
+    def _testConnection():
+        pass
+
 
     def uploadNewQuestions(self, questions):
         # Check the default deck exists
@@ -39,9 +44,13 @@ class AnkiConnectBridge:
     def _makeRequest(self, action, parmeters={}):
 
         payload = self._buildPayload(action, parmeters)
-        print("final payload", payload)
+        print("payload", payload)
         #TODO log payloads
-        res = requests.post(self.url, payload)
+        try:
+            res = requests.post(self.url, payload)
+        except Exception as e:
+            print(e.message)
+            print("yes")
 
         results = None
         if res.status_code == 200:
@@ -121,7 +130,7 @@ class AnkiConnectBridge:
 if __name__ == "__main__":
 
     b = AnkiConnectBridge()
-    # b._getDeckNames()
+    b._getDeckNames()
 
     # TestQuestion
     # q = AnkiQuestion("Test question", "Basic")

@@ -17,3 +17,10 @@ def getSavePath():
     home = os.path.expanduser(saveLocation)
     savePath = home + "/" + saveDirectory
     return savePath
+
+def getQuickNotesFileName():
+
+    return "quickNotes.org"
+
+if __name__ == "__main__":
+    print(getQuickNotesFileName())

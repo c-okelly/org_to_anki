@@ -1,12 +1,10 @@
 import os
-from org_to_anki import utils
+from . import utils
 
 
 def quickNote():
 
-    # TODO set default save file globally
-    quickNotesFile = "quickNotes.org"
-    filePath = "/"
+    filePath = utils.getSavePath() + "/" + utils.getQuickNotesFileName()
 
     utils.createQuickNotesFile()
 
