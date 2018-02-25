@@ -2,6 +2,7 @@
 from org_to_anki import AnkiQuestion
 import os
 
+
 def parse(filePath):
 
     file = open(filePath, "r")
@@ -14,6 +15,7 @@ def parse(filePath):
     questions = _buildQuestions(questions, fileName)
 
     return questions
+
 
 def _buildQuestions(questions, deckName):
 
@@ -44,6 +46,7 @@ def _buildQuestions(questions, deckName):
 
     return formatedQuestions
 
+
 def _formatLine(line):
 
     line = " ".join(line.split(" ")[1:])  # Remove leading astrics
@@ -51,6 +54,7 @@ def _formatLine(line):
     line = line.strip()
 
     return line
+
 
 def _sortData(rawFileData):
 
@@ -67,12 +71,15 @@ def _sortData(rawFileData):
             elif firstLetter == "*":
                 questions.append(currentItem)
             else:
-                badFormatting.append(["Line starts inccorectlly at line no " + i, currentItem])
+                badFormatting.append(
+                    ["Line starts incorrectly at line no " + i, currentItem])
 
     return (comments, questions, badFormatting)
+
 
 if __name__ == "__main__":
 
     dir = os.path.dirname(__file__)
     filePath = os.path.join(dir, '../tests/testData/basic.org')
-    parse(filePath)
+    questions = parse(filePath)
+    print(questions[0])

@@ -2,8 +2,9 @@ import requests
 import json
 from org_to_anki import AnkiQuestion
 
+
 class AnkiConnectBridge:
-    def __init__(self, url="http://127.0.0.1:8765/", defaultDeck = "0. Org Notes"):
+    def __init__(self, url="http://127.0.0.1:8765/", defaultDeck="0. Org Notes"):
         self.url = url
         self.defaultDeck = defaultDeck
         self.currentDecks = []
@@ -14,7 +15,6 @@ class AnkiConnectBridge:
         if self.defaultDeck not in self.currentDecks:
             self._createDeck(self.defaultDeck)
 
-
         # Build new questions
         notes = self._buildNotes(questions)
         print(notes, "notes")
@@ -24,20 +24,17 @@ class AnkiConnectBridge:
         for i in questions:
             if i.deckName not in self.currentDecks:
                 decksNeeded.append(i.deckName)
-        
+
         # Create decks
         print(decksNeeded)
         for i in decksNeeded:
             newSubDeck = self.defaultDeck + "::" + i
             self._createDeck(newSubDeck)
 
-
         # TODO Get all question from that deck and use this to verify questions need to be uploaded
 
         # Insert new question through the api
         self._makeRequest("addNotes", notes)
-
-
 
     def _makeRequest(self, action, parmeters={}):
 
@@ -54,11 +51,10 @@ class AnkiConnectBridge:
             error = res.status_code
             return error
 
-
     def _getDeckNames(self):
         decks = self._makeRequest("deckNames")
         return decks
-    
+
     def _createDeck(self, deckName):
         decks = self._makeRequest("createDeck", {"deck": deckName})
         return decks
@@ -73,7 +69,7 @@ class AnkiConnectBridge:
         finalNotes["notes"] = notes
         return finalNotes
 
-    def _buildNote(self, ankiQuestion): 
+    def _buildNote(self, ankiQuestion):
 
         if isinstance(ankiQuestion, AnkiQuestion.AnkiQuestion):
             # All decks stored under default deck
@@ -96,15 +92,16 @@ class AnkiConnectBridge:
 
         else:
             # TODO log issue
-            raise Exception("Object %s is not an instance of AnkiQuestion and cannot be converted to note" % (ankiQuestion))
-    
+            raise Exception(
+                "Object %s is not an instance of AnkiQuestion and cannot be converted to note" % (ankiQuestion))
+
         return note
 
     def _createAnswerString(self, answers, bulletPoints=True):
         result = ""
         if bulletPoints == False:
             for i in answers:
-                result += i + "<br>" # HTML link break
+                result += i + "<br>"  # HTML link break
         else:
             # Can only can create single level of indentation. Align bulletpoints.
             result += "<ul style='list-style-position: inside;'>"
@@ -120,6 +117,7 @@ class AnkiConnectBridge:
         payload["version"] = version
         return json.dumps(payload)
 
+
 if __name__ == "__main__":
 
     b = AnkiConnectBridge()
@@ -133,5 +131,3 @@ if __name__ == "__main__":
     # a.addAnswer("First answer")
     # a.addAnswer("Second answer")
     # b.uploadNewQuestions([q])#, a])
-
-

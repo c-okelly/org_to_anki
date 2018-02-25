@@ -1,6 +1,6 @@
 import os
 from org_to_anki import utils
-from org_to_anki.utils import createQuickNotesFile
+
 
 def quickNote():
 
@@ -17,14 +17,16 @@ def quickNote():
         newQuestion += "* " + question + "\n"
 
         answer = ""
-        while True: 
-            answer = input("Enter an answer. Enter blank answer to exit.\n").strip()
+        while True:
+            answer = input(
+                "Enter an answer. Enter blank answer to exit.\n").strip()
             if answer == "":
                 break
             else:
                 newQuestion += "** " + answer + "\n"
 
         orgFile.write(newQuestion)
+
 
 if __name__ == "__main__":
     quickNote()

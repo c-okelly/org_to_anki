@@ -1,10 +1,12 @@
 import os
 
+
 def createQuickNotesFile():
 
     directory = getSavePath()
     if not os.path.exists(directory):
         os.makedirs(directory)
+
 
 def getSavePath():
 
