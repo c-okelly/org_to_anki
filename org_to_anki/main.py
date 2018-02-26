@@ -2,9 +2,9 @@
 # Script to parse differnet formated org files and upload them to Anki
 import sys
 import os
-from os.path import expanduser
-from org_to_anki import parseData
-from org_to_anki import ankiConnectBridge
+
+from . import parseData
+from . import ankiConnectBridge
 
 
 def main():
@@ -17,7 +17,7 @@ def parse_and_upload_org_file(filePath=None):
 		firstArg = sys.argv[1:2]
 		if len(firstArg) < 1:
 			print("File was not given. Will upload default file.")
-			home = expanduser("~")
+			home = os.path.expanduser("~")
 			filePath = home + "/orgNotes/quickNotes.org"
 			# dir = os.path.dirname(__file__)
 			# filePath = os.path.join(dir, '../orgNotes/quickNotes.org')

@@ -1,6 +1,7 @@
 # parse data into expected format
-import AnkiQuestion
 import os
+
+from . import AnkiQuestion
 
 
 def parse(filePath):

@@ -1,8 +1,8 @@
 # from org_to_anki import AnkiQuestion
-import AnkiQuestion
 import requests
 import json
 
+from . import AnkiQuestion
 
 class AnkiConnectBridge:
     def __init__(self, url="http://127.0.0.1:8765/", defaultDeck="0. Org Notes"):
@@ -14,6 +14,7 @@ class AnkiConnectBridge:
         pass
 
 
+
     def uploadNewQuestions(self, questions):
         # Check the default deck exists
         self.currentDecks = self._getDeckNames()
@@ -22,29 +23,30 @@ class AnkiConnectBridge:
 
         # Build new questions
         notes = self._buildNotes(questions)
-        print(notes, "notes")
 
         # Check decks exist for notes
-        decksNeeded = []
+        newDeckPaths = []
         for i in questions:
-            if i.deckName not in self.currentDecks:
-                decksNeeded.append(i.deckName)
+            fullDeckPath = self._getFullDeckPath(i.deckName)
+            if fullDeckPath not in self.currentDecks and fullDeckPath not in newDeckPaths:
+                newDeckPaths.append(fullDeckPath)
 
         # Create decks
-        print(decksNeeded)
-        for i in decksNeeded:
-            newSubDeck = self.defaultDeck + "::" + i
-            self._createDeck(newSubDeck)
+        for deck in newDeckPaths:
+            self._createDeck(deck)
 
         # TODO Get all question from that deck and use this to verify questions need to be uploaded
 
         # Insert new question through the api
         self._makeRequest("addNotes", notes)
 
+    def _getFullDeckPath(self, deckName):
+        return self.defaultDeck + "::" + deckName
+
     def _makeRequest(self, action, parmeters={}):
 
         payload = self._buildPayload(action, parmeters)
-        print("payload", payload)
+        print("Parameters send to Anki", payload)
         #TODO log payloads
         try:
             res = requests.post(self.url, payload)
@@ -55,7 +57,7 @@ class AnkiConnectBridge:
         results = None
         if res.status_code == 200:
             data = json.loads(res.text)
-            return data
+            return data["result"]
         else:
             error = res.status_code
             return error
@@ -86,7 +88,7 @@ class AnkiConnectBridge:
                 # TODO log note was built on default deck
                 deckName = self.defaultDeck
             else:
-                deckName = self.defaultDeck + "::" + ankiQuestion.deckName
+                deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
             # Convert
             note = {"deckName": deckName, "modelName": "Basic"}
