@@ -41,7 +41,7 @@ class AnkiConnectBridge:
         self.currentDecks = self._getDeckNames()
         if self.defaultDeck not in self.currentDecks:
             self._createDeck(self.defaultDeck)
-    
+
     def _buildNewDecksAsRequired(self, newNotes):
         # Check decks exist for notes
         newDeckPaths = []
@@ -123,7 +123,7 @@ class AnkiConnectBridge:
 
         return note
 
-    def _createAnswerString(self, answers, bulletPoints=True):
+    def _createAnswerString(answers, bulletPoints=True):
         result = ""
         if bulletPoints == False:
             for i in answers:
@@ -136,7 +136,7 @@ class AnkiConnectBridge:
             result += "</ul>"
         return result
 
-    def _buildPayload(self, action, params={}, version=5):
+    def _buildPayload(action, params={}, version=5):
         payload = {}
         payload["action"] = action
         payload["params"] = params

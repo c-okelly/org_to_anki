@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # Script to parse differnet formated org files and upload them to Anki
 import sys
-import os
 
 from . import parseData
 from . import ankiConnectBridge
@@ -20,7 +19,7 @@ def parse_and_upload_org_file(filePath=None):
 
 	if "~" in filePath:
 		filePath = filePath.replace("~", config.homePath)
-	
+
 	print("file is ", filePath)
 	_parse_and_upload(filePath)
 

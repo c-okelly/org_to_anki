@@ -6,6 +6,6 @@ class AnkiDeck:
     def __init__(self):
         self.questions = []
         self.subDecks = []
-    
+
     def addDeckQuestion(self):
         pass
