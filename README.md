@@ -1,39 +1,54 @@
 # org_to_anki
 
-Basic Python script to convert org files into Anki question decks.
+Basic Python moudle to convert org files into Anki question decks.
 
-Script works by parseing an org file and then using the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) AnkiConnbct addon for Anki to upload the new questions.
+Will provide a number of command line utilties for uploading org files and add new notes to s
 
-Currenly a work in progress. Aka it doesn't work! (yet)
+Script works by parseing an org file and then using the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) AnkiConnect addon for Anki to upload the new questions.
+
+Currently a work in progress. Aka it doesn't work! (yet)
+Currently depends on a update to connect anki that has yet to be released.
 
 ## Requirements
 
 1. Have Anki installed locally.
-2. Have the following Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159) 
+2. Have the following Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159) installed. 
+    i. Ensure that the plugin is working correctly.
 
 ## Getting started
 
-To install this script.
+To install this module from source.
 
 1. cd to the current module directory
-2. run $"pip3 install -e ."
+2. python3 setup.py install
 
-## Default values
+This will install 2 command line utilities to be used by the user.
 
-1. Default url for ankiConnect is "http://127.0.0.1:8765/"
-2. Default deck where all sub decks will be stored is Org Notes
-3. Default folder for org files is orgNotes/
+### org_to_anki
 
-## Correctly structuring the Org file
+
+
+### ankiq
+
+
+
+## Org file syntax
 
 * Each org file will be converted into its own deck in Anki
-* Basic version will only support a single list of questions per an org file
+* Currently only a single layout type is supported.
 
-* Format is as follows for a basic question
+### Basic org file structure
 
 *Sample answer and question in org file*
  ```org
  * What is the capital of Ireland?
  ** Dublin
  ```
+ 
+## Default values
+
+1. Default url for ankiConnect is "http://127.0.0.1:8765/"
+2. Default deck where all sub decks will be stored is Org Notes
+3. Default folder for org files is ~/orgNotes/quickOrgNotes.org
+
  

@@ -1,11 +1,12 @@
 import os
 
 from . import utils
+from . import config
 
 
 def quickNote():
 
-    filePath = utils.getSavePath() + "/" + utils.getQuickNotesFileName()
+    filePath = config.quickNotesOrgPath
 
     utils.createQuickNotesFile()
 

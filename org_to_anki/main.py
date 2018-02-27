@@ -5,10 +5,7 @@ import os
 
 from . import parseData
 from . import ankiConnectBridge
-
-
-def main():
-	print("starting")
+from . import config
 
 
 def parse_and_upload_org_file(filePath=None):
@@ -17,23 +14,23 @@ def parse_and_upload_org_file(filePath=None):
 		firstArg = sys.argv[1:2]
 		if len(firstArg) < 1:
 			print("File was not given. Will upload default file.")
-			home = os.path.expanduser("~")
-			filePath = home + "/orgNotes/quickNotes.org"
-			# dir = os.path.dirname(__file__)
-			# filePath = os.path.join(dir, '../orgNotes/quickNotes.org')
+			filePath = config.quickNotesOrgPath
 		else:
 			filePath = filePath[0]
 
-	questions = parseData.parse(filePath)
+	if "~" in filePath:
+		filePath = filePath.replace("~", config.homePath)
+	
+	print("file is ", filePath)
+	_parse_and_upload(filePath)
 
+
+def _parse_and_upload(filePath):
+
+	questions = parseData.parse(filePath)
 	connector = ankiConnectBridge.AnkiConnectBridge()
 	connector.uploadNewQuestions(questions)
 
 
-def test():
-	print("starting")
-
-
 if __name__ == "__main__":
-	parse_and_upload_org_file(
-		"/Users/cokelly/Desktop/Personal_Dev/org_to_anki/orgNotes/quickNotes.org")
+	parse_and_upload_org_file()
