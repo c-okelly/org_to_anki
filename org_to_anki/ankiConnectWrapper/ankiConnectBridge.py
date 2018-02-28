@@ -2,8 +2,8 @@
 import requests
 import json
 
-from . import AnkiQuestion
-from . import config
+from ..ankiClasses import AnkiQuestion
+from .. import config
 
 class AnkiConnectBridge:
     def __init__(self, url=config.defaultAnkiConnectAddress, defaultDeck=config.defaultDeck):

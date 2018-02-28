@@ -1,10 +1,12 @@
-from org_to_anki import parseData, AnkiQuestion
-import os
+import sys
+sys.path.append('../org_to_anki')
+
+from org_to_anki.org_parser import parseData
+from org_to_anki.ankiClasses import AnkiQuestion
 
 def test_basic_parseData():
 
-    dir = os.path.dirname(__file__)
-    filename = os.path.join(dir, 'testData/basic.org')
+    filename = "tests/testData/basic.org"
     actualQuestion = parseData.parse(filename)[0]
 
     expectedQuestion = AnkiQuestion.AnkiQuestion("Put request", "basic")

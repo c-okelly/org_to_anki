@@ -2,8 +2,8 @@
 # Script to parse differnet formated org files and upload them to Anki
 import sys
 
-from . import parseData
-from . import ankiConnectBridge
+from .org_parser import parseData
+from .ankiConnectWrapper import ankiConnectBridge
 from . import config
 
 
