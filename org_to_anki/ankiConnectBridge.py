@@ -123,7 +123,7 @@ class AnkiConnectBridge:
 
         return note
 
-    def _createAnswerString(answers, bulletPoints=True):
+    def _createAnswerString(self, answers, bulletPoints=True):
         result = ""
         if bulletPoints == False:
             for i in answers:
@@ -136,11 +136,12 @@ class AnkiConnectBridge:
             result += "</ul>"
         return result
 
-    def _buildPayload(action, params={}, version=5):
+    def _buildPayload(self, action, params={}, version=5):
         payload = {}
         payload["action"] = action
         payload["params"] = params
         payload["version"] = version
+        print(payload)
         return json.dumps(payload)
 
 

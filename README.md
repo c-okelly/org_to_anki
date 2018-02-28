@@ -2,7 +2,7 @@
 
 Basic Python moudle to convert org files into Anki question decks.
 
-Will provide a number of command line utilties for uploading org files and add new notes to s
+Will provide a number of command line utilties for uploading org files and add new notes to a preset org file.
 
 Script works by parseing an org file and then using the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) AnkiConnect addon for Anki to upload the new questions.
 
