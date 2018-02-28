@@ -1,6 +1,6 @@
 # org_to_anki
 
-https://travis-ci.org/c-okelly/org_to_anki.svg?branch=master
+[![Build Status](https://travis-ci.org/c-okelly/org_to_anki.svg?branch=master)](https://travis-ci.org/c-okelly/org_to_anki)
 
 Basic Python moudle to convert org files into Anki question decks.
 
