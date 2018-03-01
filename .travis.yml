@@ -11,6 +11,9 @@ python:
 install:
   - python setup.py install
   - pip install coverage
+  - pip install codecov
 # command to run tests
 script:
   - nosetests -v --with-coverage --cover-tests
+after_success:
+  - codecov
