@@ -2,16 +2,9 @@ import os
 from . import config
 
 
-def createQuickNotesFile():
+def createQuickNotesFile(directory=None):
+    if directory == None:
+        directory = config.quickNotesDirectory
 
-    directory = config.quickNotesDirectory
     if not os.path.exists(directory):
         os.makedirs(directory)
-
-
-def getQuickNotesFileName():
-
-    return "quickNotes.org"
-
-if __name__ == "__main__":
-    print(getQuickNotesFileName())
