@@ -2,6 +2,7 @@
 *.egg-info
 *.pyc
 .vscode/
+.coverage
 files.txt
 build/
 dist/
