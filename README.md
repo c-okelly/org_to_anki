@@ -26,6 +26,8 @@ To install this module from source.
 
 This will install 2 command line utilities to be used by the user as follows.
 
+## Comannd line functions
+
 ### org_to_anki
 
 ```bash
