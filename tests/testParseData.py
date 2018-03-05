@@ -15,3 +15,32 @@ def test_basic_parseData():
     expectedQuestion.addAnswer("Request => idempotent")
 
     assert actualQuestion == expectedQuestion
+
+
+def test_format_file():
+    filename = "tests/testData/basic.org"
+    data = parseData._formatFile(filename)
+
+    assert(len(data) == 6)
+
+
+def test_sort_data():
+
+    lines = """#Comment 1
+    # Indented comment 2
+
+* line 1
+** line 2
+badlyformated line
+""".split("\n")
+
+    assert(len(lines) == 7)
+    comments, questions, badFormatting = parseData._sortData(lines)
+
+    assert(len(comments) == 2)
+    assert(len(questions) == 2)
+    assert(len(badFormatting) == 1)
+
+def test_build_questions():
+    pass
+    #TODO This should work for the basic org file first

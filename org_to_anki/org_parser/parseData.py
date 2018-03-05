@@ -6,8 +6,7 @@ from ..ankiClasses import AnkiQuestion
 
 def parse(filePath):
 
-    file = open(filePath, "r")
-    data = file.read().split('\n')
+    data = _formatFile(filePath)
     fileName = filePath.split("/")[-1].split(".")[0]
 
     comments, questions, badFormatting = _sortData(data)
@@ -16,6 +15,14 @@ def parse(filePath):
     questions = _buildQuestions(questions, fileName)
 
     return questions
+
+
+def _formatFile(filePath):
+
+    file = open(filePath, "r")
+    data = file.read().split('\n')
+
+    return data
 
 
 def _buildQuestions(questions, deckName):
@@ -69,14 +76,14 @@ def _sortData(rawFileData):
     for i in range(0, len(rawFileData)):
         currentItem = rawFileData[i]
         if len(currentItem) > 0:
-            firstLetter = currentItem[0]
+            firstLetter = currentItem.strip()[0]
             if firstLetter == "#":
                 comments.append(currentItem)
             elif firstLetter == "*":
                 questions.append(currentItem)
             else:
                 badFormatting.append(
-                    ["Line starts incorrectly at line no " + i, currentItem])
+                    ["Line starts incorrectly at line no " + str(i) + ". " + currentItem])
 
     return (comments, questions, badFormatting)
 
