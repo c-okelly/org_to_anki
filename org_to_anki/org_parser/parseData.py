@@ -9,10 +9,10 @@ def parse(filePath):
     data = _formatFile(filePath)
     fileName = filePath.split("/")[-1].split(".")[0]
 
-    comments, questions, badFormatting = _sortData(data)
+    comments, content, badFormatting = _sortData(data)
     # TODO bad formatting should be correctly logged
 
-    questions = _buildQuestions(questions, fileName)
+    questions = _buildQuestions(content, fileName)
 
     return questions
 

@@ -35,12 +35,8 @@ badlyformated line
 """.split("\n")
 
     assert(len(lines) == 7)
-    comments, questions, badFormatting = parseData._sortData(lines)
+    comments, content, badFormatting = parseData._sortData(lines)
 
     assert(len(comments) == 2)
-    assert(len(questions) == 2)
+    assert(len(content) == 2)
     assert(len(badFormatting) == 1)
-
-def test_build_questions():
-    pass
-    #TODO This should work for the basic org file first
