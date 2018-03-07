@@ -1,19 +1,18 @@
-# from org_to_anki import AnkiQuestion
-import requests
-import json
-
+from .AnkiConnectorUtils import AnkiConnectorUtils
 from ..ankiClasses import AnkiQuestion
 from .. import config
 
-class AnkiConnectBridge:
+class AnkiConnector:
+
     def __init__(self, url=config.defaultAnkiConnectAddress, defaultDeck=config.defaultDeck):
-        self.url = url
+        self.url = url #TODO remove
         self.defaultDeck = defaultDeck
         self.currentDecks = []
+        self.connector = AnkiConnectorUtils(self.url)
 
     def uploadNewQuestions(self, questions):
 
-        if self._testConnection() != True:
+        if self.connector.testConnection() != True:
             print("Failed to connect to Anki Connect. Ensure Anki is open and AnkiConnect is installed")
             return False
 
@@ -26,21 +25,7 @@ class AnkiConnectBridge:
         # self._removeAlreadyExistingQuestions()
 
         # Insert new question through the api
-        self._makeRequest("addNotes", notes)
-
-    def _testConnection(self):
-        try:
-            req = requests.post(self.url, data={})
-            #TODO log status code
-            return req.status_code == 200
-        except requests.exceptions.RequestException:
-            #TODO log excpetion
-            return False
-
-    def _checkForDefaultDeck(self):
-        self.currentDecks = self._getDeckNames()
-        if self.defaultDeck not in self.currentDecks:
-            self._createDeck(self.defaultDeck)
+        self.connector.uploadNotes(notes)
 
     def _buildNewDecksAsRequired(self, newNotes):
         # Check decks exist for notes
@@ -58,32 +43,10 @@ class AnkiConnectBridge:
     def _getFullDeckPath(self, deckName):
         return self.defaultDeck + "::" + deckName
 
-    def _makeRequest(self, action, parmeters={}):
-
-        payload = self._buildPayload(action, parmeters)
-        print("Parameters send to Anki", payload)
-        #TODO log payloads
-        try:
-            res = requests.post(self.url, payload)
-        except Exception as e:
-            print(e.message)
-            print("An error has occoured make the request.")
-
-        if res.status_code == 200:
-            data = json.loads(res.text)
-            return data["result"]
-        else:
-            error = res.status_code
-            return error
-
-    def _getDeckNames(self):
-        decks = self._makeRequest("deckNames")
-        return decks
-
-    def _createDeck(self, deckName):
-        decks = self._makeRequest("createDeck", {"deck": deckName})
-        print('return', decks)
-        return decks
+    def _checkForDefaultDeck(self):
+        self.currentDecks = self.connector.getDeckNames()
+        if self.defaultDeck not in self.currentDecks:
+            self._createDeck(self.defaultDeck)
 
     def _buildNotes(self, ankiQuestions):
 
@@ -135,14 +98,6 @@ class AnkiConnectBridge:
                 result += "<li>" + i + "</li>"
             result += "</ul>"
         return result
-
-    def _buildPayload(self, action, params={}, version=5):
-        payload = {}
-        payload["action"] = action
-        payload["params"] = params
-        payload["version"] = version
-        print(payload)
-        return json.dumps(payload)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 import sys
 
 from .org_parser import parseData
-from .ankiConnectWrapper import ankiConnectBridge
+from .ankiConnectWrapper import AnkiConnector 
 from . import config
 
 
@@ -27,7 +27,7 @@ def parse_and_upload_org_file(filePath=None):
 def _parse_and_upload(filePath):
 
 	questions = parseData.parse(filePath)
-	connector = ankiConnectBridge.AnkiConnectBridge()
+	connector = AnkiConnector.AnkiConnector()
 	connector.uploadNewQuestions(questions)
 
 

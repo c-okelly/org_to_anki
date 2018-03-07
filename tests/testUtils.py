@@ -5,7 +5,7 @@ import os
 from org_to_anki import config
 from org_to_anki.utils import createQuickNotesFile
 
-def testCreateFile():
+def test_Create_File():
     dir = os.path.dirname(__file__)
     newFilePath = dir + "/" + "orgNotes"
     assert(os.path.exists(newFilePath) == False)

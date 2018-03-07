@@ -6,7 +6,7 @@ from org_to_anki.quickNote import writeQuickNote
 from org_to_anki.ankiClasses import AnkiQuestion
 from org_to_anki.utils import createQuickNotesFile
 
-def testQuickNoteWriter():
+def test_Quick_Note_Writer():
     dir = os.path.dirname(__file__)
     dirPath = dir + "/" + "orgNotes"
     filePath = dirPath + "/" + "quickOrgNotes.org"
