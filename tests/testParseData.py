@@ -16,6 +16,18 @@ def test_basic_parseData():
 
     assert actualQuestion == expectedQuestion
 
+def test_basic_with_sublevels_parseData():
+
+    filename = "tests/testData/basicWithSublevels.org"
+    actualQuestion = parseData.parse(filename)[0]
+
+    expectedQuestion = AnkiQuestion.AnkiQuestion("What is the difference between .jar and .war files in java", "basicWithSublevels")
+    expectedQuestion.addAnswer(".jar => contains libraries / resources / accessories files")
+    expectedQuestion.addAnswer(".war => contain the web application => jsp / html / javascript / other files")
+    expectedQuestion.addAnswer("* Need for web apps")
+
+    assert actualQuestion == expectedQuestion
+
 
 def test_format_file():
     filename = "tests/testData/basic.org"

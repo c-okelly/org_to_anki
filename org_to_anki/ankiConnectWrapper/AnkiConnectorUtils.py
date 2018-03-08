@@ -8,7 +8,7 @@ class AnkiConnectorUtils:
     def __init__(self, url):
         self.url = url
 
-    def makeRequest(self, action, parmeters={}):
+    def makeRequest(self, action:str, parmeters:dict={} ):
 
         payload = self._buildPayload(action, parmeters)
         print("Parameters send to Anki", payload)
@@ -35,8 +35,8 @@ class AnkiConnectorUtils:
         return decks
 
     def uploadNotes(self, notes):
-        #TODO logical return
-        self.makeRequest("addNotes", notes)
+        result = self.makeRequest("addNotes", notes)
+        return result
 
     def testConnection(self):
         try:
@@ -58,4 +58,9 @@ class AnkiConnectorUtils:
 
 
 if __name__ == "__main__":
-    pass
+    a = AnkiConnectorUtils("http://127.0.0.1:8765/")
+    param =  {"note": {"deckName": "Default", "modelName": "Basic", "fields": { "Front": "front content 4", "Back": "back content"}}}
+
+    result = a.makeRequest("addNote", param)
+    print("Results \n\n")
+    print(result)
