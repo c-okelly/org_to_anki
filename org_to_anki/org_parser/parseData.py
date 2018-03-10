@@ -1,10 +1,10 @@
 # parse data into expected format
 import os
 
-from ..ankiClasses import AnkiQuestion
+from ..ankiClasses import AnkiQuestion, AnkiDeck
 
 
-def parse(filePath):
+def parse(filePath:str) -> ([AnkiDeck]):
 
     data = _formatFile(filePath)
     fileName = filePath.split("/")[-1].split(".")[0]
@@ -17,7 +17,7 @@ def parse(filePath):
     return questions
 
 
-def _formatFile(filePath):
+def _formatFile(filePath:str):
 
     file = open(filePath, "r")
     data = file.read().split('\n')
@@ -25,7 +25,7 @@ def _formatFile(filePath):
     return data
 
 
-def _buildQuestions(questions, deckName):
+def _buildQuestions(questions:[str], deckName:str):
 
     # TODO identify file type from comments or assume is basic
     # Build properites file
@@ -55,11 +55,12 @@ def _buildQuestions(questions, deckName):
         elif noAstrics > answerLine:
             #Remove answer astrics
             line = line.strip().split(" ")
-            # print(line[0][2:], answerLine)
             line[0] = line[0][answerLine:]
             line = " ".join(line)
             currentQuestion.addAnswer(line)
-
+            
+        else:
+            raise Exception("Line incorrectly processed.")
 
     if currentQuestion != None:
         formatedQuestions.append(currentQuestion)
@@ -68,7 +69,7 @@ def _buildQuestions(questions, deckName):
     return formatedQuestions
 
 
-def _formatLine(line):
+def _formatLine(line:str) -> (str):
 
     # line = " ".join(line.split(" ")[1:])  # Remove leading astrics
     line = line.capitalize()
@@ -77,11 +78,9 @@ def _formatLine(line):
     return line
 
 
-def _sortData(rawFileData):
+def _sortData(rawFileData:[str]) -> ([str], [str], [str]):
 
-    comments = []
-    questions = []
-    badFormatting = []
+    comments, questions, badFormatting = [], [], []
 
     for i in range(0, len(rawFileData)):
         currentItem = rawFileData[i]
