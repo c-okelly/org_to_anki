@@ -11,32 +11,41 @@ class AnkiConnectorUtils:
     def makeRequest(self, action:str, parmeters:dict={} ):
 
         payload = self._buildPayload(action, parmeters)
-        print("Parameters send to Anki", payload)
+        print("Parameters sent to Anki", payload)
+        print()
         #TODO log payloads
         try:
             res = requests.post(self.url, payload)
         except Exception as e:
-            print(e.message)
+            print(e)
             print("An error has occoured make the request.")
 
         if res.status_code == 200:
             data = json.loads(res.text)
-            return data["result"]
+            return data
         else:
             error = res.status_code
             return error
 
     def getDeckNames(self):
-        decks = self.makeRequest("deckNames")
-        return decks
+        result = self.makeRequest("deckNames")
+        return self._getResultOrError(result) 
 
     def createDeck(self, deckName):
-        decks = self.makeRequest("createDeck", {"deck": deckName})
-        return decks
+        result = self.makeRequest("createDeck", {"deck": deckName})
+        return self._getResultOrError(result) 
 
     def uploadNotes(self, notes):
         result = self.makeRequest("addNotes", notes)
-        return result
+        return self._getResultOrError(result) 
+
+    def _getResultOrError(self, result):
+        if result.get("error") == None:
+            return result.get("result")
+        else:
+            return result.get("error")
+
+
 
     def testConnection(self):
         try:
@@ -59,8 +68,9 @@ class AnkiConnectorUtils:
 
 if __name__ == "__main__":
     a = AnkiConnectorUtils("http://127.0.0.1:8765/")
-    param =  {"note": {"deckName": "Default", "modelName": "Basic", "fields": { "Front": "front content 4", "Back": "back content"}}}
+    param =  {"note": {"deckName": "Default", "tags": ["yomichan"], "modelName": "Basic", "fields": { "Front": "front content 40", "Back": "back content"}}}
+    param =  {"notes": [{"deckName": "Default", "tags": [], "modelName": "Basic", "fields": { "Front": "front content 20s0", "Back": "back content00100"}}, {"deckName": "Default", "tags": ["yomichan"], "modelName": "Basic", "fields": { "Front": "", "Back": ""}}]}
 
-    result = a.makeRequest("addNote", param)
+    result = a.makeRequest("addNotes", param)
     print("Results \n\n")
     print(result)

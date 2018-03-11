@@ -3,30 +3,38 @@ sys.path.append('../org_to_anki')
 
 from org_to_anki.org_parser import parseData
 from org_to_anki.ankiClasses import AnkiQuestion
+from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 
 def test_basic_parseData():
 
     filename = "tests/testData/basic.org"
-    actualQuestion = parseData.parse(filename)[0]
+    actualDeck = parseData.parse(filename)
 
+    expectedDeck = AnkiDeck("basic")
+    #build Question
     expectedQuestion = AnkiQuestion.AnkiQuestion("Put request", "basic")
     expectedQuestion.addAnswer("Puts file / resource at specific url")
     expectedQuestion.addAnswer("If file ==> exists => replaces // !exist => creates")
     expectedQuestion.addAnswer("Request => idempotent")
 
-    assert actualQuestion == expectedQuestion
+    expectedDeck.addQuestion(expectedQuestion)
+
+    assert actualDeck == expectedDeck
 
 def test_basic_with_sublevels_parseData():
 
     filename = "tests/testData/basicWithSublevels.org"
-    actualQuestion = parseData.parse(filename)[0]
+    actualDeck = parseData.parse(filename)
 
+    expectedDeck = AnkiDeck("basicWithSublevels")
+    #build Question
     expectedQuestion = AnkiQuestion.AnkiQuestion("What is the difference between .jar and .war files in java", "basicWithSublevels")
     expectedQuestion.addAnswer(".jar => contains libraries / resources / accessories files")
     expectedQuestion.addAnswer(".war => contain the web application => jsp / html / javascript / other files")
     expectedQuestion.addAnswer("* Need for web apps")
+    expectedDeck.addQuestion(expectedQuestion)
 
-    assert actualQuestion == expectedQuestion
+    assert actualDeck == expectedDeck
 
 
 def test_format_file():
@@ -52,3 +60,12 @@ badlyformated line
     assert(len(comments) == 2)
     assert(len(content) == 2)
     assert(len(badFormatting) == 1)
+
+
+def test_convert_comments_to_parameters():
+
+    comments = ["#fileType=basic, secondArg=10", "##file=basic"]
+    result = parseData._convertCommentsToParameters(comments)
+    expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic'} 
+    assert(result == expected)
+

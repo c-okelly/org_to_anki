@@ -1,5 +1,6 @@
 from .AnkiConnectorUtils import AnkiConnectorUtils
 from ..ankiClasses import AnkiQuestion
+from ..ankiClasses.AnkiDeck import AnkiDeck
 from .. import config
 
 class AnkiConnector:
@@ -10,16 +11,16 @@ class AnkiConnector:
         self.currentDecks = []
         self.connector = AnkiConnectorUtils(self.url)
 
-    def uploadNewQuestions(self, questions):
+    def uploadNewDeck(self, deck:AnkiDeck):
 
         if self.connector.testConnection() != True:
             print("Failed to connect to Anki Connect. Ensure Anki is open and AnkiConnect is installed")
             return False
 
         self._checkForDefaultDeck()
-        self._buildNewDecksAsRequired(questions)
+        self._buildNewDecksAsRequired(deck.getDeckNames())
         # Build new questions
-        notes = self._buildNotes(questions)
+        notes = self._buildNotes(deck.getQuestions())
 
         # TODO Get all question from that deck and use this to verify questions need to be uploaded
         # self._removeAlreadyExistingQuestions()
@@ -27,17 +28,17 @@ class AnkiConnector:
         # Insert new question through the api
         self.connector.uploadNotes(notes)
 
-    def _buildNewDecksAsRequired(self, newNotes):
+    def _buildNewDecksAsRequired(self, deckNames):
         # Check decks exist for notes
         newDeckPaths = []
-        for i in newNotes:
-            fullDeckPath = self._getFullDeckPath(i.deckName)
+        for i in deckNames:
+            fullDeckPath = self._getFullDeckPath(i)
             if fullDeckPath not in self.currentDecks and fullDeckPath not in newDeckPaths:
                 newDeckPaths.append(fullDeckPath)
 
         # Create decks
         for deck in newDeckPaths:
-            self._createDeck(deck)
+            self.connector.createDeck(deck)
 
 
     def _getFullDeckPath(self, deckName):
@@ -46,7 +47,7 @@ class AnkiConnector:
     def _checkForDefaultDeck(self):
         self.currentDecks = self.connector.getDeckNames()
         if self.defaultDeck not in self.currentDecks:
-            self._createDeck(self.defaultDeck)
+            self.connector.createDeck(self.defaultDeck)
 
     def _buildNotes(self, ankiQuestions):
 
@@ -58,32 +59,25 @@ class AnkiConnector:
         finalNotes["notes"] = notes
         return finalNotes
 
-    def _buildNote(self, ankiQuestion):
+    def _buildNote(self, ankiQuestion:AnkiQuestion):
 
-        if isinstance(ankiQuestion, AnkiQuestion.AnkiQuestion):
-            # All decks stored under default deck
-            if ankiQuestion.deckName == "" or ankiQuestion.deckName == None:
-                # TODO log note was built on default deck
-                deckName = self.defaultDeck
-            else:
-                deckName = self._getFullDeckPath(ankiQuestion.deckName)
-
-            # Convert
-            note = {"deckName": deckName, "modelName": "Basic"}
-            note["tags"] = ankiQuestion.tags
-
-            # Generate fields
-            fields = {}
-            fields["Front"] = ankiQuestion.question
-            fields["Back"] = self._createAnswerString(ankiQuestion.answers)
-
-            note["fields"] = fields
-
+        # All decks stored under default deck
+        if ankiQuestion.deckName == "" or ankiQuestion.deckName == None:
+            # TODO log note was built on default deck
+            deckName = self.defaultDeck
         else:
-            # TODO log issue
-            raise Exception(
-                "Object %s is not an instance of AnkiQuestion and cannot be converted to note" % (ankiQuestion))
+            deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
+        # Convert
+        note = {"deckName": deckName, "modelName": "Basic"}
+        note["tags"] = ankiQuestion.tags
+
+        # Generate fields
+        fields = {}
+        fields["Front"] = ankiQuestion.question
+        fields["Back"] = self._createAnswerString(ankiQuestion.answers)
+
+        note["fields"] = fields
         return note
 
     def _createAnswerString(self, answers, bulletPoints=True):

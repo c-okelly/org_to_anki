@@ -1,7 +1,8 @@
 # parse data into expected format
 import os
 
-from ..ankiClasses import AnkiQuestion, AnkiDeck
+from ..ankiClasses.AnkiQuestion import AnkiQuestion
+from ..ankiClasses.AnkiDeck import AnkiDeck
 
 
 def parse(filePath:str) -> ([AnkiDeck]):
@@ -12,10 +13,12 @@ def parse(filePath:str) -> ([AnkiDeck]):
     comments, content, badFormatting = _sortData(data)
     # TODO bad formatting should be correctly logged
 
-    questions = _buildQuestions(content, fileName)
+    globalParameters = _convertCommentsToParameters(comments)
+    fileType = globalParameters.get("fileType", "basic")
 
-    return questions
+    deck = _buildQuestions(content, fileName, fileType)
 
+    return deck
 
 def _formatFile(filePath:str):
 
@@ -25,16 +28,28 @@ def _formatFile(filePath:str):
     return data
 
 
-def _buildQuestions(questions:[str], deckName:str):
+def _convertCommentsToParameters(comments:[str]):
 
-    # TODO identify file type from comments or assume is basic
-    # Build properites file
-    # File identifer
+    parameters = {}
+    for line in comments:
+        line = line.strip()[line.count("#"):]
+        pairs = line.split(",")
+        for item in pairs:
+            if "=" in item:
+                item = item.strip()
+                parts = item.split("=")
+                parameters[parts[0]] = parts[1]
+
+    return parameters
+
+
+def _buildQuestions(questions:[str], deckName:str, fileType:str='basic'):
+
     questionLine = 1
     answerLine = 2
-    orgType = "basic"
 
-    formatedQuestions = []
+    deck = AnkiDeck(deckName)
+
     currentQuestion = None
 
     for line in questions:
@@ -45,9 +60,10 @@ def _buildQuestions(questions:[str], deckName:str):
             line = " ".join(line.split(" ")[1:])
             # Store old question
             if currentQuestion != None:
-                formatedQuestions.append(currentQuestion)
+                deck.addQuestion(currentQuestion)
             # Next Question
-            currentQuestion = AnkiQuestion.AnkiQuestion(line, deckName)
+            currentQuestion = AnkiQuestion(line, deckName)
+
         elif noAstrics == answerLine:
             line = " ".join(line.split(" ")[1:])
             currentQuestion.addAnswer(line)
@@ -63,15 +79,14 @@ def _buildQuestions(questions:[str], deckName:str):
             raise Exception("Line incorrectly processed.")
 
     if currentQuestion != None:
-        formatedQuestions.append(currentQuestion)
+        deck.addQuestion(currentQuestion)
         currentQuestion = None
 
-    return formatedQuestions
+    return deck 
 
 
 def _formatLine(line:str) -> (str):
 
-    # line = " ".join(line.split(" ")[1:])  # Remove leading astrics
     line = line.capitalize()
     line = line.strip()
 
@@ -99,7 +114,10 @@ def _sortData(rawFileData:[str]) -> ([str], [str], [str]):
 
 if __name__ == "__main__":
 
-    dir = os.path.dirname(__file__)
-    filePath = os.path.join(dir, '../tests/testData/basic.org')
-    questions = parse(filePath)
-    print(questions[0])
+    # dir = os.path.dirname(__file__)
+    # filePath = os.path.join(dir, '../tests/testData/basic.org')
+    # questions = parse(filePath)
+    # print(questions[0])
+
+    x = _convertCommentsToParameters(["#fileType=basic, secondArg=10", "##file=basic"])
+    print(x)

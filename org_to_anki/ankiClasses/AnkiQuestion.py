@@ -1,10 +1,10 @@
 class AnkiQuestion:
 
     def __init__(self, question, deckName):
+        self.deckName = deckName
         self.tags = []
         self.question = question
         self.answers = []
-        self.deckName = deckName
 
     def updateQuestion(self, question):
         self.question = question
@@ -19,7 +19,6 @@ class AnkiQuestion:
         return ("DeckName: %s. Question: %s. \nAsnwers: %s. \nTags: %s") % (self.deckName, self.question, self.answers, self.tags)
 
     def __eq__(self, other):
-        # TODO compare all properties
         if not isinstance(other, AnkiQuestion):
             return False
 
