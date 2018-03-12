@@ -1,11 +1,12 @@
 # parse data into expected format
 import os
 
-from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
-
+from .DeckBuilder import DeckBuilder
 
 def parse(filePath:str) -> ([AnkiDeck]):
+
+    deckBuilder = DeckBuilder()
 
     data = _formatFile(filePath)
     fileName = filePath.split("/")[-1].split(".")[0]
@@ -15,8 +16,9 @@ def parse(filePath:str) -> ([AnkiDeck]):
 
     globalParameters = _convertCommentsToParameters(comments)
     fileType = globalParameters.get("fileType", "basic")
-
-    deck = _buildQuestions(content, fileName, fileType)
+    
+    deck = deckBuilder.buildDeck(content, fileName, fileType)
+    # deck = _buildQuestions(content, fileName, fileType)
 
     return deck
 
@@ -43,54 +45,12 @@ def _convertCommentsToParameters(comments:[str]):
     return parameters
 
 
-def _buildQuestions(questions:[str], deckName:str, fileType:str='basic'):
+# def _formatLine(line:str) -> (str):
 
-    questionLine = 1
-    answerLine = 2
+#     line = line.capitalize()
+#     line = line.strip()
 
-    deck = AnkiDeck(deckName)
-
-    currentQuestion = None
-
-    for line in questions:
-        noAstrics = line.split(' ')[0].count('*', 0, 10)
-        # TODO lines of differnt type need different formatting
-
-        if noAstrics == questionLine:
-            line = " ".join(line.split(" ")[1:])
-            # Store old question
-            if currentQuestion != None:
-                deck.addQuestion(currentQuestion)
-            # Next Question
-            currentQuestion = AnkiQuestion(line, deckName)
-
-        elif noAstrics == answerLine:
-            line = " ".join(line.split(" ")[1:])
-            currentQuestion.addAnswer(line)
-
-        elif noAstrics > answerLine:
-            #Remove answer astrics
-            line = line.strip().split(" ")
-            line[0] = line[0][answerLine:]
-            line = " ".join(line)
-            currentQuestion.addAnswer(line)
-            
-        else:
-            raise Exception("Line incorrectly processed.")
-
-    if currentQuestion != None:
-        deck.addQuestion(currentQuestion)
-        currentQuestion = None
-
-    return deck 
-
-
-def _formatLine(line:str) -> (str):
-
-    line = line.capitalize()
-    line = line.strip()
-
-    return line
+#     return line
 
 
 def _sortData(rawFileData:[str]) -> ([str], [str], [str]):
