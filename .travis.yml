@@ -7,7 +7,7 @@ python:
   - "3.6-dev"  # 3.6 development branch
 # command to install dependencies
 install:
-  - python setup.py install
+  - python setup.py test
   - pip install coverage
   - pip install codecov
 # command to run tests
