@@ -3,10 +3,10 @@ sys.path.append('../org_to_anki')
 import os
 
 from org_to_anki.quickNote import writeQuickNote
-from org_to_anki.ankiClasses import AnkiQuestion
 from org_to_anki.utils import createQuickNotesFile
 
-def test_Quick_Note_Writer():
+
+def testQuickNoteWriter():
     dir = os.path.dirname(__file__)
     dirPath = dir + "/" + "orgNotes"
     filePath = dirPath + "/" + "quickOrgNotes.org"
@@ -18,9 +18,7 @@ def test_Quick_Note_Writer():
     writeQuickNote(q, filePath)
     with open(filePath, "r") as orgFile:
         content = orgFile.read()
-    
+
     assert(q == content)
     os.remove(filePath)
     os.rmdir(dirPath)
-    
-

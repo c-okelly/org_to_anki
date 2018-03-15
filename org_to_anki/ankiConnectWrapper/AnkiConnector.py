@@ -3,18 +3,23 @@ from ..ankiClasses import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .. import config
 
+
 class AnkiConnector:
 
-    def __init__(self, url=config.defaultAnkiConnectAddress, defaultDeck=config.defaultDeck):
-        self.url = url #TODO remove
+    def __init__(
+            self,
+            url=config.defaultAnkiConnectAddress,
+            defaultDeck=config.defaultDeck):
+        self.url = url  # TODO remove
         self.defaultDeck = defaultDeck
         self.currentDecks = []
         self.connector = AnkiConnectorUtils(self.url)
 
-    def uploadNewDeck(self, deck:AnkiDeck):
+    def uploadNewDeck(self, deck: AnkiDeck):
 
         if self.connector.testConnection() != True:
-            print("Failed to connect to Anki Connect. Ensure Anki is open and AnkiConnect is installed")
+            print(
+                "Failed to connect to Anki Connect. Ensure Anki is open and AnkiConnect is installed")
             return False
 
         self._checkForDefaultDeck()
@@ -28,7 +33,7 @@ class AnkiConnector:
         # Insert new question through the api
         self.connector.uploadNotes(notes)
 
-    def _buildNewDecksAsRequired(self, deckNames):
+    def _buildNewDecksAsRequired(self, deckNames: [str]):
         # Check decks exist for notes
         newDeckPaths = []
         for i in deckNames:
@@ -40,8 +45,7 @@ class AnkiConnector:
         for deck in newDeckPaths:
             self.connector.createDeck(deck)
 
-
-    def _getFullDeckPath(self, deckName):
+    def _getFullDeckPath(self, deckName: str):
         return self.defaultDeck + "::" + deckName
 
     def _checkForDefaultDeck(self):
@@ -49,7 +53,7 @@ class AnkiConnector:
         if self.defaultDeck not in self.currentDecks:
             self.connector.createDeck(self.defaultDeck)
 
-    def _buildNotes(self, ankiQuestions):
+    def _buildNotes(self, ankiQuestions: [AnkiQuestion]):
 
         notes = []
         for i in ankiQuestions:
@@ -59,10 +63,10 @@ class AnkiConnector:
         finalNotes["notes"] = notes
         return finalNotes
 
-    def _buildNote(self, ankiQuestion:AnkiQuestion):
+    def _buildNote(self, ankiQuestion: AnkiQuestion):
 
         # All decks stored under default deck
-        if ankiQuestion.deckName == "" or ankiQuestion.deckName == None:
+        if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
             # TODO log note was built on default deck
             deckName = self.defaultDeck
         else:
@@ -80,13 +84,14 @@ class AnkiConnector:
         note["fields"] = fields
         return note
 
-    def _createAnswerString(self, answers, bulletPoints=True):
+    def _createAnswerString(self, answers: [str], bulletPoints: bool=True):
         result = ""
-        if bulletPoints == False:
+        if not bulletPoints:
             for i in answers:
                 result += i + "<br>"  # HTML link break
         else:
-            # Can only can create single level of indentation. Align bulletpoints.
+            # Can only can create single level of indentation. Align
+            # bulletpoints.
             result += "<ul style='list-style-position: inside;'>"
             for i in answers:
                 result += "<li>" + i + "</li>"
@@ -96,8 +101,7 @@ class AnkiConnector:
 
 if __name__ == "__main__":
 
-    b = AnkiConnectBridge()
-    b._getDeckNames()
+    b = AnkiConnector()
 
     # TestQuestion
     # q = AnkiQuestion("Test question", "Basic")

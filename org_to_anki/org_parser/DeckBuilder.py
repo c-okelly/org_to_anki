@@ -2,9 +2,10 @@
 from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
 
+
 class DeckBuilder:
 
-    def buildDeck(self, questions:[str], deckName:str, fileType:str='basic'):
+    def buildDeck(self, questions: [str], deckName: str, fileType: str='basic'):
 
         questionLine = 1
         answerLine = 2
@@ -20,7 +21,7 @@ class DeckBuilder:
             if noAstrics == questionLine:
                 line = " ".join(line.split(" ")[1:])
                 # Store old question
-                if currentQuestion != None:
+                if currentQuestion is not None:
                     deck.addQuestion(currentQuestion)
                 # Next Question
                 currentQuestion = AnkiQuestion(line, deckName)
@@ -30,17 +31,17 @@ class DeckBuilder:
                 currentQuestion.addAnswer(line)
 
             elif noAstrics > answerLine:
-                #Remove answer astrics
+                # Remove answer astrics
                 line = line.strip().split(" ")
                 line[0] = line[0][answerLine:]
                 line = " ".join(line)
                 currentQuestion.addAnswer(line)
-                
+
             else:
                 raise Exception("Line incorrectly processed.")
 
-        if currentQuestion != None:
+        if currentQuestion is not None:
             deck.addQuestion(currentQuestion)
             currentQuestion = None
 
-        return deck 
+        return deck

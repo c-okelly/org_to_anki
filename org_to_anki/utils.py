@@ -3,7 +3,7 @@ from . import config
 
 
 def createQuickNotesFile(directory=None):
-    if directory == None:
+    if directory is None:
         directory = config.quickNotesDirectory
 
     if not os.path.exists(directory):

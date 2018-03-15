@@ -17,14 +17,16 @@ def quickNote():
             break
         else:
             newQuestion += "** " + answer + "\n"
-    
+
     writeQuickNote(newQuestion)
 
-def writeQuickNote(question, filePath = None):
-    if filePath == None:
+
+def writeQuickNote(question, filePath=None):
+    if filePath is None:
         filePath = config.quickNotesOrgPath
     with open(filePath, "a") as orgFile:
         orgFile.write(question)
+
 
 if __name__ == "__main__":
     quickNote()

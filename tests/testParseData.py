@@ -5,46 +5,53 @@ from org_to_anki.org_parser import parseData
 from org_to_anki.ankiClasses import AnkiQuestion
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 
-def test_basic_parseData():
+
+def testBasicParseData():
 
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
 
     expectedDeck = AnkiDeck("basic")
-    #build Question
+    # build Question
     expectedQuestion = AnkiQuestion.AnkiQuestion("Put request", "basic")
     expectedQuestion.addAnswer("Puts file / resource at specific url")
-    expectedQuestion.addAnswer("If file ==> exists => replaces // !exist => creates")
+    expectedQuestion.addAnswer(
+        "If file ==> exists => replaces // !exist => creates")
     expectedQuestion.addAnswer("Request => idempotent")
 
     expectedDeck.addQuestion(expectedQuestion)
 
     assert actualDeck == expectedDeck
 
-def test_basic_with_sublevels_parseData():
+
+def testBasicWithSublevelsParseData():
 
     filename = "tests/testData/basicWithSublevels.org"
     actualDeck = parseData.parse(filename)
 
     expectedDeck = AnkiDeck("basicWithSublevels")
-    #build Question
-    expectedQuestion = AnkiQuestion.AnkiQuestion("What is the difference between .jar and .war files in java", "basicWithSublevels")
-    expectedQuestion.addAnswer(".jar => contains libraries / resources / accessories files")
-    expectedQuestion.addAnswer(".war => contain the web application => jsp / html / javascript / other files")
+    # build Question
+    expectedQuestion = AnkiQuestion.AnkiQuestion(
+        "What is the difference between .jar and .war files in java",
+        "basicWithSublevels")
+    expectedQuestion.addAnswer(
+        ".jar => contains libraries / resources / accessories files")
+    expectedQuestion.addAnswer(
+        ".war => contain the web application => jsp / html / javascript / other files")
     expectedQuestion.addAnswer("* Need for web apps")
     expectedDeck.addQuestion(expectedQuestion)
 
     assert actualDeck == expectedDeck
 
 
-def test_format_file():
+def testFormatFile():
     filename = "tests/testData/basic.org"
     data = parseData._formatFile(filename)
 
     assert(len(data) == 6)
 
 
-def test_sort_data():
+def testSortData():
 
     lines = """#Comment 1
     # Indented comment 2
@@ -62,10 +69,9 @@ badlyformated line
     assert(len(badFormatting) == 1)
 
 
-def test_convert_comments_to_parameters():
+def testConvertCommentsToParameters():
 
     comments = ["#fileType=basic, secondArg=10", "##file=basic"]
     result = parseData._convertCommentsToParameters(comments)
-    expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic'} 
+    expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic'}
     assert(result == expected)
-

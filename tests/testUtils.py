@@ -1,16 +1,15 @@
 import sys
-sys.path.append('../org_to_anki')
 import os
+sys.path.append('../org_to_anki')
 
-from org_to_anki import config
 from org_to_anki.utils import createQuickNotesFile
 
-def test_Create_File():
+
+def testCreateFile():
     dir = os.path.dirname(__file__)
     newFilePath = dir + "/" + "orgNotes"
     assert(os.path.exists(newFilePath) == False)
     createQuickNotesFile(newFilePath)
-    assert(os.path.exists(newFilePath) == True)
+    assert(os.path.exists(newFilePath))
     os.rmdir(newFilePath)
     assert(os.path.exists(newFilePath) == False)
-    

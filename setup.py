@@ -12,7 +12,7 @@ setup(name='org_to_anki',
       entry_points={
           'console_scripts': [
               'org_to_anki = org_to_anki.main:parse_and_upload_org_file',
-           			'ankiq = org_to_anki.quickNote:quickNote'
+              'ankiq = org_to_anki.quickNote:quickNote'
           ]
       }
       )

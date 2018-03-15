@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../org_to_anki')
-from nose.tools import with_setup
+# from nose.tools import with_setup
 
 # def setup_func():
 #     print("setup test")

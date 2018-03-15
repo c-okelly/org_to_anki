@@ -1,10 +1,9 @@
 # parse data into expected format
-import os
-
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .DeckBuilder import DeckBuilder
 
-def parse(filePath:str) -> ([AnkiDeck]):
+
+def parse(filePath: str) -> ([AnkiDeck]):
 
     deckBuilder = DeckBuilder()
 
@@ -16,13 +15,14 @@ def parse(filePath:str) -> ([AnkiDeck]):
 
     globalParameters = _convertCommentsToParameters(comments)
     fileType = globalParameters.get("fileType", "basic")
-    
+
     deck = deckBuilder.buildDeck(content, fileName, fileType)
     # deck = _buildQuestions(content, fileName, fileType)
 
     return deck
 
-def _formatFile(filePath:str):
+
+def _formatFile(filePath: str):
 
     file = open(filePath, "r")
     data = file.read().split('\n')
@@ -30,7 +30,7 @@ def _formatFile(filePath:str):
     return data
 
 
-def _convertCommentsToParameters(comments:[str]):
+def _convertCommentsToParameters(comments: [str]):
 
     parameters = {}
     for line in comments:
@@ -45,15 +45,7 @@ def _convertCommentsToParameters(comments:[str]):
     return parameters
 
 
-# def _formatLine(line:str) -> (str):
-
-#     line = line.capitalize()
-#     line = line.strip()
-
-#     return line
-
-
-def _sortData(rawFileData:[str]) -> ([str], [str], [str]):
+def _sortData(rawFileData: [str]) -> ([str], [str], [str]):
 
     comments, questions, badFormatting = [], [], []
 
@@ -79,5 +71,6 @@ if __name__ == "__main__":
     # questions = parse(filePath)
     # print(questions[0])
 
-    x = _convertCommentsToParameters(["#fileType=basic, secondArg=10", "##file=basic"])
+    x = _convertCommentsToParameters(
+        ["#fileType=basic, secondArg=10", "##file=basic"])
     print(x)
