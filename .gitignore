@@ -6,3 +6,4 @@
 files.txt
 build/
 dist/
+.eggs/
