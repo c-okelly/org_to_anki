@@ -8,8 +8,7 @@ Will provide a number of command line utilties for uploading org files and add n
 
 Script works by parseing an org file and then using the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) AnkiConnect addon for Anki to upload the new questions.
 
-Currently a work in progress. Aka it doesn't work! (yet)
-Currently depends on a update to connect anki that has yet to be released.
+Currenlty working in a very basic sense. Can upload a default type file of basic questions but will not check for duplicates.
 
 ## Requirements
 
