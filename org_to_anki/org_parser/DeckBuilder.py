@@ -7,11 +7,20 @@ class DeckBuilder:
 
     def buildDeck(self, questions: [str], deckName: str, fileType: str='basic'):
 
+        if fileType == 'basic':
+            deck = self._buildBasicDeck(questions, deckName)
+        else:
+            raise Exception('Unsupported file type: ' + fileType)
+        
+        return deck
+
+
+    def _buildBasicDeck(self, questions, deckName):
+
         questionLine = 1
         answerLine = 2
 
         deck = AnkiDeck(deckName)
-
         currentQuestion = None
 
         for line in questions:
@@ -30,6 +39,7 @@ class DeckBuilder:
                 line = " ".join(line.split(" ")[1:])
                 currentQuestion.addAnswer(line)
 
+            # Sublist in question
             elif noAstrics > answerLine:
                 # Remove answer astrics
                 line = line.strip().split(" ")

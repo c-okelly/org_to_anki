@@ -75,3 +75,15 @@ def testConvertCommentsToParameters():
     result = parseData._convertCommentsToParameters(comments)
     expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic'}
     assert(result == expected)
+
+
+def testTopicsDataParse():
+
+    # Creat deck with two subdecks
+    
+    # Add questions
+
+    # Assert deck built correctly
+    assert(True)
+
+

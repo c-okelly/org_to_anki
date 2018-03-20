@@ -7,7 +7,7 @@ class AnkiDeck:
     # Basic file => represented in a single deck
     # MultiDeck file => File will have mutiple subdecks of general topic
     # represented by file
-    def __init__(self, name: str, parentDecks: [str] =None):
+    def __init__(self, name: str, parentDecks: [str] = None):
         self.deckName = name
         self._parentDecks = parentDecks
         self.ankiQuestions = []
@@ -16,15 +16,24 @@ class AnkiDeck:
         self._hasSubDecks = False
 
     def getQuestions(self):
+        # TODO questions should have their deckName added at this point
         return self.ankiQuestions
 
-    def getDeckNames(self):
-        names = [self.deckName]
-        if self._hasSubDecks:
-            for i in self.subDecks:
-                names.extend(i.getDeckNames())
+    def getDeckNames(self, parentName:str = None, joiner: str = '::'):
+        deckNames = []
+        if parentName != None:
+            deckNames.append(parentName + joiner + self.deckName)
+        else:
+            deckNames.append(self.deckName)
 
-        return names
+        if self._hasSubDecks:
+            name = self.deckName
+            if parentName != None:
+                name = parentName + joiner + self.deckName
+            for i in self.subDecks:
+                deckNames.extend(i.getDeckNames(name))
+
+        return deckNames
 
     def addQuestion(self, ankiQuestion: AnkiQuestion):
         self.ankiQuestions.append(ankiQuestion)
