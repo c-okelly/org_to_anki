@@ -6,8 +6,8 @@ class AnkiDeck:
     # Basic file => represented in a single deck
     # MultiDeck file => File will have mutiple subdecks of general topic represented by file
     def __init__(self, name: str):
-        self.deckName:str = name
-        self._ankiQuestions:[AnkiQuestion] = []
+        self.deckName = name
+        self._ankiQuestions = []
         self.subDecks = []
         self._hasSubDecks = False
 
