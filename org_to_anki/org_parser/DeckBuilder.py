@@ -33,7 +33,7 @@ class DeckBuilder:
                 if currentQuestion is not None:
                     deck.addQuestion(currentQuestion)
                 # Next Question
-                currentQuestion = AnkiQuestion(line, deckName)
+                currentQuestion = AnkiQuestion(line)
 
             elif noAstrics == answerLine:
                 line = " ".join(line.split(" ")[1:])

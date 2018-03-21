@@ -1,10 +1,13 @@
 class AnkiQuestion:
 
-    def __init__(self, question: str, deckName: str):
-        self.deckName = deckName
+    def __init__(self, question: str):
+        self.deckName = None
         self.tags = []
         self.question = question
         self.answers = []
+
+    def setDeckName(self, deckName: str):
+        self.deckName = deckName
 
     def updateQuestion(self, question: str):
         self.question = question

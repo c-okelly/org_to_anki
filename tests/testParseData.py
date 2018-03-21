@@ -13,7 +13,7 @@ def testBasicParseData():
 
     expectedDeck = AnkiDeck("basic")
     # build Question
-    expectedQuestion = AnkiQuestion.AnkiQuestion("Put request", "basic")
+    expectedQuestion = AnkiQuestion.AnkiQuestion("Put request")
     expectedQuestion.addAnswer("Puts file / resource at specific url")
     expectedQuestion.addAnswer(
         "If file ==> exists => replaces // !exist => creates")
@@ -32,8 +32,7 @@ def testBasicWithSublevelsParseData():
     expectedDeck = AnkiDeck("basicWithSublevels")
     # build Question
     expectedQuestion = AnkiQuestion.AnkiQuestion(
-        "What is the difference between .jar and .war files in java",
-        "basicWithSublevels")
+        "What is the difference between .jar and .war files in java")
     expectedQuestion.addAnswer(
         ".jar => contains libraries / resources / accessories files")
     expectedQuestion.addAnswer(

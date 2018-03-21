@@ -3,21 +3,33 @@ from .AnkiQuestion import AnkiQuestion
 
 class AnkiDeck:
 
-    # TODO flesh out to represent whole file of multiple types
     # Basic file => represented in a single deck
-    # MultiDeck file => File will have mutiple subdecks of general topic
-    # represented by file
-    def __init__(self, name: str, parentDecks: [str] = None):
-        self.deckName = name
-        self._parentDecks = parentDecks
-        self.ankiQuestions = []
-
+    # MultiDeck file => File will have mutiple subdecks of general topic represented by file
+    def __init__(self, name: str):
+        self.deckName:str = name
+        self._ankiQuestions:[AnkiQuestion] = []
         self.subDecks = []
         self._hasSubDecks = False
 
-    def getQuestions(self):
-        # TODO questions should have their deckName added at this point
-        return self.ankiQuestions
+    def getQuestions(self, parentName:str = None, joiner: str = '::'):
+        ankiQuestions = []
+
+        for question in self._ankiQuestions:
+            if parentName != None:
+                question.setDeckName(parentName + joiner + self.deckName)
+                ankiQuestions.append(question)
+            else:
+                question.setDeckName(self.deckName)
+                ankiQuestions.append(question)
+        
+        if self._hasSubDecks:
+            name = self.deckName
+            if parentName != None:
+                name = parentName + joiner + self.deckName
+            for i in self.subDecks:
+                ankiQuestions.extend(i.getQuestions(name))
+
+        return ankiQuestions 
 
     def getDeckNames(self, parentName:str = None, joiner: str = '::'):
         deckNames = []
@@ -36,7 +48,7 @@ class AnkiDeck:
         return deckNames
 
     def addQuestion(self, ankiQuestion: AnkiQuestion):
-        self.ankiQuestions.append(ankiQuestion)
+        self._ankiQuestions.append(ankiQuestion)
 
     def addSubdeck(self, ankiDeck):
         self.subDecks.append(ankiDeck)
@@ -46,4 +58,4 @@ class AnkiDeck:
         return self._hasSubDecks
 
     def __eq__(self, other):
-        return self.deckName == other.deckName and self._parentDecks == self._parentDecks and self.ankiQuestions == other.ankiQuestions and self.subDecks == other.subDecks
+        return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions() and self.subDecks == other.subDecks
