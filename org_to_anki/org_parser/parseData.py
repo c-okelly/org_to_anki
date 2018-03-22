@@ -40,7 +40,7 @@ def _convertCommentsToParameters(comments: [str]):
             if "=" in item:
                 item = item.strip()
                 parts = item.split("=")
-                parameters[parts[0]] = parts[1]
+                parameters[parts[0].strip()] = parts[1].strip()
 
     return parameters
 

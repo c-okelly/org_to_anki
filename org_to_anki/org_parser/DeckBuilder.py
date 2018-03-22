@@ -8,17 +8,43 @@ class DeckBuilder:
     def buildDeck(self, questions: [str], deckName: str, fileType: str='basic'):
 
         if fileType == 'basic':
-            deck = self._buildBasicDeck(questions, deckName)
+            deck = self._buildBasic(questions, deckName)
+        elif fileType == 'topics':
+            deck = self._buildTopics(questions, deckName)
         else:
             raise Exception('Unsupported file type: ' + fileType)
         
         return deck
 
+    def _buildTopics(self, questions, deckName):
 
-    def _buildBasicDeck(self, questions, deckName):
+        print()
+        print("topics deck")
+        print(deckName)
+        subDecks = []
 
-        questionLine = 1
-        answerLine = 2
+        currentQuestions = []
+        deckName = None
+
+        print(questions)
+        for line in questions:
+            noAstrics = line.split(' ')[0].count('*', 0, 10)
+            print(noAstrics)
+            # Start of new deck section
+            if noAstrics == 1: 
+                if deckName != None:
+                    newDeck = self._buildBasic(currentQuestions, deckName, questionLine=2, answerLine=3)
+                    subDecks.append(newDeck)
+                deckName =  " ".join(line.split(" ")[1:])
+            else:
+                currentQuestions.append(line)
+        # Finally
+        newDeck = self._buildBasic(currentQuestions, deckName, questionLine=2, answerLine=3)
+        subDecks.append(newDeck)
+
+
+        
+    def _buildBasic(self, questions, deckName, questionLine = 1, answerLine = 2):
 
         deck = AnkiDeck(deckName)
         currentQuestion = None

@@ -70,19 +70,21 @@ badlyformated line
 
 def testConvertCommentsToParameters():
 
-    comments = ["#fileType=basic, secondArg=10", "##file=basic"]
+    comments = ["#fileType=basic, secondArg=10", "##file=basic", "#fileType2 = topics"]
     result = parseData._convertCommentsToParameters(comments)
-    expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic'}
+    expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic', 'fileType2': 'topics'}
     assert(result == expected)
 
 
 def testTopicsDataParse():
 
     # Creat deck with two subdecks
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
     
     # Add questions
 
     # Assert deck built correctly
-    assert(True)
+    assert(False)
 
 
