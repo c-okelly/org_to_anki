@@ -2,7 +2,7 @@ import sys
 sys.path.append('../org_to_anki')
 
 from org_to_anki.org_parser import parseData
-from org_to_anki.ankiClasses import AnkiQuestion
+from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 
 
@@ -13,7 +13,7 @@ def testBasicParseData():
 
     expectedDeck = AnkiDeck("basic")
     # build Question
-    expectedQuestion = AnkiQuestion.AnkiQuestion("Put request")
+    expectedQuestion = AnkiQuestion("Put request")
     expectedQuestion.addAnswer("Puts file / resource at specific url")
     expectedQuestion.addAnswer(
         "If file ==> exists => replaces // !exist => creates")
@@ -31,7 +31,7 @@ def testBasicWithSublevelsParseData():
 
     expectedDeck = AnkiDeck("basicWithSublevels")
     # build Question
-    expectedQuestion = AnkiQuestion.AnkiQuestion(
+    expectedQuestion = AnkiQuestion(
         "What is the difference between .jar and .war files in java")
     expectedQuestion.addAnswer(
         ".jar => contains libraries / resources / accessories files")
@@ -82,9 +82,23 @@ def testTopicsDataParse():
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
     
-    # Add questions
+    expectedDeck = AnkiDeck("topicsLayout")
+
+    firstSubDeck = AnkiDeck("Capital cites")
+    q1 = AnkiQuestion("What is the capital of Ireland")
+    q1.addAnswer("Dublin")
+    firstSubDeck.addQuestion(q1)
+    expectedDeck.addSubdeck(firstSubDeck)
+
+    secondSubDeck = AnkiDeck("Languages of countries")
+    q2 = AnkiQuestion("What are the main languages in Ireland")
+    q2.addAnswer("English")
+    q2.addAnswer("Irish")
+    secondSubDeck.addQuestion(q2)
+    expectedDeck.addSubdeck(secondSubDeck)
 
     # Assert deck built correctly
-    assert(False)
+    assert(actualDeck == expectedDeck)
+    assert(actualDeck.getQuestions() == expectedDeck.getQuestions())
 
 

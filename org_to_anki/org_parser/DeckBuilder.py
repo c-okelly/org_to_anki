@@ -18,31 +18,33 @@ class DeckBuilder:
 
     def _buildTopics(self, questions, deckName):
 
-        print()
-        print("topics deck")
-        print(deckName)
+        # print()
+        # print("topics deck")
+        # print(deckName)
         subDecks = []
 
-        currentQuestions = []
-        deckName = None
+        topicsDeck = AnkiDeck(deckName)
 
-        print(questions)
+        currentQuestions = []
+        newDeckName = None
+
         for line in questions:
             noAstrics = line.split(' ')[0].count('*', 0, 10)
-            print(noAstrics)
             # Start of new deck section
             if noAstrics == 1: 
-                if deckName != None:
-                    newDeck = self._buildBasic(currentQuestions, deckName, questionLine=2, answerLine=3)
-                    subDecks.append(newDeck)
-                deckName =  " ".join(line.split(" ")[1:])
+                if newDeckName != None:
+                    newDeck = self._buildBasic(currentQuestions, newDeckName, questionLine=2, answerLine=3)
+                    topicsDeck.addSubdeck(newDeck)
+                    currentQuestions = []
+                newDeckName =  " ".join(line.split(" ")[1:])
             else:
                 currentQuestions.append(line)
+
         # Finally
-        newDeck = self._buildBasic(currentQuestions, deckName, questionLine=2, answerLine=3)
-        subDecks.append(newDeck)
+        newDeck = self._buildBasic(currentQuestions, newDeckName, questionLine=2, answerLine=3)
+        topicsDeck.addSubdeck(newDeck)
 
-
+        return topicsDeck
         
     def _buildBasic(self, questions, deckName, questionLine = 1, answerLine = 2):
 
