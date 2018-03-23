@@ -10,7 +10,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
     data = _formatFile(filePath)
     fileName = filePath.split("/")[-1].split(".")[0]
 
-    comments, content, badFormatting = _sortData(data)
+    comments, content = _sortData(data)
     # TODO bad formatting should be correctly logged
 
     globalParameters = _convertCommentsToParameters(comments)
@@ -47,21 +47,20 @@ def _convertCommentsToParameters(comments: [str]):
 
 def _sortData(rawFileData: [str]) -> ([str], [str], [str]):
 
-    comments, questions, badFormatting = [], [], []
+    comments, questions = [], []
 
+    questionsSection = False
     for i in range(0, len(rawFileData)):
         currentItem = rawFileData[i]
         if len(currentItem) > 0:
             firstLetter = currentItem.strip()[0]
-            if firstLetter == "#":
+            if firstLetter == "#" and questionsSection == False:
                 comments.append(currentItem)
-            elif firstLetter == "*":
+            elif firstLetter == "*" or questionsSection == True:
+                questionsSection = True
                 questions.append(currentItem)
-            else:
-                badFormatting.append(
-                    ["Line starts incorrectly at line no " + str(i) + ". " + currentItem])
 
-    return (comments, questions, badFormatting)
+    return (comments, questions)
 
 
 if __name__ == "__main__":

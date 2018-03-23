@@ -56,16 +56,18 @@ def testSortData():
     # Indented comment 2
 
 * line 1
+# type=basic
 ** line 2
 badlyformated line
 """.split("\n")
 
-    assert(len(lines) == 7)
-    comments, content, badFormatting = parseData._sortData(lines)
+    assert(len(lines) == 8)
+    comments, content = parseData._sortData(lines)
+    print(comments)
+    print(content)
 
     assert(len(comments) == 2)
-    assert(len(content) == 2)
-    assert(len(badFormatting) == 1)
+    assert(len(content) == 4)
 
 
 def testConvertCommentsToParameters():
