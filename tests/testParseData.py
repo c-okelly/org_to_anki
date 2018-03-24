@@ -14,6 +14,9 @@ def testBasicParseData():
     expectedDeck = AnkiDeck("basic")
     # build Question
     expectedQuestion = AnkiQuestion("Put request")
+    expectedQuestion.addParameter('type', 'basicTest')
+    expectedQuestion.addParameter('other','test')
+    expectedQuestion.addComment("# type=basicTest, other=test")
     expectedQuestion.addAnswer("Puts file / resource at specific url")
     expectedQuestion.addAnswer(
         "If file ==> exists => replaces // !exist => creates")
@@ -21,7 +24,7 @@ def testBasicParseData():
 
     expectedDeck.addQuestion(expectedQuestion)
 
-    assert actualDeck == expectedDeck
+    assert(actualDeck == expectedDeck)
 
 
 def testBasicWithSublevelsParseData():
@@ -47,7 +50,7 @@ def testFormatFile():
     filename = "tests/testData/basic.org"
     data = parseData._formatFile(filename)
 
-    assert(len(data) == 6)
+    assert(len(data) == 7)
 
 
 def testSortData():
@@ -73,7 +76,7 @@ badlyformated line
 def testConvertCommentsToParameters():
 
     comments = ["#fileType=basic, secondArg=10", "##file=basic", "#fileType2 = topics"]
-    result = parseData._convertCommentsToParameters(comments)
+    result = parseData.convertCommentsToParameters(comments)
     expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic', 'fileType2': 'topics'}
     assert(result == expected)
 
@@ -94,6 +97,8 @@ def testTopicsDataParse():
 
     secondSubDeck = AnkiDeck("Languages of countries")
     q2 = AnkiQuestion("What are the main languages in Ireland")
+    q2.addComment("#type=reverse")
+    q2.addParameter('type', "reverse")
     q2.addAnswer("English")
     q2.addAnswer("Irish")
     secondSubDeck.addQuestion(q2)

@@ -74,12 +74,12 @@ class AnkiConnector:
 
         # Convert
         note = {"deckName": deckName, "modelName": "Basic"}
-        note["tags"] = ankiQuestion.tags
+        note["tags"] = ankiQuestion.getTags()
 
         # Generate fields
         fields = {}
         fields["Front"] = ankiQuestion.question
-        fields["Back"] = self._createAnswerString(ankiQuestion.answers)
+        fields["Back"] = self._createAnswerString(ankiQuestion.getAnswers())
 
         note["fields"] = fields
         return note

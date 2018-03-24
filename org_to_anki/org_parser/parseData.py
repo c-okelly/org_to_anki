@@ -13,7 +13,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
     comments, content = _sortData(data)
     # TODO bad formatting should be correctly logged
 
-    globalParameters = _convertCommentsToParameters(comments)
+    globalParameters = convertCommentsToParameters(comments)
     fileType = globalParameters.get("fileType", "basic")
 
     deck = deckBuilder.buildDeck(content, fileName, fileType)
@@ -30,19 +30,27 @@ def _formatFile(filePath: str):
     return data
 
 
-def _convertCommentsToParameters(comments: [str]):
+def convertCommentsToParameters(comments: [str]):
 
     parameters = {}
     for line in comments:
-        line = line.strip()[line.count("#"):]
-        pairs = line.split(",")
-        for item in pairs:
-            if "=" in item:
-                item = item.strip()
-                parts = item.split("=")
-                parameters[parts[0].strip()] = parts[1].strip()
+        parameters.update(convertLineToParamters(line))
 
     return parameters
+
+def convertLineToParamters(line: str):
+
+    parameters = {}
+    line = line.strip()[line.count("#"):]
+    pairs = line.split(",")
+    for item in pairs:
+        if "=" in item:
+            item = item.strip()
+            parts = item.split("=")
+            parameters[parts[0].strip()] = parts[1].strip()
+
+    return parameters
+
 
 
 def _sortData(rawFileData: [str]) -> ([str], [str], [str]):
@@ -70,6 +78,6 @@ if __name__ == "__main__":
     # questions = parse(filePath)
     # print(questions[0])
 
-    x = _convertCommentsToParameters(
+    x = convertCommentsToParameters(
         ["#fileType=basic, secondArg=10", "##file=basic"])
     print(x)

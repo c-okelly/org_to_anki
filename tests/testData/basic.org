@@ -1,6 +1,7 @@
 # Quick Anki notes
 
 * Put request
+# type=basicTest, other=test
 ** Puts file / resource at specific url
 ** If file ==> exists => replaces // !exist => creates
 ** Request => idempotent

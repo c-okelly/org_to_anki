@@ -2,6 +2,7 @@
 from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
 
+from . import parseData
 
 class DeckBuilder:
 
@@ -18,9 +19,6 @@ class DeckBuilder:
 
     def _buildTopics(self, questions, deckName):
 
-        # print()
-        # print("topics deck")
-        # print(deckName)
         subDecks = []
 
         topicsDeck = AnkiDeck(deckName)
@@ -50,6 +48,7 @@ class DeckBuilder:
 
         deck = AnkiDeck(deckName)
         currentQuestion = None
+        questionComments = []
 
         for line in questions:
             noAstrics = line.split(' ')[0].count('*', 0, 10)
@@ -59,9 +58,11 @@ class DeckBuilder:
                 line = " ".join(line.split(" ")[1:])
                 # Store old question
                 if currentQuestion is not None:
+                    currentQuestion.addComments(questionComments)
                     deck.addQuestion(currentQuestion)
                 # Next Question
                 currentQuestion = AnkiQuestion(line)
+                questionComments = []
 
             elif noAstrics == answerLine:
                 line = " ".join(line.split(" ")[1:])
@@ -74,6 +75,13 @@ class DeckBuilder:
                 line[0] = line[0][answerLine:]
                 line = " ".join(line)
                 currentQuestion.addAnswer(line)
+
+            elif noAstrics == 0 and line[0] == "#":
+                currentQuestion.addComment(line)
+                parameters = parseData.convertLineToParamters(line)
+                for key in parameters.keys():
+                    currentQuestion.addParameter(key, parameters.get(key))
+
 
             else:
                 raise Exception("Line incorrectly processed.")

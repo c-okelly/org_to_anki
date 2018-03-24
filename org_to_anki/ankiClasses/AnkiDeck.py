@@ -50,7 +50,7 @@ class AnkiDeck:
     def addQuestion(self, ankiQuestion: AnkiQuestion):
         self._ankiQuestions.append(ankiQuestion)
 
-    def addSubdeck(self, ankiDeck):
+    def addSubdeck(self, ankiDeck): # TODO Should have type of AnkiDeck
         self.subDecks.append(ankiDeck)
         self._hasSubDecks = True
 

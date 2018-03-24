@@ -6,5 +6,6 @@
 *** Dublin
 * Languages of countries
 ** What are the main languages in Ireland
+#type=reverse
 *** English
 *** Irish

@@ -60,3 +60,19 @@ def testDeckNameSetFor_GetAllDeckQuestion():
 
     assert(questions == [expectedQuestion1, expectedQuestion2, expectedQuestion3])
 
+
+def testCommentsAndParametersForAnkiQuestion():
+
+    q = AnkiQuestion("Test question")
+    q.addAnswer("Test Answer")
+    q.addTag("test tag")
+    q.addComment("Test comment")
+    q.addParameter("type", "basic")
+    q.addParameter("type1", "basic1")
+
+    assert(q.getAnswers() == ["Test Answer"])
+    assert(q.getTags() == ["test tag"])
+    assert(q.getComments() == ["Test comment"])
+    assert(q.getParameter("type") == "basic")
+    assert(q.getParameter("type1") == "basic1")
+    assert(q.getParameter("notFound") == None)
