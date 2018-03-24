@@ -7,9 +7,9 @@ class AnkiDeck:
     # MultiDeck file => File will have mutiple subdecks of general topic represented by file
     def __init__(self, name: str):
         self.deckName = name
-        self._ankiQuestions = []
         self.subDecks = []
-        self._hasSubDecks = False
+        self._ankiQuestions = []
+        self._parmeters = {}
 
     def getQuestions(self, parentName:str = None, joiner: str = '::'):
         ankiQuestions = []
@@ -22,7 +22,7 @@ class AnkiDeck:
                 question.setDeckName(self.deckName)
                 ankiQuestions.append(question)
         
-        if self._hasSubDecks:
+        if self.hasSubDeck():
             name = self.deckName
             if parentName != None:
                 name = parentName + joiner + self.deckName
@@ -38,7 +38,7 @@ class AnkiDeck:
         else:
             deckNames.append(self.deckName)
 
-        if self._hasSubDecks:
+        if self.hasSubDeck():
             name = self.deckName
             if parentName != None:
                 name = parentName + joiner + self.deckName
@@ -52,10 +52,9 @@ class AnkiDeck:
 
     def addSubdeck(self, ankiDeck): # TODO Should have type of AnkiDeck
         self.subDecks.append(ankiDeck)
-        self._hasSubDecks = True
 
     def hasSubDeck(self):
-        return self._hasSubDecks
+        return len(self.subDecks) > 0
 
     def __eq__(self, other):
         return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions() and self.subDecks == other.subDecks
