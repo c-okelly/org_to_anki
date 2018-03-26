@@ -11,13 +11,17 @@ def parse(filePath: str) -> ([AnkiDeck]):
     fileName = filePath.split("/")[-1].split(".")[0]
 
     comments, content = _sortData(data)
-    # TODO bad formatting should be correctly logged
 
     globalParameters = convertCommentsToParameters(comments)
     fileType = globalParameters.get("fileType", "basic")
 
     deck = deckBuilder.buildDeck(content, fileName, fileType)
-    # deck = _buildQuestions(content, fileName, fileType)
+
+    # TODO refactor this section into DeckBuilder
+    for key in globalParameters:
+        deck.addParameter(key, globalParameters[key])
+    for comment in comments:
+        deck.addComment(comment)
 
     return deck
 

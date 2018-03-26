@@ -1,7 +1,6 @@
 
 from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
-
 from . import parseData
 
 class DeckBuilder:
@@ -19,38 +18,53 @@ class DeckBuilder:
 
     def _buildTopics(self, questions, deckName):
 
-        subDecks = []
+        deck = AnkiDeck(deckName)
 
-        topicsDeck = AnkiDeck(deckName)
+        # while questions[0][0] == "#":
+        #     comment = questions.pop(0)
+        #     deck.addComment(comment)
 
-        currentQuestions = []
-        newDeckName = None
+        subSections = self._sortTopicsSubDeck(questions)
+
+        for section in subSections:
+            subDeckName = section.pop(0).replace("*", "").strip()
+            subDeck = self._buildBasic(section, subDeckName, 2, 3)
+            deck.addSubdeck(subDeck)
+
+        return deck
+
+
+    def _sortTopicsSubDeck(self, questions):
+
+        subSections = []
+        currentSection = []
 
         for line in questions:
+            # first line
             noAstrics = line.split(' ')[0].count('*', 0, 10)
-            # Start of new deck section
-            if noAstrics == 1: 
-                if newDeckName != None:
-                    newDeck = self._buildBasic(currentQuestions, newDeckName, questionLine=2, answerLine=3)
-                    topicsDeck.addSubdeck(newDeck)
-                    currentQuestions = []
-                newDeckName =  " ".join(line.split(" ")[1:])
+            if noAstrics == 1:
+                if len(currentSection) > 0:
+                    subDeck = currentSection[:]
+                    currentSection = []
+                    subSections.append(subDeck)
+                currentSection.append(line)
+            elif noAstrics > 1 or line.strip()[0] == "#":
+                currentSection.append(line)
             else:
-                currentQuestions.append(line)
+                raise Exception("Issue parsing topics deck.")
 
-        # Finally
-        newDeck = self._buildBasic(currentQuestions, newDeckName, questionLine=2, answerLine=3)
-        topicsDeck.addSubdeck(newDeck)
+        subSections.append(currentSection[:])
 
-        return topicsDeck
-        
+        return subSections
+
     def _buildBasic(self, questions, deckName, questionLine = 1, answerLine = 2):
 
         deck = AnkiDeck(deckName)
         currentQuestion = None
         questionComments = []
 
-        for line in questions:
+        while len(questions) > 0:
+            line = questions.pop(0)
             noAstrics = line.split(' ')[0].count('*', 0, 10)
             # TODO lines of differnt type need different formatting
 
@@ -77,11 +91,17 @@ class DeckBuilder:
                 currentQuestion.addAnswer(line)
 
             elif noAstrics == 0 and line[0] == "#":
-                currentQuestion.addComment(line)
-                parameters = parseData.convertLineToParamters(line)
-                for key in parameters.keys():
-                    currentQuestion.addParameter(key, parameters.get(key))
-
+                # Deck questions
+                if currentQuestion == None:
+                    deck.addComment(line)
+                    params = parseData.convertLineToParamters(line)
+                    for key in params.keys():
+                        deck.addParameter(key, params[key])
+                else:
+                    currentQuestion.addComment(line)
+                    parameters = parseData.convertLineToParamters(line)
+                    for key in parameters.keys():
+                        currentQuestion.addParameter(key, parameters.get(key))
 
             else:
                 raise Exception("Line incorrectly processed.")

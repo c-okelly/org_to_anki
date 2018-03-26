@@ -9,7 +9,21 @@ class AnkiDeck:
         self.deckName = name
         self.subDecks = []
         self._ankiQuestions = []
-        self._parmeters = {}
+        self._parameters = {}
+        self._comments = []
+        
+    
+    def addComment(self, comment: str):
+        self._comments.append(comment)
+    
+    def getComments(self):
+        return self._comments
+    
+    def addParameter(self, key: str, value: str):
+        self._parameters[key] = value
+    
+    def getParameter(self, key):
+        return self._parameters.get(key, None)
 
     def getQuestions(self, parentName:str = None, joiner: str = '::'):
         ankiQuestions = []
@@ -56,5 +70,9 @@ class AnkiDeck:
     def hasSubDeck(self):
         return len(self.subDecks) > 0
 
+    def __str__(self):
+        return ("DeckName: %s.\nSubDecks: %s.\nQuestions: %s.\nParamters: %s.\nComments: %s.") % ( 
+        self.deckName, self.subDecks, self._ankiQuestions, self._parameters, self._comments)
+
     def __eq__(self, other):
-        return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions() and self.subDecks == other.subDecks
+        return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions() and self.subDecks == other.subDecks and self._parameters == other._parameters and self._comments == other._comments

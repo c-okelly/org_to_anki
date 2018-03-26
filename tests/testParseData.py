@@ -12,11 +12,14 @@ def testBasicParseData():
     actualDeck = parseData.parse(filename)
 
     expectedDeck = AnkiDeck("basic")
+    expectedDeck.addComment("# Quick Anki notes")
+
     # build Question
     expectedQuestion = AnkiQuestion("Put request")
     expectedQuestion.addParameter('type', 'basicTest')
     expectedQuestion.addParameter('other','test')
     expectedQuestion.addComment("# type=basicTest, other=test")
+
     expectedQuestion.addAnswer("Puts file / resource at specific url")
     expectedQuestion.addAnswer(
         "If file ==> exists => replaces // !exist => creates")
@@ -87,7 +90,11 @@ def testTopicsDataParse():
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
     
-    expectedDeck = AnkiDeck("topicsLayout")
+    expectedDeck = AnkiDeck("topicsLayout") 
+    # TODO sperate out top level deck parsing test from topics layout
+    expectedDeck.addParameter("fileType", "topics") 
+    expectedDeck.addComment("# More advanced org file layout. Each topics has its own questions.")
+    expectedDeck.addComment("#fileType = topics")
 
     firstSubDeck = AnkiDeck("Capital cites")
     q1 = AnkiQuestion("What is the capital of Ireland")
@@ -101,7 +108,10 @@ def testTopicsDataParse():
     q2.addParameter('type', "reverse")
     q2.addAnswer("English")
     q2.addAnswer("Irish")
+
     secondSubDeck.addQuestion(q2)
+    secondSubDeck.addComment("#type=basic")
+    secondSubDeck.addParameter("type","basic")
     expectedDeck.addSubdeck(secondSubDeck)
 
     # Assert deck built correctly
