@@ -1,7 +1,6 @@
 
 from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
-from . import parseData
 
 class DeckBuilder:
 
@@ -16,13 +15,23 @@ class DeckBuilder:
         
         return deck
 
+    def _convertLineToParamters(self, line: str):
+
+        parameters = {}
+        line = line.strip()[line.count("#"):]
+        pairs = line.split(",")
+        for item in pairs:
+            if "=" in item:
+                item = item.strip()
+                parts = item.split("=")
+                parameters[parts[0].strip()] = parts[1].strip()
+
+        return parameters
+
+
     def _buildTopics(self, questions, deckName):
 
         deck = AnkiDeck(deckName)
-
-        # while questions[0][0] == "#":
-        #     comment = questions.pop(0)
-        #     deck.addComment(comment)
 
         subSections = self._sortTopicsSubDeck(questions)
 
@@ -94,12 +103,12 @@ class DeckBuilder:
                 # Deck questions
                 if currentQuestion == None:
                     deck.addComment(line)
-                    params = parseData.convertLineToParamters(line)
+                    params = self._convertLineToParamters(line)
                     for key in params.keys():
                         deck.addParameter(key, params[key])
                 else:
                     currentQuestion.addComment(line)
-                    parameters = parseData.convertLineToParamters(line)
+                    parameters = self._convertLineToParamters(line)
                     for key in parameters.keys():
                         currentQuestion.addParameter(key, parameters.get(key))
 
