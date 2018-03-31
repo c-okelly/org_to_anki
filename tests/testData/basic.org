@@ -2,7 +2,7 @@
 # listType = bulletPoints
 
 * Put request
-# type=basicTest, other=test
+# other=test
 ** Puts file / resource at specific url
 ** If file ==> exists => replaces // !exist => creates
 ** Request => idempotent

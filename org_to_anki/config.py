@@ -6,4 +6,5 @@ defaultOrgFile = "/orgNotes/quickOrgNotes.org"
 quickNotesOrgPath = homePath + defaultOrgFile
 quickNotesDirectory = homePath + "/orgNotes"
 defaultDeck = "0. Org Notes"
+defaultDeckConnector = "::"
 defaultAnkiConnectAddress = "http://127.0.0.1:8765/"

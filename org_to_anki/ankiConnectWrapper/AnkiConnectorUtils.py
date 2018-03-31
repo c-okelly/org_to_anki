@@ -37,12 +37,6 @@ class AnkiConnectorUtils:
         result = self.makeRequest("addNotes", notes)
         return self._getResultOrError(result)
 
-    def _getResultOrError(self, result: {}):
-        if result.get("error") is None:
-            return result.get("result")
-        else:
-            return result.get("error")
-
     def testConnection(self):
         try:
             res = requests.post(self.url, data={})
@@ -52,7 +46,15 @@ class AnkiConnectorUtils:
             # TODO log excpetion
             return False
 
-    def _buildPayload(self, action, params: {}={}, version: int=5):
+    @staticmethod
+    def _getResultOrError(result: {}):
+        if result.get("error") is None:
+            return result.get("result")
+        else:
+            return result.get("error")
+
+    @staticmethod
+    def _buildPayload(action, params: {}={}, version: int=5):
         payload = {}
         payload["action"] = action
         payload["params"] = params

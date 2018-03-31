@@ -33,8 +33,8 @@ def testBasicParseQuestionsHaveParametersAndParameters():
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
 
-    params = {'type': 'basicTest', 'other': 'test'}
-    comments = ['# type=basicTest, other=test']
+    params = {'other': 'test'}
+    comments = ['# other=test']
     assert(actualDeck.getQuestions()[0]._parameters == params)
     assert(actualDeck.getQuestions()[0]._comments == comments)
 

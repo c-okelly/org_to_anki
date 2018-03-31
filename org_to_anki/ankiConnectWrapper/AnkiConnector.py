@@ -25,7 +25,7 @@ class AnkiConnector:
         self._checkForDefaultDeck()
         self._buildNewDecksAsRequired(deck.getDeckNames())
         # Build new questions
-        notes = self._buildNotes(deck.getQuestions())
+        notes = self.buildAnkiNotes(deck.getQuestions())
 
         # TODO Get all question from that deck and use this to verify questions need to be uploaded
         # self._removeAlreadyExistingQuestions()
@@ -53,7 +53,7 @@ class AnkiConnector:
         if self.defaultDeck not in self.currentDecks:
             self.connector.createDeck(self.defaultDeck)
 
-    def _buildNotes(self, ankiQuestions: [AnkiQuestion]):
+    def buildAnkiNotes(self, ankiQuestions: [AnkiQuestion]):
 
         notes = []
         for i in ankiQuestions:
@@ -72,8 +72,12 @@ class AnkiConnector:
         else:
             deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
-        # Convert
-        note = {"deckName": deckName, "modelName": "Basic"}
+        if ankiQuestion.getParameter("type") != None:
+            modelName = ankiQuestion.getParameter("type")
+        else:
+            modelName = "Basic"
+
+        note = {"deckName": deckName, "modelName": modelName}
         note["tags"] = ankiQuestion.getTags()
 
         # Generate fields
@@ -94,7 +98,13 @@ class AnkiConnector:
             # bulletpoints.
             result += "<ul style='list-style-position: inside;'>"
             for i in answers:
-                result += "<li>" + i + "</li>"
+                if isinstance(i, str):
+                    result += "<li>" + i + "</li>"
+                elif isinstance(i, list):
+                    result += self._createAnswerString(i)
+                else:
+                    raise Exception("Unsupported action with answer string")
+                    
             result += "</ul>"
         return result
 
