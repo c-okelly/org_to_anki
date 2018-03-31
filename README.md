@@ -21,16 +21,19 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159)an addon for A
 ## Requirements
 
 1. Have Anki app installed.
-2. Installing the Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159). 
-    i. For OSX users of anki-connect see [note for OSX users](https://foosoft.net/projects/anki-connect/#installation)
-    ii. For Windows usersa of anki-connect see [notes for Windows users](https://foosoft.net/projects/anki-connect/#installation) 
+2. Installing the Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159).
+
+	i. For OSX users of anki-connect see [note for OSX users](https://foosoft.net/projects/anki-connect/#installation)
+	
+	ii. For Windows users of anki-connect see [notes for Windows users](https://foosoft.net/projects/anki-connect/#installation) 
 
 ## Installation
 
 To install this module from source.
 
-1. cd into the module directory
-2. python3 setup.py install
+1. git clone https://github.com/c-okelly/org_to_anki
+2. cd into the module directory
+3. python3 setup.py install
 
 ## Comannd line scripts
 
@@ -62,7 +65,7 @@ ankiq
 
 * Currently supports two differnt types of org files
 * All questions and answers should start with astrics
-* All comment lines start with a #
+* All comment lines start with a \#
 
 * Each org file will be converted into its own deck in Anki
 * Currently only a single layout type is supported.
@@ -96,9 +99,11 @@ ankiq
 
 * Supported parameter syntax.
 
-1. Each line must start with a #
-2. # type=Basic
-3. # type = Basic
+1. Each line must start with a hashtag
+```org 
+# type=Basic
+# type = Basic
+```
 
 * Currently supported parameters are questions type
 
@@ -107,12 +112,12 @@ ankiq
 
 ```org
 # type=Basic
-# type=Basic (and reversed card)
 ```
 
-* Parameter inheritance
+#### Parameter inheritance
 
-1. Paramaters are inherited from Decks and parent Decks
+* Questions and decks will inhert parameters from parent Decks
+* Paramters inhereted will not overide existing paramters.
 
 ## Config values
 
