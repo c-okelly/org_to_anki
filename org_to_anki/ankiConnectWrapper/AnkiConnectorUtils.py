@@ -15,15 +15,13 @@ class AnkiConnectorUtils:
         try:
             res = requests.post(self.url, payload)
         except Exception as e:
-            print(e)
-            print("An error has occoured make the request.")
+            print("An error has occoured make the request.\n", e)
 
         if res.status_code == 200:
             data = json.loads(res.text)
             return data
         else:
-            error = res.status_code
-            return error
+            return res.status_code
 
     def getDeckNames(self):
         result = self.makeRequest("deckNames")
@@ -39,9 +37,8 @@ class AnkiConnectorUtils:
 
     def testConnection(self):
         try:
-            res = requests.post(self.url, data={})
             # TODO log status code
-            return res.status_code == 200
+            return requests.post(self.url, data={}).status_code == 200
         except requests.exceptions.RequestException:
             # TODO log excpetion
             return False
@@ -75,5 +72,4 @@ if __name__ == "__main__":
                         "fields": {"Front": "",
                                    "Back": ""}}]}
 
-    result = a.makeRequest("addNotes", param)
-    print("Results \n", result)
+    print("Results \n", a.makeRequest("addNotes", param))
