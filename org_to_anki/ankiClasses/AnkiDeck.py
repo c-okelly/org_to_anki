@@ -25,23 +25,37 @@ class AnkiDeck:
     def getParameter(self, key):
         return self._parameters.get(key, None)
 
-    def getQuestions(self, parentName:str = None, joiner: str = '::'):
+    def getQuestions(self, parentName:str = None, parentParamters:dict = None, joiner: str = '::'):
         ankiQuestions = []
 
         for question in self._ankiQuestions:
             if parentName != None:
                 question.setDeckName(parentName + joiner + self.deckName)
-                ankiQuestions.append(question)
             else:
                 question.setDeckName(self.deckName)
-                ankiQuestions.append(question)
+
+            if parentParamters != None:
+                for key in parentParamters:
+                    if self.getParameter(key) == None:
+                        self.addParameter(key, parentParamters[key])
+
+            for key in self._parameters:
+                if question.getParameter(key) == None:
+                    question.addParameter(key, self._parameters[key])
         
+            ankiQuestions.append(question)
+
         if self.hasSubDeck():
             name = self.deckName
             if parentName != None:
                 name = parentName + joiner + self.deckName
+            if parentParamters != None:
+                for key in parentParamters:
+                    if self.getParameter(key) == None:
+                        self.addParameter(key, parentParamters[key])
+
             for i in self.subDecks:
-                ankiQuestions.extend(i.getQuestions(name))
+                ankiQuestions.extend(i.getQuestions(name, self._parameters))
 
         return ankiQuestions 
 

@@ -33,7 +33,7 @@ def testBasicParseQuestionsHaveParametersAndParameters():
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
 
-    params = {'other': 'test'}
+    params = {'other': 'test', 'listType': 'bulletPoints'} # List type if inherited from parent deck
     comments = ['# other=test']
     assert(actualDeck.getQuestions()[0]._parameters == params)
     assert(actualDeck.getQuestions()[0]._comments == comments)

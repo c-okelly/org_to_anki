@@ -76,3 +76,51 @@ def testCommentsAndParametersForAnkiQuestion():
     assert(q.getParameter("type") == "basic")
     assert(q.getParameter("type1") == "basic1")
     assert(q.getParameter("notFound") == None)
+
+
+def testQuestionInheritParamsFromDeck():
+
+
+    q1 = AnkiQuestion("Test question")
+    q1.addAnswer("Test Answer")
+    q1.addParameter("type", "reversed")
+
+    deck = AnkiDeck("Test Deck")
+    deck.addParameter("type1", "basic1")
+    deck.addParameter("type", "basic")
+    deck.addQuestion(q1)
+
+    questions = deck.getQuestions()
+
+    assert(questions[0].getParameter("type") == "reversed")
+    assert(questions[0].getParameter("type1") == "basic1")
+
+def testDecksInheritParamsFromParentDeck():
+
+    q1 = AnkiQuestion("Test question")
+    q1.addAnswer("Test Answer")
+    q1.addParameter("q0", "question")
+
+    deck0 = AnkiDeck("deck0")
+    deck0.addParameter("deck0", "deck0")
+    deck0.addQuestion(q1)
+
+    deck1 = AnkiDeck("deck1")
+    deck1.addParameter("deck1", "deck1")
+    deck1.addSubdeck(deck0)
+
+    deck2 = AnkiDeck("deck2")
+    deck2.addParameter("deck2", "deck2")
+    deck2.addParameter("deck1", "deck2")
+    deck2.addParameter("deck0", "deck2")
+    deck2.addParameter("q0", "deck2")
+    deck2.addSubdeck(deck1)
+
+    questions = deck2.getQuestions()
+    print(deck2._parameters)
+
+    print(questions[0]._parameters)
+    assert(questions[0].getParameter("deck2") == "deck2")
+    assert(questions[0].getParameter("deck1") == "deck1")
+    assert(questions[0].getParameter("deck0") == "deck0")
+    assert(questions[0].getParameter("q0") == "question")
