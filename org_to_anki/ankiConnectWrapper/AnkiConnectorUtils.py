@@ -64,14 +64,6 @@ class AnkiConnectorUtils:
 
 if __name__ == "__main__":
     a = AnkiConnectorUtils("http://127.0.0.1:8765/")
-    param = {
-        "note": {
-            "deckName": "Default",
-            "tags": ["yomichan"],
-            "modelName": "Basic",
-            "fields": {
-                "Front": "front content 40",
-                "Back": "back content"}}}
     param = {"notes": [{"deckName": "Default",
                         "tags": [],
                         "modelName": "Basic",
@@ -84,5 +76,4 @@ if __name__ == "__main__":
                                    "Back": ""}}]}
 
     result = a.makeRequest("addNotes", param)
-    print("Results \n\n")
-    print(result)
+    print("Results \n", result)

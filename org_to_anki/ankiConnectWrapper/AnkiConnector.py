@@ -107,17 +107,3 @@ class AnkiConnector:
                     
             result += "</ul>"
         return result
-
-
-if __name__ == "__main__":
-
-    b = AnkiConnector()
-
-    # TestQuestion
-    # q = AnkiQuestion("Test question", "Basic")
-    # q.addAnswer("First answer edited")
-    # q.addAnswer("Second answer")
-    # a = AnkiQuestion("second test question", "Basic")
-    # a.addAnswer("First answer")
-    # a.addAnswer("Second answer")
-    # b.uploadNewQuestions([q])#, a])

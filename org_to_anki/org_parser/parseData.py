@@ -73,15 +73,3 @@ def _sortData(rawFileData: [str]) -> ([str], [str], [str]):
                 questions.append(currentItem)
 
     return (comments, questions)
-
-
-if __name__ == "__main__":
-
-    # dir = os.path.dirname(__file__)
-    # filePath = os.path.join(dir, '../tests/testData/basic.org')
-    # questions = parse(filePath)
-    # print(questions[0])
-
-    x = convertCommentsToParameters(
-        ["#fileType=basic, secondArg=10", "##file=basic"])
-    print(x)
