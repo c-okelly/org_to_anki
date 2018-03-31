@@ -66,6 +66,42 @@ class DeckBuilder:
 
         return subSections
 
+    # def _buildSub
+
+    def _removeAstrics(self, line: str):
+
+        line = line.strip().split(" ")[1:]
+        line = " ".join(line)
+
+        return line
+    
+    def _countAstrics(self, line: str):
+
+        return line.split(' ')[0].count('*', 0, 10)
+
+    def _generateSublist(self, subItems: [str]):
+
+        formatedList = []
+
+        indentaionLevel = self._countAstrics(subItems[0])
+        for item in subItems:
+            if self._countAstrics(item) == indentaionLevel:
+                formatedList.append(item)
+            elif self._countAstrics(item) > indentaionLevel and isinstance(formatedList[-1], list):
+                formatedList[-1].append(item)
+            else:
+                formatedList.append([item])
+                
+        cleaned = []
+        for i in formatedList:
+            if isinstance(i, list):
+                cleaned.append(self._generateSublist(i))
+            else:
+                cleaned.append(self._removeAstrics(i))
+
+        return cleaned
+
+
     def _buildBasic(self, questions, deckName, questionLine = 1, answerLine = 2):
 
         deck = AnkiDeck(deckName)
@@ -74,11 +110,11 @@ class DeckBuilder:
 
         while len(questions) > 0:
             line = questions.pop(0)
-            noAstrics = line.split(' ')[0].count('*', 0, 10)
+            noAstrics = self._countAstrics(line)
             # TODO lines of differnt type need different formatting
 
             if noAstrics == questionLine:
-                line = " ".join(line.split(" ")[1:])
+                line = self._removeAstrics(line)
                 # Store old question
                 if currentQuestion is not None:
                     currentQuestion.addComments(questionComments)
@@ -88,16 +124,21 @@ class DeckBuilder:
                 questionComments = []
 
             elif noAstrics == answerLine:
-                line = " ".join(line.split(" ")[1:])
+                line = self._removeAstrics(line)
                 currentQuestion.addAnswer(line)
 
             # Sublist in question
             elif noAstrics > answerLine:
-                # Remove answer astrics
-                line = line.strip().split(" ")
-                line[0] = line[0][answerLine:]
-                line = " ".join(line)
-                currentQuestion.addAnswer(line)
+
+                subList = []
+                subList.append(line)
+
+                while len(questions) > 0 and self._countAstrics(questions[0]) > answerLine:
+                    line = questions.pop(0)
+                    subList.append(line)
+                
+                formatedSubList = self._generateSublist(subList)
+                currentQuestion.addAnswer(formatedSubList)
 
             elif noAstrics == 0 and line[0] == "#":
                 # Deck questions

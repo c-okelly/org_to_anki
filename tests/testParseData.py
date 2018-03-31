@@ -8,55 +8,52 @@ from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 
 ### Test basic deck is parsed and built correctly ###
 
-def testBasicParseData():
+def testBasicPraseNamedCorrectly():
 
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
 
-    expectedDeck = AnkiDeck("basic")
-    expectedDeck.addComment("# Quick Anki notes")
+    assert(actualDeck.deckName == "basic")
 
-    # build Question
-    expectedQuestion = AnkiQuestion("Put request")
-    expectedQuestion.addParameter('type', 'basicTest')
-    expectedQuestion.addParameter('other','test')
-    expectedQuestion.addComment("# type=basicTest, other=test")
+def testBaiscPraseQuestsion():
 
-    expectedQuestion.addAnswer("Puts file / resource at specific url")
-    expectedQuestion.addAnswer(
-        "If file ==> exists => replaces // !exist => creates")
-    expectedQuestion.addAnswer("Request => idempotent")
+    filename = "tests/testData/basic.org"
+    actualDeck = parseData.parse(filename)
 
-    expectedDeck.addQuestion(expectedQuestion)
+def testBasicParseMainDeckParameters():
 
-    assert(actualDeck == expectedDeck)
+    filename = "tests/testData/basic.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(actualDeck._comments == ['# Quick Anki notes', '# listType = bulletPoints'])
+    assert(actualDeck._parameters == {'listType': 'bulletPoints'})
+
+def testBasicParseQuestionsHaveParametersAndParameters():
+
+    filename = "tests/testData/basic.org"
+    actualDeck = parseData.parse(filename)
+
+    params = {'type': 'basicTest', 'other': 'test'}
+    comments = ['# type=basicTest, other=test']
+    assert(actualDeck.getQuestions()[0]._parameters == params)
+    assert(actualDeck.getQuestions()[0]._comments == comments)
 
 ### Test basic deck parse with sublevels ###
 
-def testBasicWithSublevelsParseData():
+def testBasicWithSublevelsAnswers():
 
     filename = "tests/testData/basicWithSublevels.org"
     actualDeck = parseData.parse(filename)
 
-    expectedDeck = AnkiDeck("basicWithSublevels")
-    # build Question
-    expectedQuestion = AnkiQuestion(
-        "What is the difference between .jar and .war files in java")
-    expectedQuestion.addAnswer(
-        ".jar => contains libraries / resources / accessories files")
-    expectedQuestion.addAnswer(
-        ".war => contain the web application => jsp / html / javascript / other files")
-    expectedQuestion.addAnswer("* Need for web apps")
-    expectedDeck.addQuestion(expectedQuestion)
-
-    assert actualDeck == expectedDeck
+    answers = ['.jar => contains libraries / resources / accessories files', '.war => contain the web application => jsp / html / javascript / other files', ['Need for web apps', ["fourth 1", "fourth 2"], "back to third"]]
+    assert(actualDeck.getQuestions()[0]._answers == answers)
 
 
 def testFormatFile():
     filename = "tests/testData/basic.org"
     data = parseData._formatFile(filename)
 
-    assert(len(data) == 7)
+    assert(len(data) == 8)
 
 
 def testSortData():
@@ -72,8 +69,6 @@ badlyformated line
 
     assert(len(lines) == 8)
     comments, content = parseData._sortData(lines)
-    print(comments)
-    print(content)
 
     assert(len(comments) == 2)
     assert(len(content) == 4)
