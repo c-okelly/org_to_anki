@@ -6,6 +6,8 @@ from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 
 
+### Test basic deck is parsed and built correctly ###
+
 def testBasicParseData():
 
     filename = "tests/testData/basic.org"
@@ -29,6 +31,7 @@ def testBasicParseData():
 
     assert(actualDeck == expectedDeck)
 
+### Test basic deck parse with sublevels ###
 
 def testBasicWithSublevelsParseData():
 
@@ -83,39 +86,77 @@ def testConvertCommentsToParameters():
     expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic', 'fileType2': 'topics'}
     assert(result == expected)
 
+### Test topics deck built correctly ###
 
-def testTopicsDataParse():
+def testTopicsDeckNamedCorrectly():
 
-    # Creat deck with two subdecks
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(actualDeck.deckName == "topicsLayout")
+
+def testTopicsSubDecksNamedCorrectly():
+
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(actualDeck.subDecks[0].deckName == "Capital cites")
+    assert(actualDeck.subDecks[1].deckName == "Languages of countries")
+
+def testMainDeckHasComment():
+
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
+    comments = ['# More advanced org file layout. Each topics has its own questions.', '#fileType = topics']
+    assert(actualDeck._comments == comments)
+
+def testMainDeckHasParameters():
+
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
+    params = {'fileType': 'topics'}
+    assert(actualDeck._parameters == params)
+
+def testSubDeck1HasParamters():
+    
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
+    params = {'type': 'basic'}
+    comments = ["#type=basic"]
+    assert(actualDeck.subDecks[1]._comments == comments)
+    assert(actualDeck.subDecks[1]._parameters == params)
+
+def testSubDeck1QuestionHasParamters():
+
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
     
-    expectedDeck = AnkiDeck("topicsLayout") 
-    # TODO sperate out top level deck parsing test from topics layout
-    expectedDeck.addParameter("fileType", "topics") 
-    expectedDeck.addComment("# More advanced org file layout. Each topics has its own questions.")
-    expectedDeck.addComment("#fileType = topics")
+    params = {'type': 'reverse'}
+    comments = ["#type=reverse"]
+    assert(actualDeck.subDecks[1].getQuestions()[0]._parameters == params)
+    assert(actualDeck.subDecks[1].getQuestions()[0]._comments == comments)
 
-    firstSubDeck = AnkiDeck("Capital cites")
+def testSubDeck0HasBasicQuestion():
+
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
     q1 = AnkiQuestion("What is the capital of Ireland")
     q1.addAnswer("Dublin")
-    firstSubDeck.addQuestion(q1)
-    expectedDeck.addSubdeck(firstSubDeck)
+    q1.deckName = "Capital cites"
 
-    secondSubDeck = AnkiDeck("Languages of countries")
-    q2 = AnkiQuestion("What are the main languages in Ireland")
-    q2.addComment("#type=reverse")
-    q2.addParameter('type', "reverse")
-    q2.addAnswer("English")
-    q2.addAnswer("Irish")
+    assert(actualDeck.subDecks[0].getQuestions()[0].question == "What is the capital of Ireland")
+    assert(actualDeck.subDecks[0].getQuestions()[0]._answers == ["Dublin"])
 
-    secondSubDeck.addQuestion(q2)
-    secondSubDeck.addComment("#type=basic")
-    secondSubDeck.addParameter("type","basic")
-    expectedDeck.addSubdeck(secondSubDeck)
+def testSubDeck1HasBasicQuestion():
 
-    # Assert deck built correctly
-    assert(actualDeck == expectedDeck)
-    assert(actualDeck.getQuestions() == expectedDeck.getQuestions())
+    filename = "tests/testData/topicsLayout.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(actualDeck.subDecks[1].getQuestions()[0].question == "What are the main languages in Ireland")
+    assert(actualDeck.subDecks[1].getQuestions()[0]._answers == ["English", "Irish"])
 
 
