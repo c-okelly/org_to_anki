@@ -19,6 +19,8 @@ def testBaiscPraseQuestsion():
 
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
+    assert(actualDeck.getQuestions()[0].question == "Put request")
+    assert(actualDeck.getQuestions()[0].getAnswers() == ["Puts file / resource at specific url", "If file ==> exists => replaces // !exist => creates", "Request => idempotent"])
 
 def testBasicParseMainDeckParameters():
 
@@ -74,12 +76,6 @@ badlyformated line
     assert(len(content) == 4)
 
 
-def testConvertCommentsToParameters():
-
-    comments = ["#fileType=basic, secondArg=10", "##file=basic", "#fileType2 = topics"]
-    result = parseData.convertCommentsToParameters(comments)
-    expected = {'fileType': 'basic', 'secondArg': '10', 'file': 'basic', 'fileType2': 'topics'}
-    assert(result == expected)
 
 ### Test topics deck built correctly ###
 

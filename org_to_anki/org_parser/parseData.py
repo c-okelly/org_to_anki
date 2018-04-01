@@ -1,6 +1,7 @@
 # parse data into expected format
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .DeckBuilder import DeckBuilder
+from . import ParserUtils
 
 
 def parse(filePath: str) -> ([AnkiDeck]):
@@ -12,7 +13,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
 
     comments, content = _sortData(data)
 
-    globalParameters = convertCommentsToParameters(comments)
+    globalParameters = ParserUtils.convertCommentsToParameters(comments)
     fileType = globalParameters.get("fileType", "basic")
 
     deck = deckBuilder.buildDeck(content, fileName, fileType)
@@ -33,31 +34,7 @@ def _formatFile(filePath: str):
 
     return data
 
-
-def convertCommentsToParameters(comments: [str]):
-
-    parameters = {}
-    for line in comments:
-        parameters.update(convertLineToParamters(line))
-
-    return parameters
-
-def convertLineToParamters(line: str):
-
-    parameters = {}
-    line = line.strip()[line.count("#"):]
-    pairs = line.split(",")
-    for item in pairs:
-        if "=" in item:
-            item = item.strip()
-            parts = item.split("=")
-            parameters[parts[0].strip()] = parts[1].strip()
-
-    return parameters
-
-
-
-def _sortData(rawFileData: [str]) -> ([str], [str], [str]):
+def _sortData(rawFileData: [str]) -> ([str], [str]):
 
     comments, questions = [], []
 

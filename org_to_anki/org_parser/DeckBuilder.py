@@ -1,6 +1,7 @@
 
 from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
+from . import ParserUtils
 
 class DeckBuilder:
 
@@ -14,20 +15,6 @@ class DeckBuilder:
             raise Exception('Unsupported file type: ' + fileType)
         
         return deck
-
-    def _convertLineToParamters(self, line: str):
-
-        parameters = {}
-        line = line.strip()[line.count("#"):]
-        pairs = line.split(",")
-        for item in pairs:
-            if "=" in item:
-                item = item.strip()
-                parts = item.split("=")
-                parameters[parts[0].strip()] = parts[1].strip()
-
-        return parameters
-
 
     def _buildTopics(self, questions, deckName):
 
@@ -65,8 +52,6 @@ class DeckBuilder:
         subSections.append(currentSection[:])
 
         return subSections
-
-    # def _buildSub
 
     def _removeAstrics(self, line: str):
 
@@ -144,12 +129,12 @@ class DeckBuilder:
                 # Deck questions
                 if currentQuestion == None:
                     deck.addComment(line)
-                    params = self._convertLineToParamters(line)
+                    params = ParserUtils.convertLineToParamters(line) 
                     for key in params.keys():
                         deck.addParameter(key, params[key])
                 else:
                     currentQuestion.addComment(line)
-                    parameters = self._convertLineToParamters(line)
+                    parameters = ParserUtils.convertLineToParamters(line)
                     for key in parameters.keys():
                         currentQuestion.addParameter(key, parameters.get(key))
 

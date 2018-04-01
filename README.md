@@ -81,7 +81,8 @@ ankiq
  
 ### Topics file syntax
 
-* Each topic will be turned into it's own subdeck. Allows for a group of related topics to be managed in a single file.
+* Each topic will be turned into it's own subdeck. The name of this deck is given by the first line. E.G Capitals cities and Spoken langages.
+* Allows for a group of related topics to be managed in a single file.
 
 * Sample answer and questions for topics org file.
 
@@ -112,6 +113,7 @@ ankiq
 
 ```org
 # type=Basic
+# type=Basic (and reversed card)
 ```
 
 #### Parameter inheritance
@@ -121,9 +123,9 @@ ankiq
 
 ## Config values
 
-* Config contains all the default values for setup
-* Default org files ~/orgNotes/quickOrgNotes.org
-* Default anki url is http://127.0.0.1:8765/
+* Config in project root contains all the default values for running
+* Default org file is located at ~/orgNotes/quickOrgNotes.org
+* Default anki-connect url is http://127.0.0.1:8765/
 
 ## Testing
 
@@ -138,4 +140,5 @@ python3 setup.py nosetests
 
 * Check to see if note exists before sendin to Anki
 * Expanded support for different paramters types
+* If you have a feature you would like to see please open an issue!
  
