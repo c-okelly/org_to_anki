@@ -90,7 +90,6 @@ class DeckBuilder:
 
         deck = AnkiDeck(deckName)
         currentQuestion = None
-        questionComments = []
 
         while len(questions) > 0:
             line = questions.pop(0)
@@ -101,11 +100,9 @@ class DeckBuilder:
                 line = self._removeAstrics(line)
                 # Store old question
                 if currentQuestion is not None:
-                    currentQuestion.addComments(questionComments)
                     deck.addQuestion(currentQuestion)
                 # Next Question
                 currentQuestion = AnkiQuestion(line)
-                questionComments = []
 
             elif noAstrics == answerLine:
                 line = self._removeAstrics(line)

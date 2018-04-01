@@ -6,6 +6,7 @@ setup(name='org_to_anki',
       author='Conor OKelly',
       author_email='okellyconor@gmail.com',
       url='https://github.com/c-okelly/org_to_anki',
+      python_requires='>3.3',
       install_requires=['requests'],
       tests_require=['responses', 'nose', 'coverage'],
       test_suite="nose.collector",
@@ -13,7 +14,7 @@ setup(name='org_to_anki',
       include_package_data=True,
       entry_points={
           'console_scripts': [
-              'org_to_anki = org_to_anki.main:parse_and_upload_org_file',
+              'org_to_anki = org_to_anki.main:parseAndUploadOrgFile',
               'ankiq = org_to_anki.quickNote:quickNote'
           ]
       }

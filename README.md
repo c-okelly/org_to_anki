@@ -6,7 +6,7 @@ Python moudle to convert org files into Anki question decks.
 
 Provides two command line scripts to upload org files and take new basic notes quickly.
  
-Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159)an addon for Anki that provides a HTTP api for Anki.
+Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for Anki that provides a HTTP api for Anki.
 
 ## Contents
 
@@ -83,7 +83,7 @@ ankiq
 # Basic Example
 # type=Basic
 
-* Questsion
+* Question
 ** Answer
 * Second Question
 # type=Basic (and reversed card)
