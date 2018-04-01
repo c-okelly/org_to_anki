@@ -66,9 +66,29 @@ ankiq
 * Currently supports two differnt types of org files
 * All questions and answers should start with astrics
 * All comment lines start with a \#
+```org
+# Line comments
+* Question
+** Answer
+```
 
 * Each org file will be converted into its own deck in Anki
-* Currently only a single layout type is supported.
+
+### Global Parameters 
+
+* Parameters to be inherited by all questions / decks should be specified at the top file.
+* These will be overwritten by parameters lower down the tree.
+
+```org
+# Basic Example
+# type=Basic
+
+* Questsion
+** Answer
+* Second Question
+# type=Basic (and reversed card)
+** Second Answer
+```
 
 ### Basic org file syntax
 
@@ -108,7 +128,20 @@ ankiq
 
 * Currently supported parameters are questions type
 
-1. Question type. Used to set the type of the Anki note.
+1. Org file type
+* By default all org files will be of basic type.
+* If you want to use a topics layout must be specified at the top of the file.
+
+```org
+# Comment line
+# fileType=topics
+
+* Topics 1
+** Questions 1
+*** Answer 1
+```
+
+2. Question type. Used to set the type of the Anki note.
     i. Default value is Basic
 
 ```org
