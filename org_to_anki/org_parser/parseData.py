@@ -34,6 +34,7 @@ def _formatFile(filePath: str):
 
     return data
 
+
 def _sortData(rawFileData: [str]) -> ([str], [str]):
 
     comments, questions = [], []
@@ -43,9 +44,9 @@ def _sortData(rawFileData: [str]) -> ([str], [str]):
         currentItem = rawFileData[i]
         if len(currentItem) > 0:
             firstLetter = currentItem.strip()[0]
-            if firstLetter == "#" and questionsSection == False:
+            if firstLetter == "#" and questionsSection is False:
                 comments.append(currentItem)
-            elif firstLetter == "*" or questionsSection == True:
+            elif firstLetter == "*" or questionsSection:
                 questionsSection = True
                 questions.append(currentItem)
 

@@ -7,6 +7,7 @@ def convertCommentsToParameters(comments: [str]):
 
     return parameters
 
+
 def convertLineToParamters(line: str):
 
     parameters = {}

@@ -17,9 +17,10 @@ class AnkiConnector:
 
     def uploadNewDeck(self, deck: AnkiDeck):
 
-        if self.connector.testConnection() != True:
+        if self.connector.testConnection() is not True:
             print(
-                "Failed to connect to Anki Connect. Ensure Anki is open and AnkiConnect is installed")
+                "Failed to connect to Anki Connect. \
+                Ensure Anki is open and AnkiConnect is installed")
             return False
 
         self._checkForDefaultDeck()
@@ -27,7 +28,8 @@ class AnkiConnector:
         # Build new questions
         notes = self.buildAnkiNotes(deck.getQuestions())
 
-        # TODO Get all question from that deck and use this to verify questions need to be uploaded
+        # TODO Get all question from that deck and
+        # use this to verify questions need to be uploaded
         # self._removeAlreadyExistingQuestions()
 
         # Insert new question through the api
@@ -72,7 +74,7 @@ class AnkiConnector:
         else:
             deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
-        if ankiQuestion.getParameter("type") != None:
+        if ankiQuestion.getParameter("type") is not None:
             modelName = ankiQuestion.getParameter("type")
         else:
             modelName = "Basic"
@@ -104,6 +106,6 @@ class AnkiConnector:
                     result += self._createAnswerString(i)
                 else:
                     raise Exception("Unsupported action with answer string")
-                    
+
             result += "</ul>"
         return result

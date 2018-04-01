@@ -3,6 +3,7 @@ from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from . import ParserUtils
 
+
 class DeckBuilder:
 
     def buildDeck(self, questions: [str], deckName: str, fileType: str='basic'):
@@ -13,7 +14,7 @@ class DeckBuilder:
             deck = self._buildTopics(questions, deckName)
         else:
             raise Exception('Unsupported file type: ' + fileType)
-        
+
         return deck
 
     def _buildTopics(self, questions, deckName):
@@ -28,7 +29,6 @@ class DeckBuilder:
             deck.addSubdeck(subDeck)
 
         return deck
-
 
     def _sortTopicsSubDeck(self, questions):
 
@@ -59,7 +59,7 @@ class DeckBuilder:
         line = " ".join(line)
 
         return line
-    
+
     def _countAstrics(self, line: str):
 
         return line.split(' ')[0].count('*', 0, 10)
@@ -76,7 +76,7 @@ class DeckBuilder:
                 formatedList[-1].append(item)
             else:
                 formatedList.append([item])
-                
+
         cleaned = []
         for i in formatedList:
             if isinstance(i, list):
@@ -86,8 +86,7 @@ class DeckBuilder:
 
         return cleaned
 
-
-    def _buildBasic(self, questions, deckName, questionLine = 1, answerLine = 2):
+    def _buildBasic(self, questions, deckName, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
         currentQuestion = None
@@ -118,18 +117,19 @@ class DeckBuilder:
                 subList = []
                 subList.append(line)
 
-                while len(questions) > 0 and self._countAstrics(questions[0]) > answerLine:
+                while len(questions) > 0 and self._countAstrics(
+                        questions[0]) > answerLine:
                     line = questions.pop(0)
                     subList.append(line)
-                
+
                 formatedSubList = self._generateSublist(subList)
                 currentQuestion.addAnswer(formatedSubList)
 
             elif noAstrics == 0 and line[0] == "#":
                 # Deck questions
-                if currentQuestion == None:
+                if currentQuestion is None:
                     deck.addComment(line)
-                    params = ParserUtils.convertLineToParamters(line) 
+                    params = ParserUtils.convertLineToParamters(line)
                     for key in params.keys():
                         deck.addParameter(key, params[key])
                 else:

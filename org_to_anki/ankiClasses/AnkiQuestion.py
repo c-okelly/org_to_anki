@@ -17,31 +17,30 @@ class AnkiQuestion:
     def updateQuestion(self, question: str):
         self.question = question
 
-    ### Getters and setters ###
+    # Getters and setters #
     def addAnswer(self, answer: str):
         self._answers.append(answer)
-    
+
     def getAnswers(self):
         return self._answers
 
     def addComment(self, comment: str):
         self._comments.append(comment)
-    
+
     def getComments(self):
         return self._comments
-    
+
     def addParameter(self, key: str, value: str):
         self._parameters[key] = value
-    
+
     def getParameter(self, key):
         return self._parameters.get(key, None)
 
     def addTag(self, tag: str):
         self._tags.append(tag)
-    
+
     def getTags(self):
         return self._tags
-
 
     # String representation
     def __str__(self):
@@ -53,4 +52,5 @@ class AnkiQuestion:
         if not isinstance(other, AnkiQuestion):
             return False
 
-        return self.question == other.question and self.getAnswers() == other.getAnswers() and self.getTags() == other.getTags() and self.deckName == other.deckName and self.getComments() == other.getComments() and self._parameters == other._parameters
+        return self.question == other.question and self.getAnswers() == other.getAnswers() and self.getTags() == other.getTags(
+        ) and self.deckName == other.deckName and self.getComments() == other.getComments() and self._parameters == other._parameters
