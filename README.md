@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/c-okelly/org_to_anki.svg?branch=master)](https://travis-ci.org/c-okelly/org_to_anki) [![codecov](https://codecov.io/gh/c-okelly/org_to_anki/branch/master/graph/badge.svg)](https://codecov.io/gh/c-okelly/org_to_anki)
 
-Python moudle to convert org files into Anki question decks.
+Python module to convert org files into Anki question decks.
 
 Provides two command line scripts to upload org files and take new basic notes quickly.
  
@@ -35,14 +35,14 @@ To install this module from source.
 2. cd into the module directory
 3. python3 setup.py install
 
-## Comannd line scripts
+## Command line scripts
 
 ### org_to_anki
 
 ```bash
 org_to_anki
 ```
-* Upload the defualt org file to Anki
+* Upload the default org file to Anki
 
 ```bash
 org_to_anki /path/to/your/org/file.org
@@ -63,8 +63,8 @@ ankiq
 
 ## Org file syntax
 
-* Currently supports two differnt types of org files
-* All questions and answers should start with astrics
+* Currently supports two different types of org files
+* All questions and answers should start with an asterix
 * All comment lines start with a \#
 ```org
 # Line comments
@@ -101,7 +101,7 @@ ankiq
  
 ### Topics file syntax
 
-* Each topic will be turned into it's own subdeck. The name of this deck is given by the first line. E.G Capitals cities and Spoken langages.
+* Each topic will be turned into its own subdeck. The name of this deck is given by the first line. E.G Capitals cities and Spoken languages.
 * Allows for a group of related topics to be managed in a single file.
 
 * Sample answer and questions for topics org file.
@@ -152,7 +152,7 @@ ankiq
 #### Parameter inheritance
 
 * Questions and decks will inhert parameters from parent Decks
-* Paramters inhereted will not overide existing paramters.
+* Parameters inhereted will not override existing parameters.
 
 ## Config values
 
@@ -171,7 +171,7 @@ python3 setup.py nosetests
 
 ## Future features
 
-* Check to see if note exists before sendin to Anki
+* Check to see if note exists before sending to Anki
 * Expanded support for different paramters types
 * If you have a feature you would like to see please open an issue!
  
