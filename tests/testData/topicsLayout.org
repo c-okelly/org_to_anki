@@ -7,6 +7,6 @@
 * Languages of countries
 #type=basic
 ** What are the main languages in Ireland
-#type=reverse
+#type=Basic (and reversed card)
 *** English
 *** Irish

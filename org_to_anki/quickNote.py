@@ -1,15 +1,12 @@
 from . import utils
 from . import config
 
-
 def quickNote():
     utils.createQuickNotesFile()
 
-    newQuestion = ""
     question = input("Enter the question.\n").strip()
-    newQuestion += "* " + question + "\n"
+    newQuestion = "* " + question + "\n"
 
-    answer = ""
     while True:
         answer = input(
             "Enter an answer. Enter blank answer to exit.\n").strip()

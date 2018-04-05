@@ -10,18 +10,24 @@ from . import config
 def parseAndUploadOrgFile(filePath=None):
 
     if filePath is None:
-        firstArg = sys.argv[1:2]
-        if len(firstArg) < 1 or firstArg == ['-v']:
-            print("File was not given. Will upload default file.")
-            filePath = config.quickNotesOrgPath
-        else:
-            filePath = filePath[0]
+        filePath = _getUploadFilePath()
 
     if "~" in filePath:
         filePath = filePath.replace("~", config.homePath)
 
     print("file is ", filePath)
     _parseAndUpload(filePath)
+
+def _getUploadFilePath():
+
+    firstArg = sys.argv[1:2]
+    if len(firstArg) < 1 or firstArg == ['-v']:
+        print("File was not given. Will upload default file.")
+        filePath = config.quickNotesOrgPath
+    else:
+        filePath = sys.argv[1]
+
+    return filePath
 
 
 def _parseAndUpload(filePath):
@@ -33,4 +39,4 @@ def _parseAndUpload(filePath):
 
 
 if __name__ == "__main__":
-    parseAndUploadOrgFile()
+    parseAndUploadOrgFile("/Users/conorokelly/Desktop/Notes/Org_Files/1.orgNotes/quickNotes.org")

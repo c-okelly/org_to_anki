@@ -125,8 +125,8 @@ def testSubDeck1QuestionHasParamters():
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
     
-    params = {'type': 'reverse'}
-    comments = ["#type=reverse"]
+    params = {'type': 'Basic (and reversed card)'}
+    comments = ["#type=Basic (and reversed card)"]
     assert(actualDeck.subDecks[1].getQuestions()[0]._parameters == params)
     assert(actualDeck.subDecks[1].getQuestions()[0]._comments == comments)
 
