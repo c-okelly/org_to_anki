@@ -10,17 +10,17 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 ## Contents
 
-1. Requirements
-2. Installation
-3. Comannd line scripts
-4. Org file syntax
-5. Default values
-6. Running tests
-7. Future features
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Comannd line scripts](#command-line-scripts)
+4. [Org file syntax](#org-file-syntax)
+5. [Parameters](#parameters)
+6. [Running tests](#testing)
+7. [Future features](#future-features)
 
 ## Requirements
 
-1. Have Anki app installed.
+1. Have the [Anki app](https://apps.ankiweb.net/) installed.
 2. Installing the Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159).
 
 	i. For OSX users of anki-connect see [note for OSX users](https://foosoft.net/projects/anki-connect/#installation)
