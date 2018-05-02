@@ -10,13 +10,47 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 ## Contents
 
-1. [Requirements](#requirements)
-2. [Installation](#installation)
-3. [Comannd line scripts](#command-line-scripts)
-4. [Org file syntax](#org-file-syntax)
-5. [Parameters](#parameters)
-6. [Running tests](#testing)
-7. [Future features](#future-features)
+1. [What is an org file](#what-is-an-org-file)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
+4. [Comannd line scripts](#command-line-scripts)
+5. [Org file syntax](#org-file-syntax)
+6. [Parameters](#parameters)
+7. [Running tests](#testing)
+8. [Future features](#future-features)
+
+## What is an org file?
+
+An org files a basic text file, very similar to .txt files. The file type is from Org Mode for Emacs but really you don't need to know much about this.
+
+This is all you need to know for this project. 
+
+* Asterisks ( * ) are used to to create bullet point style lists. 
+* .org files are series of lists
+
+* A list item for a question starts with *
+* A list item for a answer starts with **
+* A comment starts with a #
+
+Examples are provided below.
+
+This project will takes corretcly formated .org files and convert them to Anki cards.
+
+### Here is some example syntax for how question should be laid out
+
+``` org
+* Question
+** Answer 1
+** Answer 2
+* Another Question
+** Another answer
+```
+
+### More information on org-mode
+
+Org mode is for keeping notes, maintaining TODO lists, planning projects, and authoring documents with a fast and effective plain-text system
+
+[orgmode homepage](https://orgmode.org/)
 
 ## Requirements
 
