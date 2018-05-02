@@ -7,8 +7,17 @@ import requests
 
 from org_to_anki.main import parseAndUploadOrgFile
 
+
+def testE2EForOrg():
+    generalEndToEndForBasic("basic.org")
+
+
+def testE2EForTxt():
+    generalEndToEndForBasic("basic.txt")
+
+
 @responses.activate
-def testEndToEndForBasic():
+def generalEndToEndForBasic(fileName):
     #https://github.com/getsentry/responses
     responses.add(responses.POST, 'http://127.0.0.1:8765/', status=200)
     #Return response so deck need to be created
@@ -18,8 +27,7 @@ def testEndToEndForBasic():
     # Return creation of card id
     responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': [1521151676641], 'error': None}, status=200)
 
-
-    filePath = os.path.abspath("tests/testData/basic.org")
+    filePath = os.path.abspath("tests/testData/" + fileName)
     parseAndUploadOrgFile(filePath)
 
     actualRequest = eval(responses.calls[3].request.body)
@@ -32,7 +40,6 @@ def testEndToEndForBasic():
     assert(actualRequest["params"]["notes"][0]["modelName"] == "Basic")
     assert(actualRequest["params"]["notes"][0]["tags"] == [])
     assert(actualRequest["params"]["notes"][0]["fields"]["Front"] == "Put request")
-    assert(actualRequest["params"]["notes"][0]["fields"]["Back"] == "<ul style='list-style-position: inside;'><li>Puts file / resource at specific url</li><li>If file ==> exists => replaces // !exist => creates</li><li>Request => idempotent</li></ul>")
 
 
 @responses.activate
