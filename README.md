@@ -2,22 +2,27 @@
 
 [![Build Status](https://travis-ci.org/c-okelly/org_to_anki.svg?branch=master)](https://travis-ci.org/c-okelly/org_to_anki) [![codecov](https://codecov.io/gh/c-okelly/org_to_anki/branch/master/graph/badge.svg)](https://codecov.io/gh/c-okelly/org_to_anki)
 
-Python module to convert org files into Anki question decks.
+Python module to convert org or txt files into Anki question decks.
 
-Provides two command line scripts to upload org files and take new basic notes quickly.
+Provides two command line scripts. First is to upload an org or txt files to Anki. The second allow quick notetaking and storage.
  
 Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for Anki that provides a HTTP api for Anki.
 
 ## Contents
 
+0. [Supported file type](#supported-file-types) 
 1. [What is an org file](#what-is-an-org-file)
 2. [Requirements](#requirements)
 3. [Installation](#installation)
 4. [Comannd line scripts](#command-line-scripts)
-5. [Org file syntax](#org-file-syntax)
+5. [File syntax](#File-syntax)
 6. [Parameters](#parameters)
 7. [Running tests](#testing)
 8. [Future features](#future-features)
+
+## Supported files types
+
+This project supports reading from both .org and .txt files. 
 
 ## What is an org file?
 
@@ -95,9 +100,9 @@ ankiq
 * Takes a questions and a series of anwers
 * Empty line add a new question to the default org file
 
-## Org file syntax
+## File syntax
 
-* Currently supports two different types of org files
+* Currently supports two different types of org or txt files
 * All questions and answers should start with an asterix
 * All comment lines start with a \#
 ```org
@@ -126,7 +131,7 @@ ankiq
 
 ### Basic org file syntax
 
-* Sample answer and question in org file
+* Sample answer and question in org or txt file
 
  ```org
  * What is the capital of Ireland?
@@ -138,7 +143,7 @@ ankiq
 * Each topic will be turned into its own subdeck. The name of this deck is given by the first line. E.G Capitals cities and Spoken languages.
 * Allows for a group of related topics to be managed in a single file.
 
-* Sample answer and questions for topics org file.
+* Sample answer and questions for topics org or txt file.
 
  ```org
  * Capital cities
@@ -162,9 +167,9 @@ ankiq
 
 * Currently supported parameters are questions type
 
-1. Org file type
-* By default all org files will be of basic type.
-* If you want to use a topics layout must be specified at the top of the file.
+1. File type
+* Org or txt files will default to type basic.
+* If you want to use a topics layout this must be specified at the top of the file.
 
 ```org
 # Comment line
