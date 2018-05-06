@@ -1,0 +1,14 @@
+# More advanced org file layout. Each topics has its own questions.
+#fileType = topics
+
+* Capital cites
+** What is the capital of Ireland
+*** Dublin
+* Languages of countries
+** What are the main languages in Ireland
+*** English
+*** Irish
+* Definitions of words
+#type=Basic (and reversed card)
+** Definition of a box
+*** A container with a flat base and sides, typically square or rectangular and having a lid.
