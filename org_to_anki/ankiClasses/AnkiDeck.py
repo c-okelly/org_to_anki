@@ -12,6 +12,13 @@ class AnkiDeck:
         self._ankiQuestions = []
         self._parameters = {}
         self._comments = []
+    #     self._sourceFilePath = ""
+
+    # def addSourceFilePath(self, filePath: str):
+    #     self._sourceFilePath = filePath
+
+    # def getSourceFilePath(self):
+    #     return self._sourceFilePath
 
     def addComment(self, comment: str):
         self._comments.append(comment)

@@ -16,7 +16,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
     globalParameters = ParserUtils.convertCommentsToParameters(comments)
     fileType = globalParameters.get("fileType", "basic")
 
-    deck = deckBuilder.buildDeck(content, fileName, fileType)
+    deck = deckBuilder.buildDeck(content, fileName, filePath, fileType)
 
     # TODO refactor this section into DeckBuilder
     for key in globalParameters:

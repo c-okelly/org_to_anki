@@ -3,21 +3,23 @@ from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from . import ParserUtils
 
+import os
+
 
 class DeckBuilder:
 
-    def buildDeck(self, questions: [str], deckName: str, fileType: str='basic'):
+    def buildDeck(self, questions: [str], deckName: str, filePath: str, fileType: str='basic'):
 
         if fileType == 'basic':
-            deck = self._buildBasic(questions, deckName)
+            deck = self._buildBasic(questions, deckName, filePath)
         elif fileType == 'topics':
-            deck = self._buildTopics(questions, deckName)
+            deck = self._buildTopics(questions, deckName, filePath)
         else:
             raise Exception('Unsupported file type: ' + fileType)
 
         return deck
 
-    def _buildTopics(self, questions, deckName):
+    def _buildTopics(self, questions, deckName, filePath):
 
         deck = AnkiDeck(deckName)
 
@@ -25,7 +27,7 @@ class DeckBuilder:
 
         for section in subSections:
             subDeckName = section.pop(0).replace("*", "").strip()
-            subDeck = self._buildBasic(section, subDeckName, 2, 3)
+            subDeck = self._buildBasic(section, subDeckName, filePath, 2, 3)
             deck.addSubdeck(subDeck)
 
         return deck
@@ -86,7 +88,30 @@ class DeckBuilder:
 
         return cleaned
 
-    def _buildBasic(self, questions, deckName, questionLine=1, answerLine=2):
+
+    def _parseAnswerLine(self, answerLine: str, filePath: str, currentQuestion: AnkiQuestion):
+
+        # Check if line needs to be parsed
+        if "[" in answerLine and "]" in answerLine:
+            if "http://" in answerLine or "www." in answerLine:
+                raise Exception("Line could not be parsed: " + answerLine)
+
+            elif answerLine.count("[") == 1:
+                relativeImagePath = answerLine.split("[")[1].split("]")[0]
+                fileName = os.path.basename(relativeImagePath)
+
+                baseDirectory = os.path.dirname(filePath) 
+                imagePath = os.path.join(baseDirectory, relativeImagePath)
+
+                print(fileName, imagePath)
+                currentQuestion.addImage(fileName, imagePath)
+
+            else:
+                raise Exception("Line could not be parsed: " + answerLine)
+        
+        return answerLine
+
+    def _buildBasic(self, questions, deckName, filePath, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
         currentQuestion = None
@@ -106,6 +131,7 @@ class DeckBuilder:
 
             elif noAstrics == answerLine:
                 line = self._removeAstrics(line)
+                line = self._parseAnswerLine(line, filePath, currentQuestion)
                 currentQuestion.addAnswer(line)
 
             # Sublist in question
@@ -117,6 +143,7 @@ class DeckBuilder:
                 while len(questions) > 0 and self._countAstrics(
                         questions[0]) > answerLine:
                     line = questions.pop(0)
+                    line = self._parseAnswerLine(line, filePath, currentQuestion)
                     subList.append(line)
 
                 formatedSubList = self._generateSublist(subList)

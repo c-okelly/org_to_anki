@@ -5,6 +5,7 @@ sys.path.append('../org_to_anki')
 # Anki deck
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
+from org_to_anki.ankiClasses.AnkiQuestionMedia import AnkiQuestionMedia
 
 def testGettingDeckNames():
 
@@ -117,10 +118,20 @@ def testDecksInheritParamsFromParentDeck():
     deck2.addSubdeck(deck1)
 
     questions = deck2.getQuestions()
-    print(deck2._parameters)
 
-    print(questions[0]._parameters)
     assert(questions[0].getParameter("deck2") == "deck2")
     assert(questions[0].getParameter("deck1") == "deck1")
     assert(questions[0].getParameter("deck0") == "deck0")
     assert(questions[0].getParameter("q0") == "question")
+
+def testAddImageForAnkiQuestion():
+
+    fullImagePath = os.path.abspath("tests/testData/imageFolder/image.png")
+
+    question = AnkiQuestion("test question")
+    question.addImage("image.png", fullImagePath)
+
+    with open(fullImagePath, 'rb') as data:
+        mediaItem = AnkiQuestionMedia("image", "image.png", data.read())
+
+    assert(mediaItem == question.getMedia()[0])
