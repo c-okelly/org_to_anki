@@ -155,6 +155,21 @@ ankiq
  *** Irish
  ```
 
+### Adding images
+
+* You can add an image as one of your answers by correctly referancing as follows
+	* Note: The image path should be relative to the file location
+	* The file will name will not change on upload. 
+		* In this case => "composite pattern.png"
+		* This could lead to a conflict on Anki if files are named badly
+* Check out the examples folder for a sample
+
+```org
+* What does the UML diagram for the compsite pattern look like?
+** Image is displayed below
+** [images_folder/composite pattern.png]
+```
+
 ### Parameters
 
 * Supported parameter syntax.
