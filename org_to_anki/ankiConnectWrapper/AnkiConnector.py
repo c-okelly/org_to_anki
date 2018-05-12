@@ -2,6 +2,7 @@ from .AnkiConnectorUtils import AnkiConnectorUtils
 from ..ankiClasses import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .. import config
+import base64
 
 
 class AnkiConnector:
@@ -27,6 +28,7 @@ class AnkiConnector:
         self._buildNewDecksAsRequired(deck.getDeckNames())
         # Build new questions
         notes = self.buildAnkiNotes(deck.getQuestions())
+        media = self.prepareMedia(deck.getMedia())
 
         # TODO Get all question from that deck and
         # use this to verify questions need to be uploaded
@@ -34,6 +36,17 @@ class AnkiConnector:
 
         # Insert new question through the api
         self.connector.uploadNotes(notes)
+        self.connector.uploadMediaCollection(media)
+
+    def prepareMedia(self, ankiMedia: []):
+
+        formattedMedia = []
+        if len(ankiMedia) == 0:
+            return formattedMedia
+        else:
+            for i in ankiMedia:
+                formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
+        return formattedMedia
 
     def _buildNewDecksAsRequired(self, deckNames: [str]):
         # Check decks exist for notes

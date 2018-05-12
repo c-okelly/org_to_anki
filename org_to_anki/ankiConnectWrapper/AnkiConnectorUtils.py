@@ -1,5 +1,6 @@
 import requests
 import json
+import copy
 
 
 class AnkiConnectorUtils:
@@ -10,7 +11,14 @@ class AnkiConnectorUtils:
     def makeRequest(self, action: str, parmeters: dict={}):
 
         payload = self._buildPayload(action, parmeters)
-        print("Parameters sent to Anki", payload, "\n")
+        if payload.get("action") != "storeMediaFile":
+            print("Parameters sent to Anki", payload, "\n")
+        else:
+            truncateMediaEncoding = copy.deepcopy(payload)
+            truncateMediaEncoding.get("params")["data"] = 'encoding remvoed for print statement'
+            print("Parameters sent to Anki", truncateMediaEncoding, "\n")
+
+        payload = json.dumps(payload)
         # TODO log payloads
         try:
             res = requests.post(self.url, payload)
@@ -35,6 +43,14 @@ class AnkiConnectorUtils:
         result = self.makeRequest("addNotes", notes)
         return self._getResultOrError(result)
 
+    def uploadMediaCollection(self, mediaItems):
+        for i in mediaItems:
+            self.uploadMedia(i.get("fileName"), i.get("data"))
+
+    def uploadMedia(self, fileName, base64EncodedMedia):
+        result = self.makeRequest("storeMediaFile", {"filename": fileName, "data": base64EncodedMedia})
+        return self._getResultOrError(result)
+
     def testConnection(self):
         try:
             # TODO log status code
@@ -56,7 +72,7 @@ class AnkiConnectorUtils:
         payload["action"] = action
         payload["params"] = params
         payload["version"] = version
-        return json.dumps(payload)
+        return payload
 
 
 if __name__ == "__main__":

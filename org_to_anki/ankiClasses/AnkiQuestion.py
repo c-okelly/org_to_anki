@@ -1,4 +1,3 @@
-from .AnkiQuestionMedia import AnkiQuestionMedia
 
 class AnkiQuestion:
 
@@ -9,7 +8,6 @@ class AnkiQuestion:
         self._tags = []
         self._comments = []
         self._parameters = {}
-        self._media = []
 
     def setDeckName(self, deckName: str):
         self.deckName = deckName
@@ -44,13 +42,6 @@ class AnkiQuestion:
 
     def getTags(self):
         return self._tags
-
-    def addImage(self, fileName, filePath):
-        with open(filePath, "rb") as file:
-            self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
-
-    def getMedia(self):
-        return self._media
 
     # String representation
     def __str__(self):

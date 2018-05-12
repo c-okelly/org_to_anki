@@ -1,5 +1,4 @@
-import sys
-import os
+import sys, os, base64
 sys.path.append('../org_to_anki')
 
 import responses
@@ -81,3 +80,27 @@ def testEndToEndForTopicsWithParams():
     assert(actualRequest["params"]["notes"][1]["deckName"] == "0. Org Notes::topicsLayout::Languages of countries")
     assert(actualRequest["params"]["notes"][1]["modelName"] == "Basic (and reversed card)")
     assert(actualRequest["params"]["notes"][1]["fields"]["Front"] == "What are the main languages in Ireland")
+
+
+@responses.activate
+def testImageUploadE2E():
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', status=200)
+    #Return response so deck need to be created
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. Org Notes'], 'error': None}, status=200)
+    #Return creation of deck id
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': 1521151676641, 'error': None}, status=200)
+    # Return creation of card id
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': [1521151676641], 'error': None}, status=200)
+
+    imagePath = os.path.abspath("tests/testData/imageFolder/image.png")
+    with open(imagePath, 'rb') as data:
+        encodedImage = base64.b64encode(data.read()).decode("utf-8")
+
+    filePath = os.path.abspath("tests/testData/image.org")
+    parseAndUploadOrgFile(filePath)
+    
+
+    actualRequest = eval(responses.calls[4].request.body)
+
+    assert(actualRequest["params"]["filename"] == "image.png")
+    assert(actualRequest["params"]["data"] == encodedImage)

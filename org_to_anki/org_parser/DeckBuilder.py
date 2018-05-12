@@ -89,7 +89,7 @@ class DeckBuilder:
         return cleaned
 
 
-    def _parseAnswerLine(self, answerLine: str, filePath: str, currentQuestion: AnkiQuestion):
+    def _parseAnswerLine(self, answerLine: str, filePath: str, currentDeck: AnkiDeck):
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
@@ -103,8 +103,8 @@ class DeckBuilder:
                 baseDirectory = os.path.dirname(filePath) 
                 imagePath = os.path.join(baseDirectory, relativeImagePath)
 
-                print(fileName, imagePath)
-                currentQuestion.addImage(fileName, imagePath)
+                currentDeck.addImage(fileName, imagePath)
+                answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
 
             else:
                 raise Exception("Line could not be parsed: " + answerLine)
@@ -131,7 +131,7 @@ class DeckBuilder:
 
             elif noAstrics == answerLine:
                 line = self._removeAstrics(line)
-                line = self._parseAnswerLine(line, filePath, currentQuestion)
+                line = self._parseAnswerLine(line, filePath, deck)
                 currentQuestion.addAnswer(line)
 
             # Sublist in question
@@ -143,7 +143,7 @@ class DeckBuilder:
                 while len(questions) > 0 and self._countAstrics(
                         questions[0]) > answerLine:
                     line = questions.pop(0)
-                    line = self._parseAnswerLine(line, filePath, currentQuestion)
+                    line = self._parseAnswerLine(line, filePath, deck)
                     subList.append(line)
 
                 formatedSubList = self._generateSublist(subList)
