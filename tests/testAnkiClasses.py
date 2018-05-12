@@ -124,6 +124,21 @@ def testDecksInheritParamsFromParentDeck():
     assert(questions[0].getParameter("deck0") == "deck0")
     assert(questions[0].getParameter("q0") == "question")
 
+def testGetMediaMethod():
+
+    # Create deck with subdeck
+    parent = AnkiDeck("parent")
+    parent._media = ['p']
+    child = AnkiDeck("child")
+    child._media = ['c']
+    subChild = AnkiDeck("subChild")
+    subChild._media = ['sc']
+
+    child.addSubdeck(subChild)
+    parent.addSubdeck(child)
+
+    assert(parent.getMedia() == ['sc', 'c', 'p'])
+
 def testAddImageForAnkiQuestion():
 
     fullImagePath = os.path.abspath("tests/testData/imageFolder/image.png")

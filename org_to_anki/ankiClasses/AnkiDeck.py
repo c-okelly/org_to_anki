@@ -26,7 +26,14 @@ class AnkiDeck:
             self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
 
     def getMedia(self):
-        return self._media
+        media = []
+
+        if self.hasSubDeck():
+            for subDeck in self.subDecks:
+                media.extend(subDeck.getMedia())
+        media.extend(self._media)
+
+        return media
 
     def addComment(self, comment: str):
         self._comments.append(comment)
@@ -100,8 +107,9 @@ class AnkiDeck:
         return len(self.subDecks) > 0
 
     def __str__(self):
-        return ("DeckName: %s.\nSubDecks: %s.\nQuestions: %s.\nParamters: %s.\nComments: %s.") % (
-            self.deckName, self.subDecks, self._ankiQuestions, self._parameters, self._comments)
+        return ("DeckName: %s.\nSubDecks: %s.\nQuestions: %s.\nParamters: %s.\nComments: %s.\nMedia: %s") % (
+            self.deckName, self.subDecks, self._ankiQuestions, self._parameters, self._comments, self._media)
 
     def __eq__(self, other):
-        return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions() and self.subDecks == other.subDecks and self._parameters == other._parameters and self._comments == other._comments
+        return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions(
+        ) and self.subDecks == other.subDecks and self._parameters == other._parameters and self._comments == other._comments and self._media == other._media

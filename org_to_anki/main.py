@@ -39,4 +39,5 @@ def _parseAndUpload(filePath):
 
 
 if __name__ == "__main__":
-    parseAndUploadOrgFile("/Users/conorokelly/Desktop/Notes/Org_Files/1.orgNotes/quickNotes.org")
+    # parseAndUploadOrgFile("/Users/conorokelly/Desktop/Notes/Org_Files/1.orgNotes/quickNotes.org")
+    parseAndUploadOrgFile("/Users/conorokelly/Desktop/Notes/Org_Files/1.orgNotes/programming_design_patterns.org")
