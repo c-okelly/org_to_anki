@@ -1,6 +1,8 @@
 
 from ..ankiClasses.AnkiQuestion import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
+from ..ankiClasses.AnkiQuestionFactory import AnkiQuestionFactory
+from . import DeckBuilderUtils
 from . import ParserUtils
 
 import os
@@ -8,10 +10,12 @@ import os
 
 class DeckBuilder:
 
+    utils = DeckBuilderUtils.DeckBuilderUtils()
+
     def buildDeck(self, questions: [str], deckName: str, filePath: str, fileType: str='basic'):
 
         if fileType == 'basic':
-            deck = self._buildBasic(questions, deckName, filePath)
+            deck = self._buildNewDeck(questions, deckName, filePath)
         elif fileType == 'topics':
             deck = self._buildTopics(questions, deckName, filePath)
         else:
@@ -27,7 +31,7 @@ class DeckBuilder:
 
         for section in subSections:
             subDeckName = section.pop(0).replace("*", "").strip()
-            subDeck = self._buildBasic(section, subDeckName, filePath, 2, 3)
+            subDeck = self._buildNewDeck(section, subDeckName, filePath, 2, 3)
             deck.addSubdeck(subDeck)
 
         return deck
@@ -55,88 +59,60 @@ class DeckBuilder:
 
         return subSections
 
-    def _removeAstrics(self, line: str):
+    def _buildNewDeck1(self, deck, questions, numberQuestionAsterisk = 1):
 
-        line = line.strip().split(" ")[1:]
-        line = " ".join(line)
+        # Answer are indented by a single or more Asterisks
+        numberAnswerAsterisk = 2
+        questionFactory = AnkiQuestionFactory()
 
-        return line
+        while len(questions) > 0:
+            line = questions.pop(0)
+            noAstrics = self.utils.countAstrics(line)
 
-    def _countAstrics(self, line: str):
-
-        return line.split(' ')[0].count('*', 0, 10)
-
-    def _generateSublist(self, subItems: [str]):
-
-        formatedList = []
-
-        indentaionLevel = self._countAstrics(subItems[0])
-        for item in subItems:
-            if self._countAstrics(item) == indentaionLevel:
-                formatedList.append(item)
-            elif self._countAstrics(item) > indentaionLevel and isinstance(formatedList[-1], list):
-                formatedList[-1].append(item)
-            else:
-                formatedList.append([item])
-
-        cleaned = []
-        for i in formatedList:
-            if isinstance(i, list):
-                cleaned.append(self._generateSublist(i))
-            else:
-                cleaned.append(self._removeAstrics(i))
-
-        return cleaned
-
-
-    def _parseAnswerLine(self, answerLine: str, filePath: str, currentDeck: AnkiDeck):
-
-        # Check if line needs to be parsed
-        if "[" in answerLine and "]" in answerLine:
-            # print(answerLine)
-            # print(filePath)
-            if "http://" in answerLine or "www." in answerLine:
-                raise Exception("Line could not be parsed: " + answerLine)
-
-            elif answerLine.count("[") == 1:
-                relativeImagePath = answerLine.split("[")[1].split("]")[0]
-                fileName = os.path.basename(relativeImagePath)
-                baseDirectory = os.path.dirname(filePath) 
-                imagePath = os.path.join(baseDirectory, relativeImagePath)
-
-                if len(relativeImagePath) > 0 and os.path.exists(imagePath):
-
-                    currentDeck.addImage(fileName, imagePath)
-                    answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
+            # Question line
+            if noAstrics == numberQuestionAsterisk:
+                # Allow for multi line questions
+                # If new question => generate ankiQuestion and start new
+                if questionFactory.questionHasAnswers() == True:
+                    deck.addQuestion(questionFactory.buildQuesiton())
                 else:
-                    print("Could not find image on line:", answerLine)
+                    questionFactory.addQuestionLine(line)
+                pass
 
+            # Answer line
+            elif noAstrics > numberQuestionAsterisk:
+                questionFactory.addAnswerLine(line) ### No subqestion line => logic should be moved when answers are built ###
+
+            # Comment line
             else:
-                raise Exception("Line could not be parsed: " + answerLine)
+                questionFactory.addCommentLine(line)
         
-        return answerLine
+        # Add last question
+        if questionFactory.questionHasAnswers():
+            deck.addQuestion(questionFactory.buildQuesiton())
 
-    def _buildBasic(self, questions, deckName, filePath, questionLine=1, answerLine=2):
+    def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
         currentQuestion = None
 
         while len(questions) > 0:
             line = questions.pop(0)
-            noAstrics = self._countAstrics(line)
-            # TODO lines of differnt type need different formatting
+            noAstrics = self.utils.countAstrics(line)
 
+            # Question line
             if noAstrics == questionLine:
-                line = self._removeAstrics(line)
+                line = self.utils.removeAstrics(line)
                 # Store old question
-                if currentQuestion is not None:
+                if currentQuestion is not None: ### TODO Check for anwers with no questions?? and len(currentQuestion.getAnswers()) != 0:
                     deck.addQuestion(currentQuestion)
                 # Next Question
                 currentQuestion = AnkiQuestion(line)
 
+            # Asnwer line
             elif noAstrics == answerLine:
-                line = self._removeAstrics(line)
-                line = self._parseAnswerLine(line, filePath, deck)
+                line = self.utils.removeAstrics(line)
+                line = self.utils.parseAnswerLine(line, filePath, deck)
                 currentQuestion.addAnswer(line)
 
             # Sublist in question
@@ -145,13 +121,13 @@ class DeckBuilder:
                 subList = []
                 subList.append(line)
 
-                while len(questions) > 0 and self._countAstrics(
+                while len(questions) > 0 and self.utils.countAstrics(
                         questions[0]) > answerLine:
                     line = questions.pop(0)
-                    line = self._parseAnswerLine(line, filePath, deck)
+                    line = self.utils.parseAnswerLine(line, filePath, deck)
                     subList.append(line)
 
-                formatedSubList = self._generateSublist(subList)
+                formatedSubList = self.utils.generateSublist(subList)
                 currentQuestion.addAnswer(formatedSubList)
 
             elif noAstrics == 0 and line[0] == "#":
@@ -170,6 +146,7 @@ class DeckBuilder:
             else:
                 raise Exception("Line incorrectly processed.")
 
+        # Add last question
         if currentQuestion is not None:
             deck.addQuestion(currentQuestion)
             currentQuestion = None
