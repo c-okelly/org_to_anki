@@ -10,17 +10,17 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 ## Contents
 
-0. [Supported file type](#supported-file-types) 
+0. [Supported file type](#supported-file-type) 
 1. [What is an org file](#what-is-an-org-file)
 2. [Requirements](#requirements)
 3. [Installation](#installation)
 4. [Comannd line scripts](#command-line-scripts)
-5. [File syntax](#File-syntax)
+5. [File syntax](#file-syntax)
 6. [Parameters](#parameters)
 7. [Running tests](#testing)
 8. [Future features](#future-features)
 
-## Supported files types
+## Supported file types
 
 This project supports reading from both .org and .txt files. 
 
@@ -68,11 +68,13 @@ Org mode is for keeping notes, maintaining TODO lists, planning projects, and au
 
 ## Installation
 
-To install this module from source.
+To install this module from source on Linux or OSx.
 
-1. git clone https://github.com/c-okelly/org_to_anki
-2. cd into the module directory
-3. python3 setup.py install
+```bash
+git clone https://github.com/c-okelly/org_to_anki
+cd org_to_ani
+python3 setup.py install
+```
 
 ## Command line scripts
 
