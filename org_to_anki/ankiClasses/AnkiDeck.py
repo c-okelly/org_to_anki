@@ -98,6 +98,8 @@ class AnkiDeck:
         return deckNames
 
     def addQuestion(self, ankiQuestion: AnkiQuestion):
+        # if ankiQuestion.hasMedia():
+        #     self.addImage(AnkiQuestion._media[0])
         self._ankiQuestions.append(ankiQuestion)
 
     def addSubdeck(self, ankiDeck):  # TODO Should have type of AnkiDeck

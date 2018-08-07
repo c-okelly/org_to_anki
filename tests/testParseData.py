@@ -19,7 +19,7 @@ def testBaiscPraseQuestsion():
 
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
-    assert(actualDeck.getQuestions()[0].question == "Put request")
+    assert(actualDeck.getQuestions()[0].question[0] == "Put request")
     assert(actualDeck.getQuestions()[0].getAnswers() == ["Puts file / resource at specific url", "If file ==> exists => replaces // !exist => creates", "Request => idempotent"])
 
 def testBasicParseMainDeckParameters():
@@ -117,6 +117,8 @@ def testSubDeck1HasParamters():
 
     params = {'type': 'basic'}
     comments = ["#type=basic"]
+    print(actualDeck.subDecks[1]._comments)
+    print(actualDeck.subDecks[1]._parameters)
     assert(actualDeck.subDecks[1]._comments == comments)
     assert(actualDeck.subDecks[1]._parameters == params)
 
@@ -139,7 +141,7 @@ def testSubDeck0HasBasicQuestion():
     q1.addAnswer("Dublin")
     q1.deckName = "Capital cites"
 
-    assert(actualDeck.subDecks[0].getQuestions()[0].question == "What is the capital of Ireland")
+    assert(actualDeck.subDecks[0].getQuestions()[0].question[0] == "What is the capital of Ireland")
     assert(actualDeck.subDecks[0].getQuestions()[0]._answers == ["Dublin"])
 
 def testSubDeck1HasBasicQuestion():
@@ -147,7 +149,7 @@ def testSubDeck1HasBasicQuestion():
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
 
-    assert(actualDeck.subDecks[1].getQuestions()[0].question == "What are the main languages in Ireland")
+    assert(actualDeck.subDecks[1].getQuestions()[0].question[0] == "What are the main languages in Ireland")
     assert(actualDeck.subDecks[1].getQuestions()[0]._answers == ["English", "Irish"])
 
 
