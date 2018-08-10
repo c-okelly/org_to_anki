@@ -143,7 +143,7 @@ def testAddImageForAnkiQuestion():
 
     fullImagePath = os.path.abspath("tests/testData/imageFolder/image.png")
 
-    question = AnkiDeck("test question")
+    question = AnkiQuestion("test question")
     question.addImage("image.png", fullImagePath)
 
     with open(fullImagePath, 'rb') as data:

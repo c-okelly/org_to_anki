@@ -1,4 +1,6 @@
 
+from .AnkiQuestionMedia import AnkiQuestionMedia
+
 class AnkiQuestion:
 
     def __init__(self, question = None):
@@ -26,10 +28,14 @@ class AnkiQuestion:
 
     def addImage(self, fileName, filePath):
         with open(filePath, "rb") as file:
+            print(filePath)
             self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
 
-    # def hasMedia(self):
-    #     return len(self._media) > 0
+    def hasMedia(self):
+        return len(self._media) > 0
+
+    def getMedia(self):
+        return self._media
 
     # Getters and setters #
     def addAnswer(self, answer: str):
