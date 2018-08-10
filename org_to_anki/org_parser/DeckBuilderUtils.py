@@ -33,9 +33,12 @@ class DeckBuilderUtils:
         return answerLine
 
     def removeAstrics(self, line: str):
-        line = line.strip().split(" ")[1:]
-        line = " ".join(line)
-        return line
+        if line.strip()[0] == "*":
+            line = line.strip().split(" ")[1:]
+            line = " ".join(line)
+            return line
+        else:
+            return line
 
     def countAstrics(self, line: str):
         return line.split(' ')[0].count('*', 0, 10)

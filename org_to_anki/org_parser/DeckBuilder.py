@@ -62,6 +62,14 @@ class DeckBuilder:
     def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
+        # Get deck comments
+        while questions[0].strip()[0] == "#":
+            comment = questions.pop(0)
+            deck.addComment(comment)
+            parameters = ParserUtils.convertLineToParamters(comment)
+            for key in parameters.keys():
+                deck.addParameter(key, parameters.get(key))
+
         # Answer are indented by a single or more Asterisks
         numberOfQuestionAsterisk = questionLine
         numberOfAnswerAsterisk = answerLine
@@ -86,8 +94,9 @@ class DeckBuilder:
 
             # Comment line
             elif line.strip()[0] == "#":
+                # Now comments are for deck and not for question
                 questionFactory.addCommentLine(line)
-            
+
             else:
                 print("Current line is not recognised: " + line)
         

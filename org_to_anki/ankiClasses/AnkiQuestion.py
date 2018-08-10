@@ -21,6 +21,9 @@ class AnkiQuestion:
     def addQuestion(self, question: str):
         self.question.append(question)
     
+    def getQuestions(self):
+        return self.question
+
     def addImage(self, fileName, filePath):
         with open(filePath, "rb") as file:
             self._media.append(AnkiQuestionMedia("image", fileName, file.read()))

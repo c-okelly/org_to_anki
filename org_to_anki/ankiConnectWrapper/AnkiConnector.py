@@ -97,11 +97,20 @@ class AnkiConnector:
 
         # Generate fields
         fields = {}
-        fields["Front"] = ankiQuestion.question
+        fields["Front"] = self._createQuestionString(ankiQuestion.getQuestions())
         fields["Back"] = self._createAnswerString(ankiQuestion.getAnswers())
 
         note["fields"] = fields
         return note
+
+    def _createQuestionString(self, questions:[str]):
+        if len(questions) == 1:
+            return questions[0]
+        else:
+            questionString = ""
+            for q in questions:
+                questionString += q + " <br>"
+            
 
     def _createAnswerString(self, answers: [str], bulletPoints: bool=True):
         result = ""

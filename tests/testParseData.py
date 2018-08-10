@@ -117,8 +117,6 @@ def testSubDeck1HasParamters():
 
     params = {'type': 'basic'}
     comments = ["#type=basic"]
-    print(actualDeck.subDecks[1]._comments)
-    print(actualDeck.subDecks[1]._parameters)
     assert(actualDeck.subDecks[1]._comments == comments)
     assert(actualDeck.subDecks[1]._parameters == params)
 

@@ -20,6 +20,9 @@ class AnkiQuestionFactory:
         self.currentAnswers = []
         self.currentComments = []
 
+    def hasData(self):
+        return len(self.curentQuestions) == 0 or len(self.currentAnswers) == 0 and len(self.currentComments) == 0
+
     def addAnswerLine(self, answer):
         self.currentAnswers.append(answer)
 
@@ -48,6 +51,7 @@ class AnkiQuestionFactory:
         noQuestionAstrics = self.utils.countAstrics(self.currentAnswers[0])
         while len(self.currentAnswers) > 0:
             line = self.currentAnswers.pop(0)
+            print(line)
             noAstrics = self.utils.countAstrics(line)
 
             # Asnwer line
@@ -64,7 +68,6 @@ class AnkiQuestionFactory:
 
                 while len(self.currentAnswers) > 0 and self.utils.countAstrics(self.currentAnswers[0]) > noQuestionAstrics:
                     line = self.currentAnswers.pop(0)
-                    line = self.utils.removeAstricsline(line)
                     line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
                     subList.append(line)
 
@@ -75,20 +78,12 @@ class AnkiQuestionFactory:
                 raise Exception("Line incorrectly processed.")
 
         for comment in self.currentComments:
-            print("Comment line ", comment)
             newQuestion.addComment(comment)
             parameters = ParserUtils.convertLineToParamters(comment)
             for key in parameters.keys():
                 newQuestion.addParameter(key, parameters.get(key))
-        print(newQuestion._comments)
 
         # Clear data and return
         self.clearData()
 
         return newQuestion
-
-
-    def removeAstrics(self, line: str):
-        line = line.strip().split(" ")[1:]
-        line = " ".join(line)
-        return line
