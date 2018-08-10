@@ -9,8 +9,6 @@ class QuestionBuilderUtils:
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
-            # print(answerLine)
-            # print(filePath)
             if "http://" in answerLine or "www." in answerLine:
                 raise Exception("Line could not be parsed: " + answerLine)
 
@@ -31,35 +29,6 @@ class QuestionBuilderUtils:
                 raise Exception("Line could not be parsed: " + answerLine)
         
         return answerLine
-      # Used to check if extra data is containted within the line
-
-    ## Double to be used before refactoring
-    # def parseAnswerLine1(self, answerLine: str, filePath: str, currentQuestion: AnkiQuestion):
-
-    #     # Check if line needs to be parsed
-    #     if "[" in answerLine and "]" in answerLine:
-    #         # print(answerLine)
-    #         # print(filePath)
-    #         if "http://" in answerLine or "www." in answerLine:
-    #             raise Exception("Line could not be parsed: " + answerLine)
-
-    #         elif answerLine.count("[") == 1:
-    #             relativeImagePath = answerLine.split("[")[1].split("]")[0]
-    #             fileName = os.path.basename(relativeImagePath)
-    #             baseDirectory = os.path.dirname(filePath) 
-    #             imagePath = os.path.join(baseDirectory, relativeImagePath)
-
-    #             if len(relativeImagePath) > 0 and os.path.exists(imagePath):
-
-    #                 currentQuestion.addImage(fileName, imagePath)
-    #                 answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
-    #             else:
-    #                 print("Could not find image on line:", answerLine)
-
-    #         else:
-    #             raise Exception("Line could not be parsed: " + answerLine)
-        
-    #     return answerLine
 
     def removeAstrics(self, line: str):
         line = line.strip().split(" ")[1:]
