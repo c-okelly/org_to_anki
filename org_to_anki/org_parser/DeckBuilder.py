@@ -59,96 +59,51 @@ class DeckBuilder:
 
         return subSections
 
-    def _buildNewDeck1(self, deck, questions, numberQuestionAsterisk = 1):
-
-        # Answer are indented by a single or more Asterisks
-        numberAnswerAsterisk = 2
-        questionFactory = AnkiQuestionFactory()
-
-        while len(questions) > 0:
-            line = questions.pop(0)
-            noAstrics = self.utils.countAstrics(line)
-
-            # Question line
-            if noAstrics == numberQuestionAsterisk:
-                # Allow for multi line questions
-                # If new question => generate ankiQuestion and start new
-                if questionFactory.questionHasAnswers() == True:
-                    deck.addQuestion(questionFactory.buildQuesiton())
-                else:
-                    questionFactory.addQuestionLine(line)
-                pass
-
-            # Answer line
-            elif noAstrics > numberQuestionAsterisk:
-                questionFactory.addAnswerLine(line) ### No subqestion line => logic should be moved when answers are built ###
-
-            # Comment line
-            else:
-                questionFactory.addCommentLine(line)
-        
-        # Add last question
-        if questionFactory.questionHasAnswers():
-            deck.addQuestion(questionFactory.buildQuesiton())
-
     def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
-        currentQuestion = None
+        # Get deck comments
+        while questions[0].strip()[0] == "#":
+            comment = questions.pop(0)
+            deck.addComment(comment)
+            parameters = ParserUtils.convertLineToParamters(comment)
+            for key in parameters.keys():
+                deck.addParameter(key, parameters.get(key))
+
+        # Answer are indented by a single or more Asterisks
+        numberOfQuestionAsterisk = questionLine
+        numberOfAnswerAsterisk = answerLine
+        questionFactory = AnkiQuestionFactory(deckName, filePath)
 
         while len(questions) > 0:
             line = questions.pop(0)
             noAstrics = self.utils.countAstrics(line)
+            if len(line) == 0:
+                continue
 
             # Question line
-            if noAstrics == questionLine:
-                line = self.utils.removeAstrics(line)
-                # Store old question
-                if currentQuestion is not None: ### TODO Check for anwers with no questions?? and len(currentQuestion.getAnswers()) != 0:
-                    deck.addQuestion(currentQuestion)
-                # Next Question
-                currentQuestion = AnkiQuestion(line)
-
-            # Asnwer line
-            elif noAstrics == answerLine:
-                line = self.utils.removeAstrics(line)
-                line = self.utils.parseAnswerLine(line, filePath, deck)
-                currentQuestion.addAnswer(line)
-
-            # Sublist in question
-            elif noAstrics > answerLine:
-
-                subList = []
-                subList.append(line)
-
-                while len(questions) > 0 and self.utils.countAstrics(
-                        questions[0]) > answerLine:
-                    line = questions.pop(0)
-                    line = self.utils.parseAnswerLine(line, filePath, deck)
-                    subList.append(line)
-
-                formatedSubList = self.utils.generateSublist(subList)
-                currentQuestion.addAnswer(formatedSubList)
-
-            elif noAstrics == 0 and line[0] == "#":
-                # Deck questions
-                if currentQuestion is None:
-                    deck.addComment(line)
-                    params = ParserUtils.convertLineToParamters(line)
-                    for key in params.keys():
-                        deck.addParameter(key, params[key])
+            if noAstrics == numberOfQuestionAsterisk:
+                # Allow for multi line questions
+                # If new question => generate ankiQuestion and start new
+                if questionFactory.questionHasAnswers() == True:
+                    deck.addQuestion(questionFactory.buildQuestion())
                 else:
-                    currentQuestion.addComment(line)
-                    parameters = ParserUtils.convertLineToParamters(line)
-                    for key in parameters.keys():
-                        currentQuestion.addParameter(key, parameters.get(key))
+                    questionFactory.addQuestionLine(line)
+
+            # Answer line
+            elif noAstrics > numberOfQuestionAsterisk:
+                questionFactory.addAnswerLine(line) ### No subqestion line => logic should be moved when answers are built ###
+
+            # Comment line
+            elif line.strip()[0] == "#":
+                # Now comments are for deck and not for question
+                questionFactory.addCommentLine(line)
 
             else:
-                raise Exception("Line incorrectly processed.")
-
+                print("Current line is not recognised: " + line)
+        
         # Add last question
-        if currentQuestion is not None:
-            deck.addQuestion(currentQuestion)
-            currentQuestion = None
+        if questionFactory.questionHasAnswers():
+            deck.addQuestion(questionFactory.buildQuestion())
 
         return deck

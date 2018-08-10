@@ -1,5 +1,5 @@
 from .AnkiQuestion import AnkiQuestion
-from .AnkiQuestionMedia import AnkiQuestionMedia
+# from .AnkiQuestionMedia import AnkiQuestionMedia
 
 class AnkiDeck:
 
@@ -14,16 +14,6 @@ class AnkiDeck:
         self._comments = []
         self._media = []
         self._sourceFilePath = ""
-
-    # def addSourceFilePath(self, filePath: str):
-    #     self._sourceFilePath = filePath
-
-    # def getSourceFilePath(self):
-    #     return self._sourceFilePath
-
-    def addImage(self, fileName, filePath):
-        with open(filePath, "rb") as file:
-            self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
 
     def getMedia(self):
         media = []
@@ -98,6 +88,10 @@ class AnkiDeck:
         return deckNames
 
     def addQuestion(self, ankiQuestion: AnkiQuestion):
+        # Add media to the main deck
+        # TODO if question is removed its media will remain in the deck
+        if ankiQuestion.hasMedia():
+            self._media.extend(ankiQuestion.getMedia())
         self._ankiQuestions.append(ankiQuestion)
 
     def addSubdeck(self, ankiDeck):  # TODO Should have type of AnkiDeck

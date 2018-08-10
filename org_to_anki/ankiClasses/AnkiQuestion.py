@@ -1,13 +1,18 @@
 
+from .AnkiQuestionMedia import AnkiQuestionMedia
+
 class AnkiQuestion:
 
-    def __init__(self, question: str):
+    def __init__(self, question = None):
         self.deckName = None
-        self.question = question
+        self.question = []
+        if question != None:
+            self.question.append(question)
         self._answers = []
         self._tags = []
         self._comments = []
         self._parameters = {}
+        self._media = []
 
     def setDeckName(self, deckName: str):
         self.deckName = deckName
@@ -15,8 +20,22 @@ class AnkiQuestion:
     def getDeckName(self):
         return self.deckName
 
-    def updateQuestion(self, question: str):
-        self.question = question
+    def addQuestion(self, question: str):
+        self.question.append(question)
+    
+    def getQuestions(self):
+        return self.question
+
+    def addImage(self, fileName, filePath):
+        with open(filePath, "rb") as file:
+            print(filePath)
+            self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
+
+    def hasMedia(self):
+        return len(self._media) > 0
+
+    def getMedia(self):
+        return self._media
 
     # Getters and setters #
     def addAnswer(self, answer: str):

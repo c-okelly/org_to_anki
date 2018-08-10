@@ -2,15 +2,13 @@ from ..ankiClasses.AnkiDeck import AnkiDeck
 
 import os
 
-class DeckBuilderUtils:
+class QuestionBuilderUtils:
 
     # Used to check if extra data is containted within the line
     def parseAnswerLine(self, answerLine: str, filePath: str, currentDeck: AnkiDeck):
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
-            # print(answerLine)
-            # print(filePath)
             if "http://" in answerLine or "www." in answerLine:
                 raise Exception("Line could not be parsed: " + answerLine)
 
@@ -33,12 +31,9 @@ class DeckBuilderUtils:
         return answerLine
 
     def removeAstrics(self, line: str):
-        if line.strip()[0] == "*":
-            line = line.strip().split(" ")[1:]
-            line = " ".join(line)
-            return line
-        else:
-            return line
+        line = line.strip().split(" ")[1:]
+        line = " ".join(line)
+        return line
 
     def countAstrics(self, line: str):
         return line.split(' ')[0].count('*', 0, 10)

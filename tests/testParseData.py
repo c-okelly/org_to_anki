@@ -4,6 +4,7 @@ sys.path.append('../org_to_anki')
 from org_to_anki.org_parser import parseData
 from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
+from org_to_anki.org_parser.DeckBuilder import DeckBuilder
 
 
 ### Test basic deck is parsed and built correctly ###
@@ -19,7 +20,7 @@ def testBaiscPraseQuestsion():
 
     filename = "tests/testData/basic.org"
     actualDeck = parseData.parse(filename)
-    assert(actualDeck.getQuestions()[0].question == "Put request")
+    assert(actualDeck.getQuestions()[0].question[0] == "Put request")
     assert(actualDeck.getQuestions()[0].getAnswers() == ["Puts file / resource at specific url", "If file ==> exists => replaces // !exist => creates", "Request => idempotent"])
 
 def testBasicParseMainDeckParameters():
@@ -139,7 +140,7 @@ def testSubDeck0HasBasicQuestion():
     q1.addAnswer("Dublin")
     q1.deckName = "Capital cites"
 
-    assert(actualDeck.subDecks[0].getQuestions()[0].question == "What is the capital of Ireland")
+    assert(actualDeck.subDecks[0].getQuestions()[0].question[0] == "What is the capital of Ireland")
     assert(actualDeck.subDecks[0].getQuestions()[0]._answers == ["Dublin"])
 
 def testSubDeck1HasBasicQuestion():
@@ -147,7 +148,28 @@ def testSubDeck1HasBasicQuestion():
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
 
-    assert(actualDeck.subDecks[1].getQuestions()[0].question == "What are the main languages in Ireland")
+    assert(actualDeck.subDecks[1].getQuestions()[0].question[0] == "What are the main languages in Ireland")
     assert(actualDeck.subDecks[1].getQuestions()[0]._answers == ["English", "Irish"])
 
+def testEmptyLinesHandledCorrectly():
+
+    data = ["* Question line 1","","** Answer"]
+    
+    deckBuilder = DeckBuilder()
+    deck = deckBuilder.buildDeck(data, "test Deck", "")
+
+def testMultiLineQuestion():
+
+    data = ["* Question line 1","* Question line 2","** Answer"]
+    deckBuilder = DeckBuilder()
+    deck = deckBuilder.buildDeck(data, "test Deck", "")
+
+    expectedQuestion = AnkiQuestion()
+    q1 = AnkiQuestion("What is the capital of Ireland")
+    expectedQuestion.addQuestion("Question line 1")
+    expectedQuestion.addQuestion("Question line 2")
+    expectedQuestion.addAnswer("Answer")
+
+    assert(deck.getQuestions()[0].question == expectedQuestion.question)
+    assert(deck.getQuestions()[0]._answers == expectedQuestion._answers)
 

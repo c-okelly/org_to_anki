@@ -38,6 +38,7 @@ def generalEndToEndForBasic(fileName):
     assert(actualRequest["params"]["notes"][0]["deckName"] == "0. Org Notes::basic")
     assert(actualRequest["params"]["notes"][0]["modelName"] == "Basic")
     assert(actualRequest["params"]["notes"][0]["tags"] == [])
+    print(actualRequest["params"]["notes"][0]["fields"]["Front"])
     assert(actualRequest["params"]["notes"][0]["fields"]["Front"] == "Put request")
 
 
