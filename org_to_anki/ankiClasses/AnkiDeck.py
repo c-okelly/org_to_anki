@@ -15,16 +15,6 @@ class AnkiDeck:
         self._media = []
         self._sourceFilePath = ""
 
-    # def addSourceFilePath(self, filePath: str):
-    #     self._sourceFilePath = filePath
-
-    # def getSourceFilePath(self):
-    #     return self._sourceFilePath
-
-    # def addImage(self, fileName, filePath):
-    #     with open(filePath, "rb") as file:
-    #         self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
-
     def getMedia(self):
         media = []
 

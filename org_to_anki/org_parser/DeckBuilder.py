@@ -78,6 +78,8 @@ class DeckBuilder:
         while len(questions) > 0:
             line = questions.pop(0)
             noAstrics = self.utils.countAstrics(line)
+            if len(line) == 0:
+                continue
 
             # Question line
             if noAstrics == numberOfQuestionAsterisk:
