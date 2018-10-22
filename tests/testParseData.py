@@ -173,3 +173,25 @@ def testMultiLineQuestion():
     assert(deck.getQuestions()[0].question == expectedQuestion.question)
     assert(deck.getQuestions()[0]._answers == expectedQuestion._answers)
 
+# Test flat topics layout
+
+def testFlatTopics():
+
+    filename = "tests/testData/flatTopics.org"
+    actualDeck = parseData.parse(filename)
+    
+    question1 = actualDeck.getQuestions()[0]
+    assert(question1.getQuestions()[0] == "Capital cites\nWhat is the capital of Ireland")
+    assert(question1.getAnswers()[0] == "Dublin")
+
+    question2 = actualDeck.getQuestions()[1]
+    assert(question2.getQuestions()[0] == "Capital cites\nWhat is the capital of Germany")
+    assert(question2.getAnswers()[0] == "Berlin")
+
+    question3 = actualDeck.getQuestions()[2]
+    assert(question3.getQuestions()[0] == "Languages of countries\nWhat is the main languages in Ireland")
+    assert(question3.getAnswers()[0] == "Irish")
+
+    question4 = actualDeck.getQuestions()[3]
+    assert(question4.getQuestions()[0] == "Languages of countries\nWhat is the main languages in Germany")
+    assert(question4.getAnswers()[0] == "German")

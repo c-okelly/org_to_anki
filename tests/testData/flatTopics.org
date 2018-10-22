@@ -1,0 +1,13 @@
+# More advanced org file layout. Each topics has its own questions.
+#fileType = flatTopics
+
+* Capital cites
+** What is the capital of Ireland
+*** Dublin
+** What is the capital of Germany
+*** Berlin
+* Languages of countries
+** What is the main languages in Ireland
+*** Irish
+** What is the main languages in Germany
+*** German

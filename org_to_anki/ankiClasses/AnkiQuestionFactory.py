@@ -45,13 +45,13 @@ class AnkiQuestionFactory:
         # Add Question
         for line in self.curentQuestions:
             line = self.utils.removeAstrics(line)
+            line = self.utils.formatLine(line)
             newQuestion.addQuestion(line)
 
         # Add answers
         noQuestionAstrics = self.utils.countAstrics(self.currentAnswers[0])
         while len(self.currentAnswers) > 0:
             line = self.currentAnswers.pop(0)
-            print(line)
             noAstrics = self.utils.countAstrics(line)
 
             # Asnwer line

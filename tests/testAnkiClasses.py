@@ -6,6 +6,7 @@ sys.path.append('../org_to_anki')
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
 from org_to_anki.ankiClasses.AnkiQuestionMedia import AnkiQuestionMedia
+from org_to_anki.ankiClasses.AnkiQuestionFactory import AnkiQuestionFactory
 
 def testGettingDeckNames():
 
@@ -152,3 +153,16 @@ def testAddImageForAnkiQuestion():
         mediaItem = AnkiQuestionMedia("image", "image.png", data.read())
 
     assert(mediaItem == question.getMedia()[0])
+
+
+def testAddMultiLineQuestion():
+
+    deck = AnkiDeck("Test deck")
+    questionFactory = AnkiQuestionFactory("test", "")
+
+    questionFactory.addQuestionLine(" test question\n second line")
+    questionFactory.addAnswerLine("answer")
+
+    q = questionFactory.buildQuestion()
+
+    assert(q.question[0] == "test question\nsecond line")

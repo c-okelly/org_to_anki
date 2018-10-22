@@ -64,3 +64,16 @@ class DeckBuilderUtils:
                 cleaned.append(self.removeAstrics(i))
 
         return cleaned
+
+    def formatLine(self, line:str):
+
+        formattedLine = line
+
+        # Strip extra spaces for multiline
+        if "\n" in formattedLine:
+            cleanLine = ""
+            for i in formattedLine.split("\n"):
+                cleanLine += i.strip() + "\n"
+            formattedLine = cleanLine.strip()
+
+        return formattedLine

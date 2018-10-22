@@ -18,6 +18,8 @@ class DeckBuilder:
             deck = self._buildNewDeck(questions, deckName, filePath)
         elif fileType == 'topics':
             deck = self._buildTopics(questions, deckName, filePath)
+        elif fileType.lower() == 'flattopics':
+            deck = self._buildFlatTopics(questions, deckName, filePath)
         else:
             raise Exception('Unsupported file type: ' + fileType)
 
@@ -36,6 +38,33 @@ class DeckBuilder:
 
         return deck
 
+    def _buildFlatTopics(self, questions, deckName, filePath):
+
+        subSections = self._sortTopicsSubDeck(questions)
+
+        if (self.utils.countAstrics(subSections[0][0]) != 1):
+            raise Exception('Topics file is not correctly formatted')
+
+        allQuestion = []
+        for i in subSections:
+            allQuestion.extend(i)
+
+        formattedQuestions = []
+        currentTopic = questions.pop(0).replace("*", "")
+        while len(questions) > 0:
+            q = questions.pop(0)
+            if (self.utils.countAstrics(q) == 1):
+                currentTopic = q.replace("*", "")
+            elif (self.utils.countAstrics(q) == 2):
+                q = q.replace("*", "")
+                q = "** " + currentTopic + "\n" + q
+                formattedQuestions.append(q)
+            else:
+                formattedQuestions.append(q)
+
+        deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3)
+        return deck
+
     def _sortTopicsSubDeck(self, questions):
 
         subSections = []
@@ -43,7 +72,7 @@ class DeckBuilder:
 
         for line in questions:
             # first line
-            noAstrics = line.split(' ')[0].count('*', 0, 10)
+            noAstrics =self.utils.countAstrics(line)
             if noAstrics == 1:
                 if len(currentSection) > 0:
                     subDeck = currentSection[:]
@@ -87,12 +116,13 @@ class DeckBuilder:
                 # If new question => generate ankiQuestion and start new
                 if questionFactory.questionHasAnswers() == True:
                     deck.addQuestion(questionFactory.buildQuestion())
+                    questionFactory.addQuestionLine(line)
                 else:
                     questionFactory.addQuestionLine(line)
 
             # Answer line
             elif noAstrics > numberOfQuestionAsterisk:
-                questionFactory.addAnswerLine(line) ### No subqestion line => logic should be moved when answers are built ###
+                questionFactory.addAnswerLine(line) ### No subquestion line => logic should be moved when answers are built ###
 
             # Comment line
             elif line.strip()[0] == "#":
