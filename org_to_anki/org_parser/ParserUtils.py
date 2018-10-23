@@ -17,6 +17,7 @@ def convertLineToParamters(line: str):
         if "=" in item:
             item = item.strip()
             parts = item.split("=")
+            # TODO: Make lowercase parameters
             parameters[parts[0].strip()] = parts[1].strip()
 
     return parameters

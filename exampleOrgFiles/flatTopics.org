@@ -1,0 +1,15 @@
+# This will result in only a single deck being produced
+# The topics (e.g => Capital cities) is added to the top of each question in the finished card
+#fileType = flatTopics
+
+* Capital cites
+** What is the capital of Ireland
+*** Dublin
+* Languages of countries
+** What are the main languages in Ireland
+*** English
+*** Irish
+* Definitions of words
+#type=Basic (and reversed card)
+** Definition of a box
+*** A container with a flat base and sides, typically square or rectangular and having a lid.

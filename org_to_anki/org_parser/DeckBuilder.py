@@ -18,6 +18,7 @@ class DeckBuilder:
             deck = self._buildNewDeck(questions, deckName, filePath)
         elif fileType == 'topics':
             deck = self._buildTopics(questions, deckName, filePath)
+        # TODO: Remove lower
         elif fileType.lower() == 'flattopics':
             deck = self._buildFlatTopics(questions, deckName, filePath)
         else:

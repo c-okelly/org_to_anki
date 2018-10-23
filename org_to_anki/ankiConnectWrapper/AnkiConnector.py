@@ -87,6 +87,7 @@ class AnkiConnector:
         else:
             deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
+        # TODO: Verify model name correctly and use parameters
         if ankiQuestion.getParameter("type") is not None:
             modelName = ankiQuestion.getParameter("type")
         else:
@@ -104,12 +105,16 @@ class AnkiConnector:
         return note
 
     def _createQuestionString(self, questions:[str]):
+
         if len(questions) == 1:
-            return questions[0]
+            question =  questions[0].replace("\n", "<br>")
+            return question
         else:
             questionString = ""
             for q in questions:
+                q = q.strip().replace("\n", "<br>")
                 questionString += q + " <br>"
+            return questionString
             
 
     def _createAnswerString(self, answers: [str], bulletPoints: bool=True):

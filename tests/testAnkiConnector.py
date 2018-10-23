@@ -50,3 +50,29 @@ def testBuildNoteForSublists():
 
     expectedString = "<ul style='list-style-position: inside;'><li>first answer</li><ul style='list-style-position: inside;'><li>sublist 1</li><ul style='list-style-position: inside;'><li>sublist2</li></ul><li>back to sublist1</li></ul><li>second answer</li></ul>"
     assert(answerString == expectedString)
+
+### Next two tests ensure that questions that have an internal multiline string are correctly html formatted ###
+def testMultiLineQuestionLine():
+
+    q = AnkiQuestion("Capital Cities\nCapital of dublin")
+    q.addAnswer("Dublin")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiConnector()
+    noteData = a._buildNote(deck.getQuestions()[0])
+
+    assert(noteData["fields"]["Front"] == "Capital Cities<br>Capital of dublin")
+
+def testManyMultiLineQuestionLines():
+
+    q = AnkiQuestion("Capital Cities\nCapital of dublin")
+    q.addQuestion("Second line")
+    q.addAnswer("Dublin")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiConnector()
+    noteData = a._buildNote(deck.getQuestions()[0])
+
+    assert(noteData["fields"]["Front"] == "Capital Cities<br>Capital of dublin <br>Second line <br>")

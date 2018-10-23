@@ -279,8 +279,6 @@
 ** union file system
 * Create volume from dockerFile
 ** VOLUME
-* How to use -v flag for mount directory from host
-** -v /home/cokelly/path:/file/from/volume
 * How to share data between docker images
 ** Use flag => --volumes-from vol-name
 * Create docker containers for data storage? Best practices?
