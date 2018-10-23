@@ -12,9 +12,9 @@ def testConvertCommentsToParameters():
 
 def testConvertLineToParameter():
 
-    assert(ParserUtils.convertLineToParamters("type=Basic") == {'type' : 'Basic'})
-    assert(ParserUtils.convertLineToParamters("#type=Basic, type2=2") == {'type' : 'Basic', 'type2':'2'})
-    assert(ParserUtils.convertLineToParamters("type = Basic") == {'type' : 'Basic'})
-    assert(ParserUtils.convertLineToParamters("#type = Basic") == {'type' : 'Basic'})
-    assert(ParserUtils.convertLineToParamters("# type = Basic") == {'type' : 'Basic'})
-    assert(ParserUtils.convertLineToParamters("# type = Basic (and reversed card), sec=1") == {'type' : 'Basic (and reversed card)', 'sec':'1'})
+    assert(ParserUtils.convertLineToParameters("type=Basic") == {'type' : 'Basic'})
+    assert(ParserUtils.convertLineToParameters("#type=Basic, type2=2") == {'type' : 'Basic', 'type2':'2'})
+    assert(ParserUtils.convertLineToParameters("type = Basic") == {'type' : 'Basic'})
+    assert(ParserUtils.convertLineToParameters("#type = Basic") == {'type' : 'Basic'})
+    assert(ParserUtils.convertLineToParameters("# type = Basic") == {'type' : 'Basic'})
+    assert(ParserUtils.convertLineToParameters("# type = Basic (and reversed card), sec=1") == {'type' : 'Basic (and reversed card)', 'sec':'1'})

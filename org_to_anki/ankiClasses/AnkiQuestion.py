@@ -1,4 +1,3 @@
-
 from .AnkiQuestionMedia import AnkiQuestionMedia
 
 class AnkiQuestion:
@@ -67,7 +66,7 @@ class AnkiQuestion:
         return ("DeckName: %s. Question: %s. \nAsnwers: %s. \nTags: %s.\nComments: %s.\nParameters: %s,\nMedia: %s") % (
             self.deckName, self.question, self.getAnswers(), self.getTags(), self.getComments(), self._parameters, self._media)
 
-    # Comparioson to other questions
+    # Comparison to other questions
     def __eq__(self, other):
         if not isinstance(other, AnkiQuestion):
             return False

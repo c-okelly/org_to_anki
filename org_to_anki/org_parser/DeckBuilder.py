@@ -43,7 +43,7 @@ class DeckBuilder:
 
         subSections = self._sortTopicsSubDeck(questions)
 
-        if (self.utils.countAstrics(subSections[0][0]) != 1):
+        if (self.utils.countAsterisk(subSections[0][0]) != 1):
             raise Exception('Topics file is not correctly formatted')
 
         allQuestion = []
@@ -54,9 +54,9 @@ class DeckBuilder:
         currentTopic = questions.pop(0).replace("*", "")
         while len(questions) > 0:
             q = questions.pop(0)
-            if (self.utils.countAstrics(q) == 1):
+            if (self.utils.countAsterisk(q) == 1):
                 currentTopic = q.replace("*", "")
-            elif (self.utils.countAstrics(q) == 2):
+            elif (self.utils.countAsterisk(q) == 2):
                 q = q.replace("*", "")
                 q = "** " + currentTopic + "\n" + q
                 formattedQuestions.append(q)
@@ -73,14 +73,14 @@ class DeckBuilder:
 
         for line in questions:
             # first line
-            noAstrics =self.utils.countAstrics(line)
-            if noAstrics == 1:
+            noAsterisk =self.utils.countAsterisk(line)
+            if noAsterisk == 1:
                 if len(currentSection) > 0:
                     subDeck = currentSection[:]
                     currentSection = []
                     subSections.append(subDeck)
                 currentSection.append(line)
-            elif noAstrics > 1 or line.strip()[0] == "#":
+            elif noAsterisk > 1 or line.strip()[0] == "#":
                 currentSection.append(line)
             else:
                 raise Exception("Issue parsing topics deck.")
@@ -96,7 +96,7 @@ class DeckBuilder:
         while questions[0].strip()[0] == "#":
             comment = questions.pop(0)
             deck.addComment(comment)
-            parameters = ParserUtils.convertLineToParamters(comment)
+            parameters = ParserUtils.convertLineToParameters(comment)
             for key in parameters.keys():
                 deck.addParameter(key, parameters.get(key))
 
@@ -107,12 +107,12 @@ class DeckBuilder:
 
         while len(questions) > 0:
             line = questions.pop(0)
-            noAstrics = self.utils.countAstrics(line)
+            noAsterisk = self.utils.countAsterisk(line)
             if len(line) == 0:
                 continue
 
             # Question line
-            if noAstrics == numberOfQuestionAsterisk:
+            if noAsterisk == numberOfQuestionAsterisk:
                 # Allow for multi line questions
                 # If new question => generate ankiQuestion and start new
                 if questionFactory.questionHasAnswers() == True:
@@ -122,7 +122,7 @@ class DeckBuilder:
                     questionFactory.addQuestionLine(line)
 
             # Answer line
-            elif noAstrics > numberOfQuestionAsterisk:
+            elif noAsterisk > numberOfQuestionAsterisk:
                 questionFactory.addAnswerLine(line) ### No subquestion line => logic should be moved when answers are built ###
 
             # Comment line

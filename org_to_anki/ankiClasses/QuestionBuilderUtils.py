@@ -2,6 +2,7 @@ from ..ankiClasses.AnkiDeck import AnkiDeck
 
 import os
 
+# TODO: Remove a lot of this as unused code
 class QuestionBuilderUtils:
 
     # Used to check if extra data is containted within the line
@@ -30,23 +31,23 @@ class QuestionBuilderUtils:
         
         return answerLine
 
-    def removeAstrics(self, line: str):
+    def removeAsterisk(self, line: str):
         line = line.strip().split(" ")[1:]
         line = " ".join(line)
         return line
 
-    def countAstrics(self, line: str):
+    def countAsterisk(self, line: str):
         return line.split(' ')[0].count('*', 0, 10)
 
     def generateSublist(self, subItems: [str]):
 
         formatedList = []
 
-        indentaionLevel = self.countAstrics(subItems[0])
+        indentationLevel = self.countAsterisk(subItems[0])
         for item in subItems:
-            if self.countAstrics(item) == indentaionLevel:
+            if self.countAsterisk(item) == indentationLevel:
                 formatedList.append(item)
-            elif self.countAstrics(item) > indentaionLevel and isinstance(formatedList[-1], list):
+            elif self.countAsterisk(item) > indentationLevel and isinstance(formatedList[-1], list):
                 formatedList[-1].append(item)
             else:
                 formatedList.append([item])
@@ -56,6 +57,6 @@ class QuestionBuilderUtils:
             if isinstance(i, list):
                 cleaned.append(self.generateSublist(i))
             else:
-                cleaned.append(self.removeAstrics(i))
+                cleaned.append(self.removeAsterisks(i))
 
         return cleaned

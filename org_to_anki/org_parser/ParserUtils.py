@@ -3,12 +3,12 @@ def convertCommentsToParameters(comments: [str]):
 
     parameters = {}
     for line in comments:
-        parameters.update(convertLineToParamters(line))
+        parameters.update(convertLineToParameters(line))
 
     return parameters
 
 
-def convertLineToParamters(line: str):
+def convertLineToParameters(line: str):
 
     parameters = {}
     line = line.strip()[line.count("#"):]

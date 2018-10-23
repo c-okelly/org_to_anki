@@ -23,7 +23,7 @@ class AnkiConnectorUtils:
         try:
             res = requests.post(self.url, payload)
         except Exception as e:
-            print("An error has occoured make the request.\n", e)
+            print("An error has occurred make the request.\n", e)
 
         if res.status_code == 200:
             data = json.loads(res.text)
@@ -56,7 +56,7 @@ class AnkiConnectorUtils:
             # TODO log status code
             return requests.post(self.url, data={}).status_code == 200
         except requests.exceptions.RequestException:
-            # TODO log excpetion
+            # TODO log exception
             return False
 
     @staticmethod

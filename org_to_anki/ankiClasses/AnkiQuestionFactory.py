@@ -10,24 +10,24 @@ class AnkiQuestionFactory:
         self.currentDeck = currentDeck
         self.filePath = filePath
         self.indentor = indentor
-        self.curentQuestions = []
+        self.currentQuestions = []
         self.currentAnswers = []
         self.currentComments = []
     
     # Clear the current data
     def clearData(self):
-        self.curentQuestions = []
+        self.currentQuestions = []
         self.currentAnswers = []
         self.currentComments = []
 
     def hasData(self):
-        return len(self.curentQuestions) == 0 or len(self.currentAnswers) == 0 and len(self.currentComments) == 0
+        return len(self.currentQuestions) == 0 or len(self.currentAnswers) == 0 and len(self.currentComments) == 0
 
     def addAnswerLine(self, answer):
         self.currentAnswers.append(answer)
 
     def addQuestionLine(self, question):
-        self.curentQuestions.append(question)
+        self.currentQuestions.append(question)
 
     def addCommentLine(self, comment):
         self.currentComments.append(comment)
@@ -43,30 +43,30 @@ class AnkiQuestionFactory:
         newQuestion = AnkiQuestion()
 
         # Add Question
-        for line in self.curentQuestions:
-            line = self.utils.removeAstrics(line)
+        for line in self.currentQuestions:
+            line = self.utils.removeAsterisk(line)
             line = self.utils.formatLine(line)
             newQuestion.addQuestion(line)
 
         # Add answers
-        noQuestionAstrics = self.utils.countAstrics(self.currentAnswers[0])
+        noQuestionAsterisk = self.utils.countAsterisk(self.currentAnswers[0])
         while len(self.currentAnswers) > 0:
             line = self.currentAnswers.pop(0)
-            noAstrics = self.utils.countAstrics(line)
+            noAsterisks = self.utils.countAsterisk(line)
 
-            # Asnwer line
-            if noAstrics == noQuestionAstrics:
-                line = self.utils.removeAstrics(line)
+            # Answer line
+            if noAsterisks == noQuestionAsterisk:
+                line = self.utils.removeAsterisk(line)
                 line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
                 newQuestion.addAnswer(line)
 
             # Sublist in question
-            elif noAstrics > noQuestionAstrics:
+            elif noAsterisks > noQuestionAsterisk:
 
                 subList = []
                 subList.append(line)
 
-                while len(self.currentAnswers) > 0 and self.utils.countAstrics(self.currentAnswers[0]) > noQuestionAstrics:
+                while len(self.currentAnswers) > 0 and self.utils.countAsterisk(self.currentAnswers[0]) > noQuestionAsterisk:
                     line = self.currentAnswers.pop(0)
                     line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
                     subList.append(line)
@@ -79,7 +79,7 @@ class AnkiQuestionFactory:
 
         for comment in self.currentComments:
             newQuestion.addComment(comment)
-            parameters = ParserUtils.convertLineToParamters(comment)
+            parameters = ParserUtils.convertLineToParameters(comment)
             for key in parameters.keys():
                 newQuestion.addParameter(key, parameters.get(key))
 

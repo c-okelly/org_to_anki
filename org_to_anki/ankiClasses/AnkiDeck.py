@@ -4,7 +4,7 @@ from .AnkiQuestion import AnkiQuestion
 class AnkiDeck:
 
     # Basic file => represented in a single deck
-    # MultiDeck file => File will have mutiple subdecks of general topic
+    # MultiDeck file => File will have multiple subdecks of general topic
     # represented by file
     def __init__(self, name: str):
         self.deckName = name
@@ -37,7 +37,7 @@ class AnkiDeck:
     def getParameter(self, key):
         return self._parameters.get(key, None)
 
-    def getQuestions(self, parentName: str = None, parentParamters: dict = None, joiner: str = '::'):
+    def getQuestions(self, parentName: str = None, parentParamaters: dict = None, joiner: str = '::'):
         ankiQuestions = []
 
         for question in self._ankiQuestions:
@@ -46,10 +46,10 @@ class AnkiDeck:
             else:
                 question.setDeckName(self.deckName)
 
-            if parentParamters is not None:
-                for key in parentParamters:
+            if parentParamaters is not None:
+                for key in parentParamaters:
                     if self.getParameter(key) is None:
-                        self.addParameter(key, parentParamters[key])
+                        self.addParameter(key, parentParamaters[key])
 
             for key in self._parameters:
                 if question.getParameter(key) is None:
@@ -61,10 +61,10 @@ class AnkiDeck:
             name = self.deckName
             if parentName is not None:
                 name = parentName + joiner + self.deckName
-            if parentParamters is not None:
-                for key in parentParamters:
+            if parentParamaters is not None:
+                for key in parentParamaters:
                     if self.getParameter(key) is None:
-                        self.addParameter(key, parentParamters[key])
+                        self.addParameter(key, parentParamaters[key])
 
             for i in self.subDecks:
                 ankiQuestions.extend(i.getQuestions(name, self._parameters))
