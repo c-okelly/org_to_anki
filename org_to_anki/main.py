@@ -9,6 +9,12 @@ from . import config
 
 def parseAndUploadOrgFile(filePath=None):
 
+    # debugMode = False
+    # for arg in sys.argv:
+    #     if arg == "-d":
+    #         debugMode = True
+    #         sys.argv.remove(arg)
+
     if filePath is None:
         filePath = _getUploadFilePath()
 

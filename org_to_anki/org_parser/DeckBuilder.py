@@ -14,13 +14,15 @@ class DeckBuilder:
 
     def buildDeck(self, questions: [str], deckName: str, filePath: str, fileType: str='basic'):
 
-        if fileType == 'basic':
+        if fileType.lower() == 'basic':
             deck = self._buildNewDeck(questions, deckName, filePath)
-        elif fileType == 'topics':
+        elif fileType.lower() == 'topics':
             deck = self._buildTopics(questions, deckName, filePath)
         # TODO: Remove lower
         elif fileType.lower() == 'flattopics':
             deck = self._buildFlatTopics(questions, deckName, filePath)
+        elif fileType.lower() == "flatorganisedtopics":
+            deck = self._buildFlatOrganisedTopics(questions, deckName, filePath)
         else:
             raise Exception('Unsupported file type: ' + fileType)
 
@@ -32,6 +34,7 @@ class DeckBuilder:
 
         subSections = self._sortTopicsSubDeck(questions)
 
+        # TODO: Expand support for topics with flatTopics subdecks
         for section in subSections:
             subDeckName = section.pop(0).replace("*", "").strip()
             subDeck = self._buildNewDeck(section, subDeckName, filePath, 2, 3)
@@ -64,6 +67,31 @@ class DeckBuilder:
                 formattedQuestions.append(q)
 
         deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3)
+        return deck
+
+    def _buildFlatOrganisedTopics(self, questions, deckName, filePath):
+
+        subSections = self._sortTopicsSubDeck(questions)
+
+        formattedQuestions = []
+        for section in subSections:
+            currentTopic = section.pop(0).replace("*", "")
+
+            while len(section) > 0:
+                q = section.pop(0)
+                if (self.utils.countAsterisk(q) == 2):
+                    # Ignore line on second level of indent as only used for organization
+                    continue
+                elif (self.utils.countAsterisk(q) == 3):
+                    q = q.replace("*", "")
+                    q = "*** " + currentTopic + "\n" + q
+                    formattedQuestions.append(q)
+                else:
+                    formattedQuestions.append(q)
+
+        # for i in formattedQuestions:
+        #     print(i)
+        deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 3, 4)
         return deck
 
     def _sortTopicsSubDeck(self, questions):
@@ -116,7 +144,9 @@ class DeckBuilder:
                 # Allow for multi line questions
                 # If new question => generate ankiQuestion and start new
                 if questionFactory.questionHasAnswers() == True:
-                    deck.addQuestion(questionFactory.buildQuestion())
+                    newQuestion = questionFactory.buildQuestion()
+                    if (newQuestion.getParameter("type") != 'notes'):
+                        deck.addQuestion(newQuestion)
                     questionFactory.addQuestionLine(line)
                 else:
                     questionFactory.addQuestionLine(line)
@@ -135,6 +165,8 @@ class DeckBuilder:
         
         # Add last question
         if questionFactory.questionHasAnswers():
-            deck.addQuestion(questionFactory.buildQuestion())
+            newQuestion = questionFactory.buildQuestion()
+            if (newQuestion.getParameter("type") != 'notes'):
+                deck.addQuestion(newQuestion)
 
         return deck

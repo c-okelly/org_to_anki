@@ -18,6 +18,7 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 5. [File syntax](#file-syntax)
 6. [Parameters](#parameters)
 7. [Running tests](#testing)
+<!-- 8. [Debug mode](#debug-mode) -->
 8. [Future features](#future-features)
 
 ## Supported file types
@@ -148,6 +149,7 @@ ankiq
 * Sample answer and questions for topics org or txt file.
 
  ```org
+ #fileType = topics
  * Capital cities
  ** What is the capital of Ireland?
  *** Dublin
@@ -156,6 +158,81 @@ ankiq
  *** English
  *** Irish
  ```
+
+
+### FlatTopics file syntax
+
+* All topics are combined into the same deck to be uploaded to Anki
+
+* The name of each topic is added to the top of each card. An example is shown below
+
+* Sample answer and questions for flatTopics org or txt file.
+
+ ```org
+ #fileType = flatTopics
+ * Capital cities
+ ** What is the capital of Ireland?
+ *** Dublin
+ * Spoken languages
+ ** What are the main spoken languages in Ireland?
+ *** English
+ *** Irish
+ ```
+
+* This will produce the following 2 Anki notes in the same deck
+
+```org
+Capital Cities
+What is the capital of Ireland?
+_______________________________________________________________________
+Dublin
+```
+
+```org
+Spoken Languages
+What are the main spoken languages in Ireland
+_______________________________________________________________________
+English
+Irish
+```
+
+### FlatOrganisedTopics file syntax
+
+* All topics are combined into the same deck to be uploaded to Anki
+
+* In this case the second level of bullet points (e.g Scalability intro blog) are considered only to be for organizational purposes and are ignored for the actual questions
+
+* Sample answer and questions for flatTopics org or txt file.
+
+ ```org
+ #fileType = flatOrganisedTopics
+* Systems design primer
+** Scalability intro blog
+*** First main rule of scalability?
+**** Each server behind load balancer
+* Programming design patterns (online version)
+** Factory pattern
+*** What is the main purpose of the factory pattern? (2)
+**** To allow object creation without exposing the creation logic to client
+**** Allow reference to objects via an interface
+ ```
+
+* This will produce the following 2 Anki notes in the same deck
+
+```org
+Systems design primer
+First main rule of scalability?
+_______________________________________________________________________
+Dublin
+```
+
+```org
+Programming design patterns (online version)
+What is the main purpose of the factory pattern? (2)
+_______________________________________________________________________
+To allow object creation without exposing the creation logic to client
+Allow reference to objects via an interface
+```
 
 ### Adding images
 
@@ -224,6 +301,11 @@ A number of extra libraries are used in testing
 ``` bash
 python3 setup.py nosetests
 ```
+
+## Debug mode
+
+TODO: implement a debug mode
+To activate debug 
 
 ## Future features
 

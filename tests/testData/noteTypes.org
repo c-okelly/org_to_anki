@@ -1,0 +1,6 @@
+# Quick Anki notes
+# listType = bulletPoints
+
+* Only notes and not any questions
+# type=notes
+** Only some notes

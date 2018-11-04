@@ -195,3 +195,23 @@ def testFlatTopics():
     question4 = actualDeck.getQuestions()[3]
     assert(question4.getQuestions()[0] == "Languages of countries\nWhat is the main languages in Germany")
     assert(question4.getAnswers()[0] == "German")
+
+
+def testFlatOrganisedTopics():
+
+    filename = "tests/testData/FlatOrganisedTopics.org"
+    actualDeck = parseData.parse(filename)
+
+    question1 = actualDeck.getQuestions()[0]
+    assert(question1.getQuestions()[0] == "Systems design primer\nFirst main rule of scalability?")
+    assert(question1.getAnswers()[0] == "Each server behind load balancer")
+    assert(question1.getAnswers()[1] == "Contains same codebase and does not store any user related data")
+
+    question2 = actualDeck.getQuestions()[1]
+    assert(question2.getQuestions()[0] == "Systems design primer\nWhere should sessions be stored?")
+    assert(question2.getAnswers()[0] == "Centralized data store accessible to servers")
+
+    question3 = actualDeck.getQuestions()[2]
+    assert(question3.getQuestions()[0] == "Programming design patterns (online version)\nWhat is the main purpose of the factory pattern? (2)")
+    assert(question3.getAnswers()[0] == "To allow object creation without exposing the creation logic to client")
+    assert(question3.getAnswers()[1] == "Allow reference to objects via an interface")

@@ -1,0 +1,13 @@
+# fileType=flatOrganisedTopics
+* Systems design primer
+** Scalability intro blog
+*** First main rule of scalability?
+**** Each server behind load balancer
+**** Contains same codebase and does not store any user related data
+*** Where should sessions be stored?
+**** Centralized data store accessible to servers
+* Programming design patterns (online version)
+** Factory pattern
+*** What is the main purpose of the factory pattern? (2)
+**** To allow object creation without exposing the creation logic to client
+**** Allow reference to objects via an interface
