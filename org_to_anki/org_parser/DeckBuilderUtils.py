@@ -26,9 +26,8 @@ class DeckBuilderUtils:
                     answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
                 else:
                     print("Could not find image on line:", answerLine)
-
             else:
-                raise Exception("Line could not be parsed: " + answerLine)
+                print("Could not parse image from line: " + answerLine)
         
         return answerLine
 

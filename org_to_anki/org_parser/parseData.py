@@ -29,8 +29,8 @@ def parse(filePath: str) -> ([AnkiDeck]):
 
 def _formatFile(filePath: str):
 
-    file = open(filePath, "r")
-    data = file.read().split('\n')
+    with open(filePath, 'r') as file:
+        data = file.read().split('\n')
 
     return data
 

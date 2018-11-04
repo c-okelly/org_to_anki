@@ -249,38 +249,41 @@ English
 Irish
 ```
 
-### OranisedFile syntax
+### OrganisedFlatFile syntax
 
-* All topics are combined into the same deck to be uploaded to Anki
-
-* In this case top level bullet points are used to organise the sub-questions. The top level are not part of any question. 
-
-* Sample answer and questions for flatTopics org or txt file.
-
- ```org
- #fileType = organisedFile
-* Chapter 1
-** First main rule of scalability?
-*** Each server behind load balancer
-* Chapter 2
-** What is the main purpose of the factory pattern?
-*** Allow reference to objects via an interface
- ```
-
-* This will produce the following 2 Anki notes in the same deck
+ * All topics are combined into the same deck to be uploaded to Anki
+ * In this case the second level of bullet points (e.g Scalability intro blog) are considered only to be for organizational purposes and are ignored for the actual questions
+ * Sample answer and questions for flatTopics org or txt file.
 
 ```org
+ #fileType = organisedFlatFile
+* Systems design primer
+** Scalability intro blog
+*** First main rule of scalability?
+**** Each server behind load balancer
+* Programming design patterns (online version)
+** Factory pattern
+*** What is the main purpose of the factory pattern? (2)
+**** To allow object creation without exposing the creation logic to client
+**** Allow reference to objects via an interface
+```
+
+ * This will produce the following 2 Anki notes in the same deck
+
+```org
+Systems design primer
 First main rule of scalability?
 _______________________________________________________________________
-Each server behind load balancer
+Dublin
 ```
 
 ```org
-What is the main purpose of the factory pattern?
+Programming design patterns (online version)
+What is the main purpose of the factory pattern? (2)
 _______________________________________________________________________
+To allow object creation without exposing the creation logic to client
 Allow reference to objects via an interface
 ```
-
 ### Adding images
 
 * You can add an image as one of your answers by correctly referancing as follows
