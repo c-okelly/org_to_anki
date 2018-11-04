@@ -140,6 +140,14 @@ ankiq
  * What is the capital of Ireland?
  ** Dublin
  ```
+
+* This will produce the following 1 Anki note in the same deck
+
+```org
+What is the capital of Ireland?
+_______________________________________________________________________
+Dublin
+```
  
 ### Topics file syntax
 
@@ -159,6 +167,51 @@ ankiq
  *** Irish
  ```
 
+* This will produce the following 2 Anki note in separate decks
+
+```org
+What is the capital of Ireland?
+_______________________________________________________________________
+Dublin
+```
+
+```org
+What are the main spoken languages in Ireland?
+English
+Irish
+```
+
+### Organised File syntax
+
+* All topics are combined into the same deck to be uploaded to Anki
+
+* In this case top level bullet points are used to organise the sub-questions. The top level are not part of any question. 
+
+* Sample answer and questions for flatTopics org or txt file.
+
+ ```org
+ #fileType = organisedFile
+* Chapter 1
+** First main rule of scalability?
+*** Each server behind load balancer
+* Chapter 2
+** What is the main purpose of the factory pattern?
+*** Allow reference to objects via an interface
+ ```
+
+* This will produce the following 2 Anki notes in the same deck
+
+```org
+First main rule of scalability?
+_______________________________________________________________________
+Each server behind load balancer
+```
+
+```org
+What is the main purpose of the factory pattern?
+_______________________________________________________________________
+Allow reference to objects via an interface
+```
 
 ### FlatTopics file syntax
 
@@ -196,41 +249,35 @@ English
 Irish
 ```
 
-### FlatOrganisedTopics file syntax
+### OranisedFile syntax
 
 * All topics are combined into the same deck to be uploaded to Anki
 
-* In this case the second level of bullet points (e.g Scalability intro blog) are considered only to be for organizational purposes and are ignored for the actual questions
+* In this case top level bullet points are used to organise the sub-questions. The top level are not part of any question. 
 
 * Sample answer and questions for flatTopics org or txt file.
 
  ```org
- #fileType = flatOrganisedTopics
-* Systems design primer
-** Scalability intro blog
-*** First main rule of scalability?
-**** Each server behind load balancer
-* Programming design patterns (online version)
-** Factory pattern
-*** What is the main purpose of the factory pattern? (2)
-**** To allow object creation without exposing the creation logic to client
-**** Allow reference to objects via an interface
+ #fileType = organisedFile
+* Chapter 1
+** First main rule of scalability?
+*** Each server behind load balancer
+* Chapter 2
+** What is the main purpose of the factory pattern?
+*** Allow reference to objects via an interface
  ```
 
 * This will produce the following 2 Anki notes in the same deck
 
 ```org
-Systems design primer
 First main rule of scalability?
 _______________________________________________________________________
-Dublin
+Each server behind load balancer
 ```
 
 ```org
-Programming design patterns (online version)
-What is the main purpose of the factory pattern? (2)
+What is the main purpose of the factory pattern?
 _______________________________________________________________________
-To allow object creation without exposing the creation logic to client
 Allow reference to objects via an interface
 ```
 

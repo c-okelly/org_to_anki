@@ -1,4 +1,4 @@
-# fileType=flatOrganisedTopics
+# fileType=organisedFlatFile
 * Systems design primer
 ** Scalability intro blog
 *** First main rule of scalability?

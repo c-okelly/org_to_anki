@@ -1,0 +1,7 @@
+#fileType = organisedFile
+* Chapter 1
+** First main rule of scalability?
+*** Each server behind load balancer
+* Chapter 2
+** What is the main purpose of the factory pattern?
+*** Allow reference to objects via an interface

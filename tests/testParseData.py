@@ -196,10 +196,22 @@ def testFlatTopics():
     assert(question4.getQuestions()[0] == "Languages of countries\nWhat is the main languages in Germany")
     assert(question4.getAnswers()[0] == "German")
 
+def testOrganisedTopics():
 
-def testFlatOrganisedTopics():
+    filename = "tests/testData/organisedFile.org"
+    actualDeck = parseData.parse(filename)
 
-    filename = "tests/testData/FlatOrganisedTopics.org"
+    question1 = actualDeck.getQuestions()[0]
+    assert(question1.getQuestions()[0] == "First main rule of scalability?")
+    assert(question1.getAnswers()[0] == "Each server behind load balancer")
+
+    question2 = actualDeck.getQuestions()[1]
+    assert(question2.getQuestions()[0] == "What is the main purpose of the factory pattern?")
+    assert(question2.getAnswers()[0] == "Allow reference to objects via an interface")
+
+def testOrganisedFlatTopics():
+
+    filename = "tests/testData/organisedFlatFile.org"
     actualDeck = parseData.parse(filename)
 
     question1 = actualDeck.getQuestions()[0]

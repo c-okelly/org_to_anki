@@ -14,15 +14,17 @@ class DeckBuilder:
 
     def buildDeck(self, questions: [str], deckName: str, filePath: str, fileType: str='basic'):
 
+        # TODO: Remove lower
         if fileType.lower() == 'basic':
             deck = self._buildNewDeck(questions, deckName, filePath)
         elif fileType.lower() == 'topics':
             deck = self._buildTopics(questions, deckName, filePath)
-        # TODO: Remove lower
         elif fileType.lower() == 'flattopics':
             deck = self._buildFlatTopics(questions, deckName, filePath)
-        elif fileType.lower() == "flatorganisedtopics":
-            deck = self._buildFlatOrganisedTopics(questions, deckName, filePath)
+        elif fileType.lower() == 'organisedflatfile':
+            deck = self._buildOrganisedFlatFile(questions, deckName, filePath)
+        elif fileType.lower() == 'organisedfile':
+            deck = self._buildOrganisedFile(questions, deckName, filePath)
         else:
             raise Exception('Unsupported file type: ' + fileType)
 
@@ -34,7 +36,6 @@ class DeckBuilder:
 
         subSections = self._sortTopicsSubDeck(questions)
 
-        # TODO: Expand support for topics with flatTopics subdecks
         for section in subSections:
             subDeckName = section.pop(0).replace("*", "").strip()
             subDeck = self._buildNewDeck(section, subDeckName, filePath, 2, 3)
@@ -69,7 +70,23 @@ class DeckBuilder:
         deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3)
         return deck
 
-    def _buildFlatOrganisedTopics(self, questions, deckName, filePath):
+    def _buildOrganisedFile(self, questions, deckName, filePath):
+
+        subSections = self._sortTopicsSubDeck(questions)
+
+        formattedQuestions = []
+
+        for section in subSections:
+            for q in section:
+                if (self.utils.countAsterisk(q) == 1):
+                    continue
+                else:
+                    formattedQuestions.append(q)
+        
+        deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3)
+        return deck
+
+    def _buildOrganisedFlatFile(self, questions, deckName, filePath):
 
         subSections = self._sortTopicsSubDeck(questions)
 
