@@ -13,7 +13,8 @@ class AnkiQuestionFactory:
         self.currentQuestions = []
         self.currentAnswers = []
         self.currentComments = []
-    
+        self.questionsCreated = 0
+
     # Clear the current data
     def clearData(self):
         self.currentQuestions = []
@@ -41,6 +42,7 @@ class AnkiQuestionFactory:
     def buildQuestion(self):
 
         newQuestion = AnkiQuestion()
+        self.questionsCreated += 1
 
         # Add Question
         for line in self.currentQuestions:
@@ -85,5 +87,10 @@ class AnkiQuestionFactory:
 
         # Clear data and return
         self.clearData()
+
+        print("Single question: " + str(self.questionsCreated))
+        print("Question:", newQuestion.question)
+        print("Answers:", newQuestion._answers)
+        print()
 
         return newQuestion
