@@ -3,15 +3,29 @@ import re
 # This should parse either libre office / microsoft office 
 # files with bullet points into the expected format
 
-def convertBulletPointsDocument():
+def convertBulletPointsDocument(filePath):
 
     # Will determine if word or libreOffice document
-    # TODO 
 
+    if checkDocumentType(filePath) == "word":
+        return _parseWordBulletPoints(filePath)
+    elif checkDocumentType(filePath) == "libreOffice":
+        return _parseLibreOfficeBulletPoints(filePath)
 
-    return ""
+def checkDocumentType(filePath):
 
-def parseWordBulletPoints(filePath):
+    htmlFile = open(filePath, encoding="latin-1")
+    soup = BeautifulSoup(htmlFile, 'html.parser')
+
+    numberLists = len(soup.find_all("ul"))
+
+    # Check if there are any html list => these are not present in word files
+    if numberLists == 0:
+        return "word"
+    else: 
+        return "libreOffice"
+
+def _parseWordBulletPoints(filePath):
 
     htmlFile = open(filePath, encoding="latin-1")
     soup = BeautifulSoup(htmlFile, 'html.parser')
@@ -64,7 +78,7 @@ def parseWordBulletPoints(filePath):
 
     return parsedFile.strip()
 
-def parseLibreOfficeBulletPoints(filePath):
+def _parseLibreOfficeBulletPoints(filePath):
 
 
     htmlFile = open(filePath, encoding="latin-1")

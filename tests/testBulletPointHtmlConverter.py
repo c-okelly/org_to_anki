@@ -1,6 +1,6 @@
 import sys
-from org_to_anki.converters.BulletPointHtmlConverter import parseWordBulletPoints
-from org_to_anki.converters.BulletPointHtmlConverter import parseLibreOfficeBulletPoints
+from org_to_anki.converters.BulletPointHtmlConverter import convertBulletPointsDocument
+from org_to_anki.converters.BulletPointHtmlConverter import checkDocumentType
 
 sys.path.append('../org_to_anki')
 
@@ -9,7 +9,7 @@ def testWordOsxDocument():
     print("Osx word document test")
 
     filename = "tests/testData/documents/bulletpoint-doc-word-osx.html"
-    parsedFile = parseWordBulletPoints(filename)
+    parsedFile = convertBulletPointsDocument(filename)
 
     # print(parsedFile)
     lines = parsedFile.split("\n")
@@ -29,7 +29,7 @@ def testWordWindowsDocument():
     print("Windows word document test")
 
     filename = "tests/testData/documents/bulletpoint-doc-word-windows.htm"
-    parsedFile = parseWordBulletPoints(filename)
+    parsedFile = convertBulletPointsDocument(filename)
 
     # print(parsedFile)
     lines = parsedFile.split("\n")
@@ -48,7 +48,7 @@ def testLibreOsxDocument():
     print("Osx libre document test")
 
     filename = "tests/testData/documents/bulletpoint-doc-libreOffice-osx.html"
-    parsedFile = parseLibreOfficeBulletPoints(filename)
+    parsedFile = convertBulletPointsDocument(filename)
 
     print(parsedFile)
 
@@ -63,3 +63,16 @@ def testLibreOsxDocument():
     assert(lines[5] == "** Dublin")
     assert(lines[6] == "* What is the Capital of Germany")
     assert(lines[7] == "** Berlin")
+
+
+def testDocumentTypeDeterminedCorrectly():
+
+    libreOfficeFile = "tests/testData/documents/bulletpoint-doc-libreOffice-osx.html"
+
+    assert(checkDocumentType(libreOfficeFile) == "libreOffice")
+
+    wordWindowsFile = "tests/testData/documents/bulletpoint-doc-word-windows.htm"
+    wordOsxFile = "tests/testData/documents/bulletpoint-doc-word-osx.html"
+
+    assert(checkDocumentType(wordOsxFile) == "word")
+    assert(checkDocumentType(wordWindowsFile) == "word")
