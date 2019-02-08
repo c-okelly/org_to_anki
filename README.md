@@ -10,20 +10,24 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 ## Contents
 
-0. [Supported file type](#supported-file-type) 
+0. [Supported file types](#supported-file-types) 
 1. [What is an org file](#what-is-an-org-file)
 2. [Requirements](#requirements)
 3. [Installation](#installation)
 4. [Comannd line scripts](#command-line-scripts)
-5. [File syntax](#file-syntax)
-6. [Parameters](#parameters)
-7. [Running tests](#testing)
+5. [Using Word or LibreOffice files](#word-or-libreoffice-files) 
+6. [File syntax](#file-syntax)
+7. [Parameters](#parameters)
+8. [Running tests](#testing)
+9. [Future features](#future-features)
+
 <!-- 8. [Debug mode](#debug-mode) -->
-8. [Future features](#future-features)
 
 ## Supported file types
 
 This project supports reading from both .org and .txt files. 
+
+Bullet points are supported through the use of Word and LibreOffice files. These must be saved as HTML / HTM (Web) files in order to work correctly. Please refer to the section on this.
 
 ## What is an org file?
 
@@ -102,6 +106,43 @@ ankiq
 * Will start a Python input reply.
 * Takes a questions and a series of anwers
 * Empty line add a new question to the default org file
+
+## Word or LibreOffice files
+
+### Specific file syntax
+
+Word and LibreOffice files are now support using bulletpoints for the question answers.
+
+Instead of using * or ** you can use bulletpoint list instead. All other syntax rules apply.
+
+Format of question ansewers
+
+* What is the capital of Ireland
+
+	`# type = basic`
+	* Dublin
+* What is the capital of Germany
+	* Berlin
+
+
+
+### Saving Word or LibreOffice files correctly
+
+In order to parse Word or LibreOffice files these must first be saved as HTML / HTM files. Unsaved examples are both located in `exampleLibreOfficeAndWordFiles` folder.
+
+Saving a Word file
+```
+File > Save As
+```
+For "File Format" select "Web Page (.htm)"
+
+Saving a LibreOffice file
+```
+File > Save As
+```
+For "File type" select "HTML Document (.html)"
+
+
 
 ## File syntax
 
