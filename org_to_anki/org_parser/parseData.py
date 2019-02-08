@@ -2,7 +2,6 @@
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .DeckBuilder import DeckBuilder
 from . import ParserUtils
-from . import DocxConverter
 
 
 def parse(filePath: str) -> ([AnkiDeck]):
@@ -13,8 +12,6 @@ def parse(filePath: str) -> ([AnkiDeck]):
     fileExtension = filePath.split(".")[-1] # Unhandled index error here
     if (fileExtension == "org" or fileExtension == "txt"):
         data = _formatFile(filePath)
-    elif (fileExtension == "org"):
-        data = DocxConverter.convertDocxToOrgFormat(filePath)
     else:
         raise Exception("Inccorrect file format given")
     fileName = filePath.split("/")[-1].split(".")[0]
