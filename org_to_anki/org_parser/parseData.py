@@ -1,6 +1,7 @@
 # parse data into expected format
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .DeckBuilder import DeckBuilder
+from ..converters.BulletPointHtmlConverter import convertBulletPointsDocument
 from . import ParserUtils
 
 
@@ -12,6 +13,10 @@ def parse(filePath: str) -> ([AnkiDeck]):
     fileExtension = filePath.split(".")[-1] # Unhandled index error here
     if (fileExtension == "org" or fileExtension == "txt"):
         data = _formatFile(filePath)
+    # 
+    elif ((fileExtension == "html") or (fileExtension == "htm")):
+        formatedData = convertBulletPointsDocument(filePath)
+        data = formatedData.split("\n")
     else:
         raise Exception("Inccorrect file format given")
     fileName = filePath.split("/")[-1].split(".")[0]
