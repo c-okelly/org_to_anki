@@ -1,5 +1,14 @@
-from bs4 import BeautifulSoup
+# Differnet imports if within Anki app
+try:
+    from bs4 import BeautifulSoup
+except:
+    from BeautifulSoup import BeautifulSoup
 import re
+
+
+## TODO => review these
+import io
+from aqt.utils import showInfo
 # This should parse either libre office / microsoft office 
 # files with bullet points into the expected format
 
@@ -14,10 +23,16 @@ def convertBulletPointsDocument(filePath):
 
 def checkDocumentType(filePath):
 
-    htmlFile = open(filePath, encoding="latin-1")
-    soup = BeautifulSoup(htmlFile, 'html.parser')
+    # TODO => fix between python2 / 3
+    # htmlFile = io.open(filePath, encoding="utf-8")
+    with open(filePath, 'r') as file:
+        htmlFile = file.read()
+        showInfo(str(type(htmlFile)))
 
-    numberLists = len(soup.find_all("ul"))
+    soup = BeautifulSoup(htmlFile) #, 'html.parser')
+
+    # TODO => change backFindAll for python3
+    numberLists = len(soup.findAll("ul"))
 
     # Check if there are any html list => these are not present in word files
     if numberLists == 0:
@@ -26,13 +41,20 @@ def checkDocumentType(filePath):
         return "libreOffice"
 
 def _parseWordBulletPoints(filePath):
+ 
+     # TODO => python2 => io
+    # htmlFile = io.open(filePath, encoding="utf-8")
+    with open(filePath, 'r') as file:
+        htmlFile = file.read()
 
-    htmlFile = open(filePath, encoding="latin-1")
-    soup = BeautifulSoup(htmlFile, 'html.parser')
+    # TODO => fix between python2 / 3
+    soup = BeautifulSoup(htmlFile) #, 'html.parser')
 
     # Word file
     parsedFile = ""
-    paragraphs = soup.find_all('p')
+
+    # TODO => change back FindAll for python3
+    paragraphs = soup.findAll('p')
 
     for line in paragraphs:
 
@@ -41,7 +63,8 @@ def _parseWordBulletPoints(filePath):
 
         text = line.text.split("\n")
         style = ""
-        if (line.has_attr("style")):
+        # TODO => changed for python2 => has_attr
+        if (line.has_key("style")):
             style = line["style"]
 
         # TODO bullet points or # seem to be split by a line break in raw foramt. 
@@ -76,61 +99,48 @@ def _parseWordBulletPoints(filePath):
         if len(newLine) != 0:
             parsedFile += newLine + "\n"
 
+    # TODO => need to have string not unicode here
+    showInfo("Something here - word")
+    showInfo(str(type(parsedFile)))
     return parsedFile.strip()
 
 def _parseLibreOfficeBulletPoints(filePath):
 
 
-    htmlFile = open(filePath, encoding="latin-1")
+    # TODO => python2 => io
+    # htmlFile = io.open(filePath, encoding="utf-8")
+    with open(filePath, 'r') as file:
+        htmlFile = file.read()
     soup = BeautifulSoup(htmlFile, 'lxml')
 
     parsedFile = ""
-    
-    # x = soup.body.contents
-    # print(x)
-    # print()
 
     bodyContents = soup.body.contents
 
     for section in bodyContents:
-
-        # print()
-        # print(section.name)
 
         if section.name == "p":
             if len(section.text.strip()) != 0:
                 parsedFile += section.text + "\n"
 
         elif section.name == "ul":
-            # print("list")
-            # print(section)
             formattedList = _processHtmlList(section)
             parsedFile += formattedList + "\n"
-            # break
 
         elif section.name == None:
             continue
-            # print("unknown type")
 
+    showInfo("Something here")
+    showInfo(str(type(parsedFile)))
     return parsedFile.strip()
 
 def _processHtmlList(soupHtmlList, level=1):
 
     formatedList = ""
 
-    # print(soupHtmlList.contents)
-    # print()
-    # print("scanner")
-
     for i in soupHtmlList.contents:
-        # print("i section")
-        # print(i)
-        # print()
         if i.name == "li":
-            # print("list")
-            # print()
             for k in i.contents:
-                # print("k is => ", k.name, ". k => ", k)
                 if (k.name == "p"):
                     stars = "*" * level
                     newText = _formatText(k.text)
@@ -144,7 +154,6 @@ def _processHtmlList(soupHtmlList, level=1):
                 else:
                     continue
 
-    # print(formatedList)
     return formatedList.strip()
 
 def _formatText(text):

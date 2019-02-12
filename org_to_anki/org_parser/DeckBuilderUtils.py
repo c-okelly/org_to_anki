@@ -5,7 +5,7 @@ import os
 class DeckBuilderUtils:
 
     # Used to check if extra data is containted within the line
-    def parseAnswerLine(self, answerLine: str, filePath: str, currentDeck: AnkiDeck):
+    def parseAnswerLine(self, answerLine, filePath, currentDeck): # (str, str, AnkiDeck)
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
@@ -31,7 +31,7 @@ class DeckBuilderUtils:
         
         return answerLine
 
-    def removeAsterisk(self, line: str):
+    def removeAsterisk(self, line): # (str)
         if line.strip()[0] == "*":
             line = line.strip().split(" ")[1:]
             line = " ".join(line)
@@ -39,10 +39,10 @@ class DeckBuilderUtils:
         else:
             return line
 
-    def countAsterisk(self, line: str):
+    def countAsterisk(self, line): # (str)
         return line.split(' ')[0].count('*', 0, 10)
 
-    def generateSublist(self, subItems: [str]):
+    def generateSublist(self, subItems): # ([str])
 
         formatedList = []
 
@@ -64,7 +64,7 @@ class DeckBuilderUtils:
 
         return cleaned
 
-    def formatLine(self, line:str):
+    def formatLine(self, line): # (str)
 
         formattedLine = line
 

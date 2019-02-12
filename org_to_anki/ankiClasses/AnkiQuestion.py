@@ -13,19 +13,19 @@ class AnkiQuestion:
         self._parameters = {}
         self._media = []
 
-    def setDeckName(self, deckName: str):
+    def setDeckName(self, deckName): # (str)
         self.deckName = deckName
 
     def getDeckName(self):
         return self.deckName
 
-    def addQuestion(self, question: str):
+    def addQuestion(self, question): # (str
         self.question.append(question)
     
     def getQuestions(self):
         return self.question
 
-    def addImage(self, fileName, filePath):
+    def addImage(self, fileName, filePath): 
         with open(filePath, "rb") as file:
             print(filePath)
             self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
@@ -37,25 +37,25 @@ class AnkiQuestion:
         return self._media
 
     # Getters and setters #
-    def addAnswer(self, answer: str):
+    def addAnswer(self, answer): # (str)
         self._answers.append(answer)
 
     def getAnswers(self):
         return self._answers
 
-    def addComment(self, comment: str):
+    def addComment(self, comment): # (str)
         self._comments.append(comment)
 
     def getComments(self):
         return self._comments
 
-    def addParameter(self, key: str, value: str):
+    def addParameter(self, key, value): # (str, str)
         self._parameters[key] = value
 
     def getParameter(self, key):
         return self._parameters.get(key, None)
 
-    def addTag(self, tag: str):
+    def addTag(self, tag): # (str)
         self._tags.append(tag)
 
     def getTags(self):

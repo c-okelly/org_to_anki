@@ -16,7 +16,7 @@ class AnkiConnector:
         self.currentDecks = []
         self.connector = AnkiConnectorUtils(self.url)
 
-    def uploadNewDeck(self, deck: AnkiDeck):
+    def uploadNewDeck(self, deck): # (AnkiDeck)
 
         if self.connector.testConnection() is not True:
             print(
@@ -38,7 +38,7 @@ class AnkiConnector:
         self.connector.uploadNotes(notes)
         self.connector.uploadMediaCollection(media)
 
-    def prepareMedia(self, ankiMedia: []):
+    def prepareMedia(self, ankiMedia): # ([])
 
         formattedMedia = []
         if len(ankiMedia) == 0:
@@ -48,7 +48,7 @@ class AnkiConnector:
                 formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
         return formattedMedia
 
-    def _buildNewDecksAsRequired(self, deckNames: [str]):
+    def _buildNewDecksAsRequired(self, deckNames): # ([str])
         # Check decks exist for notes
         newDeckPaths = []
         for i in deckNames:
@@ -60,7 +60,7 @@ class AnkiConnector:
         for deck in newDeckPaths:
             self.connector.createDeck(deck)
 
-    def _getFullDeckPath(self, deckName: str):
+    def _getFullDeckPath(self, deckName):
         return self.defaultDeck + "::" + deckName
 
     def _checkForDefaultDeck(self):
@@ -68,7 +68,7 @@ class AnkiConnector:
         if self.defaultDeck not in self.currentDecks:
             self.connector.createDeck(self.defaultDeck)
 
-    def buildAnkiNotes(self, ankiQuestions: [AnkiQuestion]):
+    def buildAnkiNotes(self, ankiQuestions): # [AnkiQuestion]
 
         notes = []
         for i in ankiQuestions:
@@ -78,7 +78,7 @@ class AnkiConnector:
         finalNotes["notes"] = notes
         return finalNotes
 
-    def _buildNote(self, ankiQuestion: AnkiQuestion):
+    def _buildNote(self, ankiQuestion): # AnkiQuestion
 
         # All decks stored under default deck
         if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
@@ -104,7 +104,7 @@ class AnkiConnector:
         note["fields"] = fields
         return note
 
-    def _createQuestionString(self, questions:[str]):
+    def _createQuestionString(self, questions): # [str]
 
         if len(questions) == 1:
             question =  questions[0].replace("\n", "<br>")
@@ -117,7 +117,7 @@ class AnkiConnector:
             return questionString
             
 
-    def _createAnswerString(self, answers: [str], bulletPoints: bool=True):
+    def _createAnswerString(self, answers, bulletPoints = True): #([str], bool)
         result = ""
         if not bulletPoints:
             for i in answers:

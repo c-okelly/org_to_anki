@@ -6,7 +6,7 @@ import os
 class QuestionBuilderUtils:
 
     # Used to check if extra data is containted within the line
-    def parseAnswerLine(self, answerLine: str, filePath: str, currentDeck: AnkiDeck):
+    def parseAnswerLine(self, answerLine, filePath, currentDeck): # (str, str, AnkiDeck)
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
@@ -31,15 +31,15 @@ class QuestionBuilderUtils:
         
         return answerLine
 
-    def removeAsterisk(self, line: str):
+    def removeAsterisk(self, line): # (str)
         line = line.strip().split(" ")[1:]
         line = " ".join(line)
         return line
 
-    def countAsterisk(self, line: str):
+    def countAsterisk(self, line): # (str)
         return line.split(' ')[0].count('*', 0, 10)
 
-    def generateSublist(self, subItems: [str]):
+    def generateSublist(self, subItems): # [str]
 
         formatedList = []
 

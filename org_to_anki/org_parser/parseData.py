@@ -5,7 +5,7 @@ from ..converters.BulletPointHtmlConverter import convertBulletPointsDocument
 from . import ParserUtils
 
 
-def parse(filePath: str) -> ([AnkiDeck]):
+def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
     deckBuilder = DeckBuilder()
 
@@ -37,7 +37,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
     return deck
 
 
-def _formatFile(filePath: str):
+def _formatFile(filePath):# (filePath: str):
 
     with open(filePath, 'r') as file:
         data = file.read().split('\n')
@@ -45,7 +45,7 @@ def _formatFile(filePath: str):
     return data
 
 
-def _sortData(rawFileData: [str]) -> ([str], [str]):
+def _sortData(rawFileData): #(rawFileData: [str]) -> ([str], [str]):
 
     comments, questions = [], []
 

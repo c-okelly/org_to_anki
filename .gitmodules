@@ -1,0 +1,3 @@
+[submodule "anki-connect"]
+	path = org_to_anki/anki-connect
+	url = https://github.com/FooSoft/anki-connect

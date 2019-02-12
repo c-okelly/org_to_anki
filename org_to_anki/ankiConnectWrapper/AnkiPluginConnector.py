@@ -1,58 +1,172 @@
+# Using AnkiConnect project as a sub-module import and use AnkiBridge 
+import sys
+# sys.path.insert(0, "org_to_anki/anki-connect/AnkiConnect.py")
+# sys.path.insert(0, "org_to_anki/org_to_anki/anki-connect/AnkiConnect.py")
+from AnkiConnect import AnkiConnect
+from .. import config
 
+# Anki imports
+import anki
+import aqt
+from aqt.utils import showInfo
 class AnkiPluginConnector:
 
     # TODO => integrate for anki
+    def __init__(self):
+        self.AnkiBridge = AnkiConnect()
+        self.defaultDeck = config.defaultDeck
 
-    def __init__(self, url):
-        self.url = url
+    def uploadNewDeck(self, deck): # AnkiDeck
 
-    def makeRequest(self, action: str, parmeters: dict={}):
+        ### Upload deck to Anki in embedded mode ###
+        showInfo("Creating deck")
+        # showInfo(str(sys.version))
+        # # showInfo(print(deck))
+        # showInfo(str(deck.getDeckNames()))
+        # print(sys.version)
 
-        payload = self._buildPayload(action, parmeters)
-        if payload.get("action") != "storeMediaFile":
-            print("Parameters sent to Anki", payload, "\n")
+
+        # # Create deck if it does not exist for main deck
+        # self.AnkiBridge.createDeck("New test Deck")
+
+
+        # Ensure subdecks also exist
+
+        # Add notes
+
+        # Add media 
+
+        self._checkForDefaultDeck()
+        self._buildNewDecksAsRequired(deck.getDeckNames())
+        # Build new questions
+        notes = self.buildIndividualAnkiNotes(deck.getQuestions())
+        media = self.prepareMedia(deck.getMedia())
+
+        # TODO Get all question from that deck and
+        # use this to verify questions need to be uploaded
+        # self._removeAlreadyExistingQuestions()
+
+        # Insert new question through the api
+        # TODO fix both of these
+        # self.AnkiBridge.uploadNotes(notes)
+
+        showInfo(str(notes))
+        for note in notes:
+            self.AnkiBridge.addNote(note)
+
+        # self.AnkiBridge.uploadMediaCollection(media)
+        for i in media:
+            self.AnkiBridge.storeMediaFile(i.get("fileName"), i.get("data"))
+
+
+    def prepareMedia(self, ankiMedia): # ([])
+
+        formattedMedia = []
+        if len(ankiMedia) == 0:
+            return formattedMedia
         else:
-            truncateMediaEncoding = copy.deepcopy(payload)
-            truncateMediaEncoding.get("params")["data"] = 'encoding remvoed for print statement'
-            print("Parameters sent to Anki", truncateMediaEncoding, "\n")
+            for i in ankiMedia:
+                formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
+        return formattedMedia
 
-        payload = json.dumps(payload)
-        # TODO log payloads
-        try:
-            res = requests.post(self.url, payload)
-        except Exception as e:
-            print("An error has occurred make the request.\n", e)
+    def _buildNewDecksAsRequired(self, deckNames): # ([str])
+        # Check decks exist for notes
+        newDeckPaths = []
+        for i in deckNames:
+            fullDeckPath = self._getFullDeckPath(i)
+            if fullDeckPath not in self.currentDecks and fullDeckPath not in newDeckPaths:
+                newDeckPaths.append(fullDeckPath)
 
-        if res.status_code == 200:
-            data = json.loads(res.text)
-            return data
+        # Create decks
+        for deck in newDeckPaths:
+            self.AnkiBridge.createDeck(deck)
+
+    def _getFullDeckPath(self, deckName): # (str)
+        return str(self.defaultDeck + "::" + deckName)
+
+    def _checkForDefaultDeck(self):
+        self.currentDecks = self.AnkiBridge.deckNames()
+        if self.defaultDeck not in self.currentDecks:
+            self.AnkiBridge.createDeck(self.defaultDeck)
+
+    # TODO => refactor
+    def buildAnkiNotes(self, ankiQuestions): # [AnkiQuestion]
+
+        notes = []
+        for i in ankiQuestions:
+            notes.append(self._buildNote(i))
+
+        finalNotes = {}
+        finalNotes["notes"] = notes
+        return finalNotes
+    
+    def buildIndividualAnkiNotes(self, ankiQuestions):
+
+        allNotes = []
+        for i in ankiQuestions:
+            # singleNote = {}
+            # singleNote["notes"] = self._buildNote(i)
+            allNotes.append(self._buildNote(i))
+        
+        return allNotes
+
+    def _buildNote(self, ankiQuestion): # AnkiQuestion
+
+        # All decks stored under default deck
+        if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
+            # TODO log note was built on default deck
+            deckName = self.defaultDeck
         else:
-            return res.status_code
+            deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
-    def getDeckNames(self):
-        result = self.makeRequest("deckNames")
-        return self._getResultOrError(result)
+        # TODO: Verify model name correctly and use parameters
+        if ankiQuestion.getParameter("type") is not None:
+            modelName = ankiQuestion.getParameter("type")
+        else:
+            modelName = "Basic"
 
-    def createDeck(self, deckName: str):
-        result = self.makeRequest("createDeck", {"deck": deckName})
-        return self._getResultOrError(result)
+        note = {"deckName": deckName, "modelName": modelName}
+        note["tags"] = ankiQuestion.getTags()
 
-    def uploadNotes(self, notes: {}):
-        result = self.makeRequest("addNotes", notes)
-        return self._getResultOrError(result)
+        # Generate fields
+        fields = {}
+        fields["Front"] = self._createQuestionString(ankiQuestion.getQuestions())
+        fields["Back"] = self._createAnswerString(ankiQuestion.getAnswers())
 
-    def uploadMediaCollection(self, mediaItems):
-        for i in mediaItems:
-            self.uploadMedia(i.get("fileName"), i.get("data"))
+        note["fields"] = fields
+        return note
 
-    def uploadMedia(self, fileName, base64EncodedMedia):
-        result = self.makeRequest("storeMediaFile", {"filename": fileName, "data": base64EncodedMedia})
-        return self._getResultOrError(result)
+    def _createQuestionString(self, questions): #([str])
 
-    def testConnection(self):
-        try:
-            # TODO log status code
-            return requests.post(self.url, data={}).status_code == 200
-        except requests.exceptions.RequestException:
-            # TODO log exception
-            return False
+        if len(questions) == 1:
+            question =  questions[0].replace("\n", "<br>")
+            return question
+        else:
+            questionString = ""
+            for q in questions:
+                q = q.strip().replace("\n", "<br>")
+                questionString += q + " <br>"
+            return questionString
+            
+
+    def _createAnswerString(self, answers, bulletPoints=True): # ([str], bool)
+
+        result = ""
+        if not bulletPoints:
+            for i in answers:
+                result += i + "<br>"  # HTML link break
+        else:
+            # Can only can create single level of indentation. Align
+            # bulletpoints.
+            result += "<ul style='list-style-position: inside;'>"
+            for i in answers:
+                if isinstance(i, str):
+                    result += "<li>" + i + "</li>"
+                elif isinstance(i, list):
+                    result += self._createAnswerString(i)
+                else:
+                    showInfo(str(type(i)))
+                    raise Exception("Unsupported action with answer string from => ") # + str(i))
+
+            result += "</ul>"
+        return result

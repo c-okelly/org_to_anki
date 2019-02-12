@@ -12,7 +12,7 @@ class DeckBuilder:
 
     utils = DeckBuilderUtils.DeckBuilderUtils()
 
-    def buildDeck(self, questions: [str], deckName: str, filePath: str, fileType: str='basic'):
+    def buildDeck(self, questions, deckName, filePath, fileType ='basic'): # ([str], str, str, str)
 
         # TODO: Remove lower
         if fileType.lower() == 'basic':

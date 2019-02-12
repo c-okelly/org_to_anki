@@ -3,11 +3,12 @@
 import sys
 
 from .org_parser import parseData
-from .ankiConnectWrapper import AnkiConnector
+from .ankiConnectWrapper.AnkiConnector import AnkiConnector
+from .ankiConnectWrapper import AnkiPluginConnector
 from . import config
 
 
-def parseAndUploadOrgFile(filePath=None):
+def parseAndUploadOrgFile(filePath=None, embedded=False):
 
     # debugMode = False
     # for arg in sys.argv:
@@ -15,6 +16,7 @@ def parseAndUploadOrgFile(filePath=None):
     #         debugMode = True
     #         sys.argv.remove(arg)
 
+    # TODO: => uncoment section 
     if filePath is None:
         filePath = _getUploadFilePath()
 
@@ -22,7 +24,11 @@ def parseAndUploadOrgFile(filePath=None):
         filePath = filePath.replace("~", config.homePath)
 
     print("file is ", filePath)
-    _parseAndUpload(filePath)
+    _parseAndUpload(filePath, True)
+
+    # # Test
+    # connector = AnkiPluginConnector.AnkiPluginConnector()
+    # connector.uploadNewDeck("file")
 
 def _getUploadFilePath():
 
@@ -36,11 +42,15 @@ def _getUploadFilePath():
     return filePath
 
 
-def _parseAndUpload(filePath):
+def _parseAndUpload(filePath, embedded=False):
 
     deck = parseData.parse(filePath)
 
-    connector = AnkiConnector.AnkiConnector()
+    if (embedded == False):
+        connector = AnkiConnector()
+    else:
+    #     # TODO fix
+        connector = AnkiPluginConnector.AnkiPluginConnector()
     connector.uploadNewDeck(deck)
 
 
