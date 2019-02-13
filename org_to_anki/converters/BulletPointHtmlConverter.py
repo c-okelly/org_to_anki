@@ -1,14 +1,17 @@
 # Differnet imports if within Anki app
-try:
-    from bs4 import BeautifulSoup
-except:
-    from BeautifulSoup import BeautifulSoup
+# try:
+from bs4 import BeautifulSoup
+# except:
+    # from BeautifulSoup import BeautifulSoup
 import re
 
 
 ## TODO => review these
 import io
-from aqt.utils import showInfo
+try: # Anki import 
+    from aqt.utils import showInfo
+except:
+    pass
 # This should parse either libre office / microsoft office 
 # files with bullet points into the expected format
 
@@ -16,9 +19,10 @@ def convertBulletPointsDocument(filePath):
 
     # Will determine if word or libreOffice document
 
-    if checkDocumentType(filePath) == "word":
+    documentType = checkDocumentType(filePath)
+    if documentType == "word":
         return _parseWordBulletPoints(filePath)
-    elif checkDocumentType(filePath) == "libreOffice":
+    elif documentType == "libreOffice":
         return _parseLibreOfficeBulletPoints(filePath)
 
 def checkDocumentType(filePath):
@@ -27,9 +31,9 @@ def checkDocumentType(filePath):
     # htmlFile = io.open(filePath, encoding="utf-8")
     with open(filePath, 'r') as file:
         htmlFile = file.read()
-        showInfo(str(type(htmlFile)))
+        # showInfo(str(type(htmlFile)))
 
-    soup = BeautifulSoup(htmlFile) #, 'html.parser')
+    soup = BeautifulSoup(htmlFile, 'html.parser') #, 'html.parser')
 
     # TODO => change backFindAll for python3
     numberLists = len(soup.findAll("ul"))
@@ -48,7 +52,7 @@ def _parseWordBulletPoints(filePath):
         htmlFile = file.read()
 
     # TODO => fix between python2 / 3
-    soup = BeautifulSoup(htmlFile) #, 'html.parser')
+    soup = BeautifulSoup(htmlFile, 'html.parser')
 
     # Word file
     parsedFile = ""
@@ -61,7 +65,11 @@ def _parseWordBulletPoints(filePath):
         if (len(line.text.strip()) == 0):
             continue
 
-        text = line.text.split("\n")
+        lineOfText = line.text
+        if (isinstance(lineOfText, str) == False):
+            lineOfText = lineOfText.encode("utf-8")
+        text = lineOfText.split("\n")
+
         style = ""
         # TODO => changed for python2 => has_attr
         if (line.has_key("style")):
@@ -69,7 +77,7 @@ def _parseWordBulletPoints(filePath):
 
         # TODO bullet points or # seem to be split by a line break in raw foramt. 
         # need to redesign how text is parsed here
-        if (text[0] == "#"):
+        if (text[0].strip() == "#"):
             text[1] = "# " + text[1]
 
         # Get level of indentation
@@ -89,7 +97,7 @@ def _parseWordBulletPoints(filePath):
         else:
             text = text[0]
         # Clean up text
-        text = text.replace(u'\xa0', u'')
+        # text = text.replace(u'\xa0', u'')
 
         if level != None:
             newLine = ("*" * level) + " " + text
@@ -100,8 +108,10 @@ def _parseWordBulletPoints(filePath):
             parsedFile += newLine + "\n"
 
     # TODO => need to have string not unicode here
-    showInfo("Something here - word")
-    showInfo(str(type(parsedFile)))
+    # showInfo("Something here - word")
+    # showInfo(str(type(parsedFile)))
+    if (isinstance(parsedFile, str) == False):
+        parsedFile = parsedFile.encode("utf-8")
     return parsedFile.strip()
 
 def _parseLibreOfficeBulletPoints(filePath):
@@ -111,7 +121,7 @@ def _parseLibreOfficeBulletPoints(filePath):
     # htmlFile = io.open(filePath, encoding="utf-8")
     with open(filePath, 'r') as file:
         htmlFile = file.read()
-    soup = BeautifulSoup(htmlFile, 'lxml')
+    soup = BeautifulSoup(htmlFile, 'html.parser')
 
     parsedFile = ""
 
@@ -130,8 +140,8 @@ def _parseLibreOfficeBulletPoints(filePath):
         elif section.name == None:
             continue
 
-    showInfo("Something here")
-    showInfo(str(type(parsedFile)))
+    # showInfo("Something here")
+    # showInfo(str(type(parsedFile)))
     return parsedFile.strip()
 
 def _processHtmlList(soupHtmlList, level=1):
@@ -144,6 +154,9 @@ def _processHtmlList(soupHtmlList, level=1):
                 if (k.name == "p"):
                     stars = "*" * level
                     newText = _formatText(k.text)
+                    if (isinstance(newText, str) == False):
+                        newText = newText.encode("utf-8")
+
                     # TODO => only supports either comments or bullet points
                     if newText[0] != "#": 
                         newText = stars + " " + newText

@@ -1,25 +1,36 @@
 # Using AnkiConnect project as a sub-module import and use AnkiBridge 
 import sys
 # sys.path.insert(0, "org_to_anki/anki-connect/AnkiConnect.py")
-# sys.path.insert(0, "org_to_anki/org_to_anki/anki-connect/AnkiConnect.py")
-from AnkiConnect import AnkiConnect
+import os
+dirname = os.path.dirname(__file__)
+ankiConnectPath = os.path.join(dirname, "../anki-connect/AnkiConnect.py")
+sys.path.append(ankiConnectPath)
+
 from .. import config
 
 # Anki imports
-import anki
-import aqt
-from aqt.utils import showInfo
+try:
+    from AnkiConnect import AnkiConnect
+    import anki
+    import aqt
+    from aqt.utils import showInfo
+except:
+    pass
 class AnkiPluginConnector:
 
     # TODO => integrate for anki
     def __init__(self):
-        self.AnkiBridge = AnkiConnect()
+        try: 
+            self.AnkiBridge = AnkiConnect()
+        except:
+            self.AnkiBridge = None
+        print(ankiConnectPath)
         self.defaultDeck = config.defaultDeck
 
     def uploadNewDeck(self, deck): # AnkiDeck
 
         ### Upload deck to Anki in embedded mode ###
-        showInfo("Creating deck")
+        # showInfo("Creating deck")
         # showInfo(str(sys.version))
         # # showInfo(print(deck))
         # showInfo(str(deck.getDeckNames()))
@@ -50,7 +61,7 @@ class AnkiPluginConnector:
         # TODO fix both of these
         # self.AnkiBridge.uploadNotes(notes)
 
-        showInfo(str(notes))
+        # showInfo(str(notes))
         for note in notes:
             self.AnkiBridge.addNote(note)
 
@@ -165,7 +176,7 @@ class AnkiPluginConnector:
                 elif isinstance(i, list):
                     result += self._createAnswerString(i)
                 else:
-                    showInfo(str(type(i)))
+                    # showInfo(str(type(i)))
                     raise Exception("Unsupported action with answer string from => ") # + str(i))
 
             result += "</ul>"

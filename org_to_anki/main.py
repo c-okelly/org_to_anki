@@ -24,7 +24,7 @@ def parseAndUploadOrgFile(filePath=None, embedded=False):
         filePath = filePath.replace("~", config.homePath)
 
     print("file is ", filePath)
-    _parseAndUpload(filePath, True)
+    _parseAndUpload(filePath, embedded)
 
     # # Test
     # connector = AnkiPluginConnector.AnkiPluginConnector()
