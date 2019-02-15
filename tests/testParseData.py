@@ -16,6 +16,13 @@ def testBasicPraseNamedCorrectly():
 
     assert(actualDeck.deckName == "basic")
 
+def testFileWithNoQuestions():
+
+    filename = "tests/testData/empty.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(len(actualDeck.getQuestions()) == 0)
+
 def testBaiscPraseQuestsion():
 
     filename = "tests/testData/basic.org"

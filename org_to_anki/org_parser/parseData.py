@@ -4,7 +4,6 @@ from .DeckBuilder import DeckBuilder
 from ..converters.BulletPointHtmlConverter import convertBulletPointsDocument
 from . import ParserUtils
 
-
 def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
     deckBuilder = DeckBuilder()

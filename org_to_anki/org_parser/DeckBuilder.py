@@ -137,6 +137,9 @@ class DeckBuilder:
     def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
+        if len(questions) == 0:
+            return deck
+
         # Get deck comments
         while questions[0].strip()[0] == "#":
             comment = questions.pop(0)

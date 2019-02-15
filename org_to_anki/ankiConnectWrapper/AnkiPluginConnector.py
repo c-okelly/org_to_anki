@@ -2,15 +2,16 @@
 import sys
 # sys.path.insert(0, "org_to_anki/anki-connect/AnkiConnect.py")
 import os
-dirname = os.path.dirname(__file__)
-ankiConnectPath = os.path.join(dirname, "../anki-connect/AnkiConnect.py")
-sys.path.append(ankiConnectPath)
+# TODO => need to embbeded the AnkiConnectCode
+# dirname = os.path.dirname(__file__)
+# ankiConnectPath = os.path.join(dirname, "../anki-connect/AnkiConnect.py")
+# sys.path.append(ankiConnectPath)
 
 from .. import config
+from .AnkiBridge import AnkiBridge
 
 # Anki imports
 try:
-    from AnkiConnect import AnkiConnect
     import anki
     import aqt
     from aqt.utils import showInfo
@@ -18,54 +19,26 @@ except:
     pass
 class AnkiPluginConnector:
 
-    # TODO => integrate for anki
     def __init__(self):
-        try: 
-            self.AnkiBridge = AnkiConnect()
-        except:
-            self.AnkiBridge = None
-        print(ankiConnectPath)
-        self.defaultDeck = config.defaultDeck
+        self.AnkiBridge = AnkiBridge()
+        # TODO => reset 
+        # self.defaultDeck = config.defaultDeck
+        self.defaultDeck = "testDeck"
 
     def uploadNewDeck(self, deck): # AnkiDeck
 
         ### Upload deck to Anki in embedded mode ###
-        # showInfo("Creating deck")
-        # showInfo(str(sys.version))
-        # # showInfo(print(deck))
-        # showInfo(str(deck.getDeckNames()))
-        # print(sys.version)
-
-
-        # # Create deck if it does not exist for main deck
-        # self.AnkiBridge.createDeck("New test Deck")
-
-
-        # Ensure subdecks also exist
-
-        # Add notes
-
-        # Add media 
-
         self._checkForDefaultDeck()
         self._buildNewDecksAsRequired(deck.getDeckNames())
         # Build new questions
         notes = self.buildIndividualAnkiNotes(deck.getQuestions())
         media = self.prepareMedia(deck.getMedia())
 
-        # TODO Get all question from that deck and
-        # use this to verify questions need to be uploaded
-        # self._removeAlreadyExistingQuestions()
-
-        # Insert new question through the api
-        # TODO fix both of these
-        # self.AnkiBridge.uploadNotes(notes)
-
-        # showInfo(str(notes))
+        # Add notes => TODO => needs to handle exception better
         for note in notes:
             self.AnkiBridge.addNote(note)
 
-        # self.AnkiBridge.uploadMediaCollection(media)
+        # Add Media => TODO => not tested
         for i in media:
             self.AnkiBridge.storeMediaFile(i.get("fileName"), i.get("data"))
 
@@ -155,6 +128,7 @@ class AnkiPluginConnector:
         else:
             questionString = ""
             for q in questions:
+                q = self._formatString(q)
                 q = q.strip().replace("\n", "<br>")
                 questionString += q + " <br>"
             return questionString
@@ -165,19 +139,27 @@ class AnkiPluginConnector:
         result = ""
         if not bulletPoints:
             for i in answers:
+                i = self._formatString(i)
                 result += i + "<br>"  # HTML link break
         else:
             # Can only can create single level of indentation. Align
             # bulletpoints.
             result += "<ul style='list-style-position: inside;'>"
             for i in answers:
+                i = self._formatString(i)
                 if isinstance(i, str):
                     result += "<li>" + i + "</li>"
                 elif isinstance(i, list):
                     result += self._createAnswerString(i)
                 else:
-                    # showInfo(str(type(i)))
-                    raise Exception("Unsupported action with answer string from => ") # + str(i))
+                    raise Exception("Unsupported action with answer string from => " + str(i))
 
             result += "</ul>"
         return result
+
+    def _formatString(self, unformattedString):
+
+        # if (isinstance(unformattedString, unicode) == True):
+        #     return unformattedString.encode("utf-8")
+        # else:
+        return unformattedString

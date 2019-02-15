@@ -1,9 +1,14 @@
 # Differnet imports if within Anki app
 # try:
+# from bs4 import BeautifulSoup
+## TODO => realtive import
 from bs4 import BeautifulSoup
 # except:
-    # from BeautifulSoup import BeautifulSoup
+# from BeautifulSoup import BeautifulSoup
+
 import re
+import codecs
+import chardet
 
 
 ## TODO => review these
@@ -27,13 +32,10 @@ def convertBulletPointsDocument(filePath):
 
 def checkDocumentType(filePath):
 
-    # TODO => fix between python2 / 3
-    # htmlFile = io.open(filePath, encoding="utf-8")
-    with open(filePath, 'r') as file:
-        htmlFile = file.read()
-        # showInfo(str(type(htmlFile)))
+    # TODO wrap in a try catch that give the user some useful information
+    htmlFile = codecs.open(filePath, 'r', "utf-8")
+    soup = BeautifulSoup(htmlFile, 'html.parser')
 
-    soup = BeautifulSoup(htmlFile, 'html.parser') #, 'html.parser')
 
     # TODO => change backFindAll for python3
     numberLists = len(soup.findAll("ul"))
@@ -44,39 +46,33 @@ def checkDocumentType(filePath):
     else: 
         return "libreOffice"
 
+# Ahh word files. Good dam it they do some annoying things. If you save a word file 
+# as a web pagethe first time it's charset will be utf-8. If you open this file (in word) and save it again
+# it will change to some form of utf-16 little or big endian but with no BOM. Don't do this
+# I could support this by checking the chartset and then determining the system endian
 def _parseWordBulletPoints(filePath):
  
-     # TODO => python2 => io
-    # htmlFile = io.open(filePath, encoding="utf-8")
-    with open(filePath, 'r') as file:
-        htmlFile = file.read()
-
-    # TODO => fix between python2 / 3
+    htmlFile = codecs.open(filePath, 'r', "utf-8")
     soup = BeautifulSoup(htmlFile, 'html.parser')
 
     # Word file
     parsedFile = ""
-
-    # TODO => change back FindAll for python3
-    paragraphs = soup.findAll('p')
+    paragraphs = soup.find_all('p')
+    # showInfo(str(paragraphs))
 
     for line in paragraphs:
 
         if (len(line.text.strip()) == 0):
             continue
 
-        lineOfText = line.text
-        if (isinstance(lineOfText, str) == False):
-            lineOfText = lineOfText.encode("utf-8")
-        text = lineOfText.split("\n")
-
+        text = line.text.split("\n")
         style = ""
-        # TODO => changed for python2 => has_attr
-        if (line.has_key("style")):
+        if (line.has_attr("style")):
             style = line["style"]
 
         # TODO bullet points or # seem to be split by a line break in raw foramt. 
         # need to redesign how text is parsed here
+        print(text)
         if (text[0].strip() == "#"):
             text[1] = "# " + text[1]
 
@@ -97,7 +93,7 @@ def _parseWordBulletPoints(filePath):
         else:
             text = text[0]
         # Clean up text
-        # text = text.replace(u'\xa0', u'')
+        text = text.replace(u'\xa0', u'')
 
         if level != None:
             newLine = ("*" * level) + " " + text
@@ -107,20 +103,18 @@ def _parseWordBulletPoints(filePath):
         if len(newLine) != 0:
             parsedFile += newLine + "\n"
 
-    # TODO => need to have string not unicode here
-    # showInfo("Something here - word")
-    # showInfo(str(type(parsedFile)))
-    if (isinstance(parsedFile, str) == False):
-        parsedFile = parsedFile.encode("utf-8")
+    # showInfo("Word")
+    # showInfo(str(parsedFile))
     return parsedFile.strip()
 
 def _parseLibreOfficeBulletPoints(filePath):
 
 
     # TODO => python2 => io
-    # htmlFile = io.open(filePath, encoding="utf-8")
-    with open(filePath, 'r') as file:
-        htmlFile = file.read()
+    htmlFile = open(filePath, encoding="utf-8")
+    # htmlFile = io.open(filePath, encoding="utf-16")
+    # with open(filePath, 'r') as file:
+    #     htmlFile = file.read()
     soup = BeautifulSoup(htmlFile, 'html.parser')
 
     parsedFile = ""
@@ -140,7 +134,7 @@ def _parseLibreOfficeBulletPoints(filePath):
         elif section.name == None:
             continue
 
-    # showInfo("Something here")
+    # showInfo("Libre office")
     # showInfo(str(type(parsedFile)))
     return parsedFile.strip()
 
