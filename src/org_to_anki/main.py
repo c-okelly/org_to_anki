@@ -16,8 +16,10 @@ def parseAndUploadOrgFile(filePath=None, embedded=False):
     #         debugMode = True
     #         sys.argv.remove(arg)
 
-    # TODO: => uncoment section 
-    if filePath is None:
+
+    if (filePath == None and embedded == True):
+        raise Exception("No file path was given while running in embedded mode.")
+    elif filePath is None:
         filePath = _getUploadFilePath()
 
     if "~" in filePath:
@@ -25,10 +27,6 @@ def parseAndUploadOrgFile(filePath=None, embedded=False):
 
     print("file is ", filePath)
     _parseAndUpload(filePath, embedded)
-
-    # # Test
-    # connector = AnkiPluginConnector.AnkiPluginConnector()
-    # connector.uploadNewDeck("file")
 
 def _getUploadFilePath():
 
@@ -49,7 +47,6 @@ def _parseAndUpload(filePath, embedded=False):
     if (embedded == False):
         connector = AnkiConnector()
     else:
-    #     # TODO fix
         connector = AnkiPluginConnector.AnkiPluginConnector()
     connector.uploadNewDeck(deck)
 

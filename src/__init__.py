@@ -13,9 +13,20 @@ except:
     mw = None
     pass
 
-# We're going to add a menu item below. First we want to create a function to
-# be called when the menu item is activated.
+import traceback
 
+errorTemplate = """
+Hey there! It seems an error has occurred while running the importer.
+
+The error was {}.
+
+If you would like me to fix it please report it here: https://github.com/c-okelly/org_to_anki/issues
+
+Please be sure to provide as much information as possible, specifically the error below!
+
+Error report:
+{}
+"""
 def importNewFile():
 
     # show a message box
@@ -25,7 +36,23 @@ def importNewFile():
     showInfo(filePath)
 
     ## Do real main
-    parseAndUploadOrgFile(filePath, embedded=True)
+    try:
+        parseAndUploadOrgFile(filePath, embedded=True)
+    
+    except TypeError as e:
+        error = "The file that was selected for upload is not either an org, txt, html or htm file. Path was {}"
+        showInfo(error.format(filePath))
+    
+    except FileNotFoundError as e:
+        error = "The file {} as not found. Please double check the path is correct."
+        showInfo(error.format(filePath))
+
+    # General exception
+    except Exception as e:
+        errorMessage = str(e)
+        trace = traceback.format_exc()
+        showInfo(errorTemplate.format(errorMessage, trace))
+
 
 
 if (QAction != None and mw != None):

@@ -17,7 +17,7 @@ def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
         formatedData = convertBulletPointsDocument(filePath)
         data = formatedData.split("\n")
     else:
-        raise Exception("Inccorrect file format given")
+        raise TypeError("Inccorrect file format given")
     fileName = filePath.split("/")[-1].split(".")[0]
 
     comments, content = _sortData(data)
