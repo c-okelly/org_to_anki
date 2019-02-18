@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Version: 0.1.2
+# See github page to report issues or to contribute:
+# https://github.com/c-okelly/org_to_anki
+
 # Anki Imports => with try catch for testing
 try:
     # import the main window object (mw) from aqt
@@ -33,7 +38,7 @@ def importNewFile():
     # showInfo("Card count: %d. Wowo this really worked did it?" % cardCount)
     d = QFileDialog(mw)
     filePath = d.getOpenFileName()[0]
-    showInfo(filePath)
+    # showInfo(filePath)
 
     ## Do real main
     try:
@@ -57,7 +62,7 @@ def importNewFile():
 
 if (QAction != None and mw != None):
     # create a new menu item, "test"
-    action = QAction("Import Org File", mw)
+    action = QAction("Import list into Anki cards", mw)
     # set it to call testFunction when it's clicked
     action.triggered.connect(importNewFile)
     # and add it to the tools menu

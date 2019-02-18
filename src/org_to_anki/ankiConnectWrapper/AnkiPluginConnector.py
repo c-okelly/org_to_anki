@@ -35,8 +35,15 @@ class AnkiPluginConnector:
         media = self.prepareMedia(deck.getMedia())
 
         # Add notes => TODO => needs to handle exception better
+        numberOfDuplicateNotes = 0
         for note in notes:
-            self.AnkiBridge.addNote(note)
+            try:
+                self.AnkiBridge.addNote(note)
+            except Exception as e:
+                if str(e) == "cannot create note because it is a duplicate":
+                    numberOfDuplicateNotes += 1
+                else:
+                    raise e
 
         # Add Media => TODO => not tested
         for i in media:

@@ -72,7 +72,7 @@ def _parseWordBulletPoints(filePath):
 
         # TODO bullet points or # seem to be split by a line break in raw foramt. 
         # need to redesign how text is parsed here
-        print(text)
+        # print(text)
         if (text[0].strip() == "#"):
             text[1] = "# " + text[1]
 
