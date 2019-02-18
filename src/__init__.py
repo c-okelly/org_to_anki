@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Version: 0.1.2
+# Version: 0.1.3
 # See github page to report issues or to contribute:
 # https://github.com/c-okelly/org_to_anki
 

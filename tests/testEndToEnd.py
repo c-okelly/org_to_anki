@@ -20,7 +20,7 @@ def generalEndToEndForBasic(fileName):
     #https://github.com/getsentry/responses
     responses.add(responses.POST, 'http://127.0.0.1:8765/', status=200)
     #Return response so deck need to be created
-    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. Org Notes'], 'error': None}, status=200)
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. List Notes'], 'error': None}, status=200)
     #Return creation of deck id
     responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': 1521151676641, 'error': None}, status=200)
     # Return creation of card id
@@ -33,9 +33,9 @@ def generalEndToEndForBasic(fileName):
 
     # Deck created
     assert(eval(responses.calls[2].request.body)["action"] == "createDeck") 
-    assert(eval(responses.calls[2].request.body)["params"]["deck"] == "0. Org Notes::basic") 
+    assert(eval(responses.calls[2].request.body)["params"]["deck"] == "0. List Notes::basic") 
 
-    assert(actualRequest["params"]["notes"][0]["deckName"] == "0. Org Notes::basic")
+    assert(actualRequest["params"]["notes"][0]["deckName"] == "0. List Notes::basic")
     assert(actualRequest["params"]["notes"][0]["modelName"] == "Basic")
     assert(actualRequest["params"]["notes"][0]["tags"] == [])
     print(actualRequest["params"]["notes"][0]["fields"]["Front"])
@@ -46,7 +46,7 @@ def generalEndToEndForBasic(fileName):
 def testEndToEndForTopicsWithParams():
     responses.add(responses.POST, 'http://127.0.0.1:8765/', status=200)
     #Return response so deck need to be created
-    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. Org Notes'], 'error': None}, status=200)
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. List Notes'], 'error': None}, status=200)
     #Return creation main deck and two subdecks 
     responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': 1521151676640, 'error': None}, status=200)
     responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': 1521151676641, 'error': None}, status=200)
@@ -61,24 +61,24 @@ def testEndToEndForTopicsWithParams():
 
     # Should create two decks
     assert(eval(responses.calls[2].request.body)["action"] == "createDeck") 
-    assert(eval(responses.calls[2].request.body)["params"]["deck"] == "0. Org Notes::topicsLayout") 
+    assert(eval(responses.calls[2].request.body)["params"]["deck"] == "0. List Notes::topicsLayout") 
 
     assert(eval(responses.calls[3].request.body)["action"] == "createDeck") 
-    assert(eval(responses.calls[3].request.body)["params"]["deck"] == "0. Org Notes::topicsLayout::Capital cites") 
+    assert(eval(responses.calls[3].request.body)["params"]["deck"] == "0. List Notes::topicsLayout::Capital cites") 
 
     assert(eval(responses.calls[4].request.body)["action"] == "createDeck") 
-    assert(eval(responses.calls[4].request.body)["params"]["deck"] == "0. Org Notes::topicsLayout::Languages of countries") 
+    assert(eval(responses.calls[4].request.body)["params"]["deck"] == "0. List Notes::topicsLayout::Languages of countries") 
 
     # Should create two notes. The second should be reversed
     actualRequest = eval(responses.calls[5].request.body)
 
     assert(actualRequest["action"] == "addNotes")
 
-    assert(actualRequest["params"]["notes"][0]["deckName"] == "0. Org Notes::topicsLayout::Capital cites")
+    assert(actualRequest["params"]["notes"][0]["deckName"] == "0. List Notes::topicsLayout::Capital cites")
     assert(actualRequest["params"]["notes"][0]["modelName"] == "Basic")
     assert(actualRequest["params"]["notes"][0]["fields"]["Front"] == "What is the capital of Ireland")
 
-    assert(actualRequest["params"]["notes"][1]["deckName"] == "0. Org Notes::topicsLayout::Languages of countries")
+    assert(actualRequest["params"]["notes"][1]["deckName"] == "0. List Notes::topicsLayout::Languages of countries")
     assert(actualRequest["params"]["notes"][1]["modelName"] == "Basic (and reversed card)")
     assert(actualRequest["params"]["notes"][1]["fields"]["Front"] == "What are the main languages in Ireland")
 
@@ -87,7 +87,7 @@ def testEndToEndForTopicsWithParams():
 def testImageUploadE2E():
     responses.add(responses.POST, 'http://127.0.0.1:8765/', status=200)
     #Return response so deck need to be created
-    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. Org Notes'], 'error': None}, status=200)
+    responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': ['Default', '0. List Notes'], 'error': None}, status=200)
     #Return creation of deck id
     responses.add(responses.POST, 'http://127.0.0.1:8765/', json={'result': 1521151676641, 'error': None}, status=200)
     # Return creation of card id
