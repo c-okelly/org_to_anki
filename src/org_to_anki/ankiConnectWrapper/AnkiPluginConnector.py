@@ -21,9 +21,7 @@ class AnkiPluginConnector:
 
     def __init__(self):
         self.AnkiBridge = AnkiBridge()
-        # TODO => reset 
-        # self.defaultDeck = config.defaultDeck
-        self.defaultDeck = "testDeck"
+        self.defaultDeck = config.defaultDeck
 
     def uploadNewDeck(self, deck): # AnkiDeck
 

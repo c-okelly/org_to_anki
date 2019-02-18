@@ -38,6 +38,10 @@ def importNewFile():
     # showInfo("Card count: %d. Wowo this really worked did it?" % cardCount)
     d = QFileDialog(mw)
     filePath = d.getOpenFileName()[0]
+    if len(filePath) == 0:
+        showInfo("No file selected")
+        return
+        
     # showInfo(filePath)
 
     ## Do real main
