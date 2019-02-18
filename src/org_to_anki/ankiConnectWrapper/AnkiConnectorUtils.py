@@ -1,4 +1,9 @@
-import requests
+# Import will fail only when within Anki application
+try:
+    import requests
+except:
+    pass
+
 import json
 import copy
 
@@ -8,7 +13,7 @@ class AnkiConnectorUtils:
     def __init__(self, url):
         self.url = url
 
-    def makeRequest(self, action: str, parmeters: dict={}):
+    def makeRequest(self, action, parmeters = {}): # (str, dict)
 
         payload = self._buildPayload(action, parmeters)
         if payload.get("action") != "storeMediaFile":
@@ -35,11 +40,11 @@ class AnkiConnectorUtils:
         result = self.makeRequest("deckNames")
         return self._getResultOrError(result)
 
-    def createDeck(self, deckName: str):
+    def createDeck(self, deckName): # (str)
         result = self.makeRequest("createDeck", {"deck": deckName})
         return self._getResultOrError(result)
 
-    def uploadNotes(self, notes: {}):
+    def uploadNotes(self, notes): # ({})
         result = self.makeRequest("addNotes", notes)
         return self._getResultOrError(result)
 
@@ -60,14 +65,14 @@ class AnkiConnectorUtils:
             return False
 
     @staticmethod
-    def _getResultOrError(result: {}):
+    def _getResultOrError(result): # ( {} )
         if result.get("error") is None:
             return result.get("result")
         else:
             return result.get("error")
 
     @staticmethod
-    def _buildPayload(action, params: {}={}, version: int=5):
+    def _buildPayload(action, params = {}, version = 5): # ({}, int)
         payload = {}
         payload["action"] = action
         payload["params"] = params

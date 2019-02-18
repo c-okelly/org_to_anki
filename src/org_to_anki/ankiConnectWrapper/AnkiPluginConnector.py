@@ -1,44 +1,49 @@
-from .AnkiConnectorUtils import AnkiConnectorUtils
-from ..ankiClasses import AnkiQuestion
-from ..ankiClasses.AnkiDeck import AnkiDeck
+# Using AnkiConnect project as a sub-module import and use AnkiBridge 
+import sys
+# sys.path.insert(0, "org_to_anki/anki-connect/AnkiConnect.py")
+import os
+# TODO => need to embbeded the AnkiConnectCode
+# dirname = os.path.dirname(__file__)
+# ankiConnectPath = os.path.join(dirname, "../anki-connect/AnkiConnect.py")
+# sys.path.append(ankiConnectPath)
+
 from .. import config
-import base64
+from .AnkiBridge import AnkiBridge
 
+# Anki imports
+try:
+    import anki
+    import aqt
+    from aqt.utils import showInfo
+except:
+    pass
+class AnkiPluginConnector:
 
-class AnkiConnector:
+    def __init__(self):
+        self.AnkiBridge = AnkiBridge()
+        # TODO => reset 
+        # self.defaultDeck = config.defaultDeck
+        self.defaultDeck = "testDeck"
 
-    def __init__(
-            self,
-            url=config.defaultAnkiConnectAddress,
-            defaultDeck=config.defaultDeck):
-        self.url = url  # TODO remove
-        self.defaultDeck = defaultDeck
-        self.currentDecks = []
-        self.connector = AnkiConnectorUtils(self.url)
+    def uploadNewDeck(self, deck): # AnkiDeck
 
-    def uploadNewDeck(self, deck: AnkiDeck):
-
-        if self.connector.testConnection() is not True:
-            print(
-                "Failed to connect to Anki Connect. \
-                Ensure Anki is open and AnkiConnect is installed")
-            return False
-
+        ### Upload deck to Anki in embedded mode ###
         self._checkForDefaultDeck()
         self._buildNewDecksAsRequired(deck.getDeckNames())
         # Build new questions
-        notes = self.buildAnkiNotes(deck.getQuestions())
+        notes = self.buildIndividualAnkiNotes(deck.getQuestions())
         media = self.prepareMedia(deck.getMedia())
 
-        # TODO Get all question from that deck and
-        # use this to verify questions need to be uploaded
-        # self._removeAlreadyExistingQuestions()
+        # Add notes => TODO => needs to handle exception better
+        for note in notes:
+            self.AnkiBridge.addNote(note)
 
-        # Insert new question through the api
-        self.connector.uploadNotes(notes)
-        self.connector.uploadMediaCollection(media)
+        # Add Media => TODO => not tested
+        for i in media:
+            self.AnkiBridge.storeMediaFile(i.get("fileName"), i.get("data"))
 
-    def prepareMedia(self, ankiMedia: []):
+
+    def prepareMedia(self, ankiMedia): # ([])
 
         formattedMedia = []
         if len(ankiMedia) == 0:
@@ -48,7 +53,7 @@ class AnkiConnector:
                 formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
         return formattedMedia
 
-    def _buildNewDecksAsRequired(self, deckNames: [str]):
+    def _buildNewDecksAsRequired(self, deckNames): # ([str])
         # Check decks exist for notes
         newDeckPaths = []
         for i in deckNames:
@@ -58,17 +63,18 @@ class AnkiConnector:
 
         # Create decks
         for deck in newDeckPaths:
-            self.connector.createDeck(deck)
+            self.AnkiBridge.createDeck(deck)
 
-    def _getFullDeckPath(self, deckName: str):
-        return self.defaultDeck + "::" + deckName
+    def _getFullDeckPath(self, deckName): # (str)
+        return str(self.defaultDeck + "::" + deckName)
 
     def _checkForDefaultDeck(self):
-        self.currentDecks = self.connector.getDeckNames()
+        self.currentDecks = self.AnkiBridge.deckNames()
         if self.defaultDeck not in self.currentDecks:
-            self.connector.createDeck(self.defaultDeck)
+            self.AnkiBridge.createDeck(self.defaultDeck)
 
-    def buildAnkiNotes(self, ankiQuestions: [AnkiQuestion]):
+    # TODO => refactor
+    def buildAnkiNotes(self, ankiQuestions): # [AnkiQuestion]
 
         notes = []
         for i in ankiQuestions:
@@ -77,8 +83,18 @@ class AnkiConnector:
         finalNotes = {}
         finalNotes["notes"] = notes
         return finalNotes
+    
+    def buildIndividualAnkiNotes(self, ankiQuestions):
 
-    def _buildNote(self, ankiQuestion: AnkiQuestion):
+        allNotes = []
+        for i in ankiQuestions:
+            # singleNote = {}
+            # singleNote["notes"] = self._buildNote(i)
+            allNotes.append(self._buildNote(i))
+        
+        return allNotes
+
+    def _buildNote(self, ankiQuestion): # AnkiQuestion
 
         # All decks stored under default deck
         if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
@@ -104,7 +120,7 @@ class AnkiConnector:
         note["fields"] = fields
         return note
 
-    def _createQuestionString(self, questions:[str]):
+    def _createQuestionString(self, questions): #([str])
 
         if len(questions) == 1:
             question =  questions[0].replace("\n", "<br>")
@@ -112,27 +128,38 @@ class AnkiConnector:
         else:
             questionString = ""
             for q in questions:
+                q = self._formatString(q)
                 q = q.strip().replace("\n", "<br>")
                 questionString += q + " <br>"
             return questionString
             
 
-    def _createAnswerString(self, answers: [str], bulletPoints: bool=True):
+    def _createAnswerString(self, answers, bulletPoints=True): # ([str], bool)
+
         result = ""
         if not bulletPoints:
             for i in answers:
+                i = self._formatString(i)
                 result += i + "<br>"  # HTML link break
         else:
             # Can only can create single level of indentation. Align
             # bulletpoints.
             result += "<ul style='list-style-position: inside;'>"
             for i in answers:
+                i = self._formatString(i)
                 if isinstance(i, str):
                     result += "<li>" + i + "</li>"
                 elif isinstance(i, list):
                     result += self._createAnswerString(i)
                 else:
-                    raise Exception("Unsupported action with answer string")
+                    raise Exception("Unsupported action with answer string from => " + str(i))
 
             result += "</ul>"
         return result
+
+    def _formatString(self, unformattedString):
+
+        # if (isinstance(unformattedString, unicode) == True):
+        #     return unformattedString.encode("utf-8")
+        # else:
+        return unformattedString

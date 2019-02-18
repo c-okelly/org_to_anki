@@ -12,7 +12,6 @@ def testWordOsxDocument():
     filename = "tests/testData/documents/bulletpoint-doc-word-osx.html"
     parsedFile = convertBulletPointsDocument(filename)
 
-    # print(parsedFile)
     lines = parsedFile.split("\n")
 
     assert(len(lines) == 8)

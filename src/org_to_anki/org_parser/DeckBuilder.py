@@ -12,7 +12,7 @@ class DeckBuilder:
 
     utils = DeckBuilderUtils.DeckBuilderUtils()
 
-    def buildDeck(self, questions: [str], deckName: str, filePath: str, fileType: str='basic'):
+    def buildDeck(self, questions, deckName, filePath, fileType ='basic'): # ([str], str, str, str)
 
         # TODO: Remove lower
         if fileType.lower() == 'basic':
@@ -137,6 +137,9 @@ class DeckBuilder:
     def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2):
 
         deck = AnkiDeck(deckName)
+        if len(questions) == 0:
+            return deck
+
         # Get deck comments
         while questions[0].strip()[0] == "#":
             comment = questions.pop(0)

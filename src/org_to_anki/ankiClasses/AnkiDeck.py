@@ -6,7 +6,7 @@ class AnkiDeck:
     # Basic file => represented in a single deck
     # MultiDeck file => File will have multiple subdecks of general topic
     # represented by file
-    def __init__(self, name: str):
+    def __init__(self, name): # (str)
         self.deckName = name
         self.subDecks = []
         self._ankiQuestions = []
@@ -25,19 +25,19 @@ class AnkiDeck:
 
         return media
 
-    def addComment(self, comment: str):
+    def addComment(self, comment): # (str)
         self._comments.append(comment)
 
     def getComments(self):
         return self._comments
 
-    def addParameter(self, key: str, value: str):
+    def addParameter(self, key, value): # (str, str)
         self._parameters[key] = value
 
     def getParameter(self, key):
         return self._parameters.get(key, None)
 
-    def getQuestions(self, parentName: str = None, parentParamaters: dict = None, joiner: str = '::'):
+    def getQuestions(self, parentName = None, parentParamaters = None, joiner = '::'): # (str, dict, str)
         ankiQuestions = []
 
         for question in self._ankiQuestions:
@@ -71,7 +71,7 @@ class AnkiDeck:
 
         return ankiQuestions
 
-    def getDeckNames(self, parentName: str = None, joiner: str = '::'):
+    def getDeckNames(self, parentName = None, joiner = '::'): # (str, str)
         deckNames = []
         if parentName is not None:
             deckNames.append(parentName + joiner + self.deckName)
@@ -87,7 +87,7 @@ class AnkiDeck:
 
         return deckNames
 
-    def addQuestion(self, ankiQuestion: AnkiQuestion):
+    def addQuestion(self, ankiQuestion): # (AnkiQuestion)
         # Add media to the main deck
         # TODO if question is removed its media will remain in the deck
         if ankiQuestion.hasMedia():

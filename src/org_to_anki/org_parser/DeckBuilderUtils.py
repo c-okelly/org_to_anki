@@ -2,14 +2,15 @@ from ..ankiClasses.AnkiDeck import AnkiDeck
 
 import os
 
-# TODO: Remove a lot of this as unused code
-class QuestionBuilderUtils:
+class DeckBuilderUtils:
 
     # Used to check if extra data is containted within the line
-    def parseAnswerLine(self, answerLine: str, filePath: str, currentDeck: AnkiDeck):
+    def parseAnswerLine(self, answerLine, filePath, currentDeck): # (str, str, AnkiDeck)
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
+            # print(answerLine)
+            # print(filePath)
             if "http://" in answerLine or "www." in answerLine:
                 raise Exception("Line could not be parsed: " + answerLine)
 
@@ -25,21 +26,23 @@ class QuestionBuilderUtils:
                     answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
                 else:
                     print("Could not find image on line:", answerLine)
-
             else:
-                raise Exception("Line could not be parsed: " + answerLine)
+                print("Could not parse image from line: " + answerLine)
         
         return answerLine
 
-    def removeAsterisk(self, line: str):
-        line = line.strip().split(" ")[1:]
-        line = " ".join(line)
-        return line
+    def removeAsterisk(self, line): # (str)
+        if line.strip()[0] == "*":
+            line = line.strip().split(" ")[1:]
+            line = " ".join(line)
+            return line
+        else:
+            return line
 
-    def countAsterisk(self, line: str):
+    def countAsterisk(self, line): # (str)
         return line.split(' ')[0].count('*', 0, 10)
 
-    def generateSublist(self, subItems: [str]):
+    def generateSublist(self, subItems): # ([str])
 
         formatedList = []
 
@@ -57,6 +60,19 @@ class QuestionBuilderUtils:
             if isinstance(i, list):
                 cleaned.append(self.generateSublist(i))
             else:
-                cleaned.append(self.removeAsterisks(i))
+                cleaned.append(self.removeAsterisk(i))
 
         return cleaned
+
+    def formatLine(self, line): # (str)
+
+        formattedLine = line
+
+        # Strip extra spaces for multiline
+        if "\n" in formattedLine:
+            cleanLine = ""
+            for i in formattedLine.split("\n"):
+                cleanLine += i.strip() + "\n"
+            formattedLine = cleanLine.strip()
+
+        return formattedLine

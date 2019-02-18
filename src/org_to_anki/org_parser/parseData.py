@@ -4,8 +4,7 @@ from .DeckBuilder import DeckBuilder
 from ..converters.BulletPointHtmlConverter import convertBulletPointsDocument
 from . import ParserUtils
 
-
-def parse(filePath: str) -> ([AnkiDeck]):
+def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
     deckBuilder = DeckBuilder()
 
@@ -18,7 +17,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
         formatedData = convertBulletPointsDocument(filePath)
         data = formatedData.split("\n")
     else:
-        raise Exception("Inccorrect file format given")
+        raise TypeError("Inccorrect file format given")
     fileName = filePath.split("/")[-1].split(".")[0]
 
     comments, content = _sortData(data)
@@ -37,7 +36,7 @@ def parse(filePath: str) -> ([AnkiDeck]):
     return deck
 
 
-def _formatFile(filePath: str):
+def _formatFile(filePath):# (filePath: str):
 
     with open(filePath, 'r') as file:
         data = file.read().split('\n')
@@ -45,7 +44,7 @@ def _formatFile(filePath: str):
     return data
 
 
-def _sortData(rawFileData: [str]) -> ([str], [str]):
+def _sortData(rawFileData): #(rawFileData: [str]) -> ([str], [str]):
 
     comments, questions = [], []
 

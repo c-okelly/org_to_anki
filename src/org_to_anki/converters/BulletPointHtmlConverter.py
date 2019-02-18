@@ -1,5 +1,22 @@
+# Differnet imports if within Anki app
+# try:
+# from bs4 import BeautifulSoup
+## TODO => realtive import
 from bs4 import BeautifulSoup
+# except:
+# from BeautifulSoup import BeautifulSoup
+
 import re
+import codecs
+import chardet
+
+
+## TODO => review these
+import io
+try: # Anki import 
+    from aqt.utils import showInfo
+except:
+    pass
 # This should parse either libre office / microsoft office 
 # files with bullet points into the expected format
 
@@ -7,17 +24,21 @@ def convertBulletPointsDocument(filePath):
 
     # Will determine if word or libreOffice document
 
-    if checkDocumentType(filePath) == "word":
+    documentType = checkDocumentType(filePath)
+    if documentType == "word":
         return _parseWordBulletPoints(filePath)
-    elif checkDocumentType(filePath) == "libreOffice":
+    elif documentType == "libreOffice":
         return _parseLibreOfficeBulletPoints(filePath)
 
 def checkDocumentType(filePath):
 
-    htmlFile = open(filePath, encoding="latin-1")
+    # TODO wrap in a try catch that give the user some useful information
+    htmlFile = codecs.open(filePath, 'r', "utf-8")
     soup = BeautifulSoup(htmlFile, 'html.parser')
 
-    numberLists = len(soup.find_all("ul"))
+
+    # TODO => change backFindAll for python3
+    numberLists = len(soup.findAll("ul"))
 
     # Check if there are any html list => these are not present in word files
     if numberLists == 0:
@@ -25,14 +46,19 @@ def checkDocumentType(filePath):
     else: 
         return "libreOffice"
 
+# Ahh word files. Good dam it they do some annoying things. If you save a word file 
+# as a web pagethe first time it's charset will be utf-8. If you open this file (in word) and save it again
+# it will change to some form of utf-16 little or big endian but with no BOM. Don't do this
+# I could support this by checking the chartset and then determining the system endian
 def _parseWordBulletPoints(filePath):
-
-    htmlFile = open(filePath, encoding="latin-1")
+ 
+    htmlFile = codecs.open(filePath, 'r', "utf-8")
     soup = BeautifulSoup(htmlFile, 'html.parser')
 
     # Word file
     parsedFile = ""
     paragraphs = soup.find_all('p')
+    # showInfo(str(paragraphs))
 
     for line in paragraphs:
 
@@ -46,7 +72,8 @@ def _parseWordBulletPoints(filePath):
 
         # TODO bullet points or # seem to be split by a line break in raw foramt. 
         # need to redesign how text is parsed here
-        if (text[0] == "#"):
+        print(text)
+        if (text[0].strip() == "#"):
             text[1] = "# " + text[1]
 
         # Get level of indentation
@@ -76,64 +103,54 @@ def _parseWordBulletPoints(filePath):
         if len(newLine) != 0:
             parsedFile += newLine + "\n"
 
+    # showInfo("Word")
+    # showInfo(str(parsedFile))
     return parsedFile.strip()
 
 def _parseLibreOfficeBulletPoints(filePath):
 
 
-    htmlFile = open(filePath, encoding="latin-1")
-    soup = BeautifulSoup(htmlFile, 'lxml')
+    # TODO => python2 => io
+    htmlFile = open(filePath, encoding="utf-8")
+    # htmlFile = io.open(filePath, encoding="utf-16")
+    # with open(filePath, 'r') as file:
+    #     htmlFile = file.read()
+    soup = BeautifulSoup(htmlFile, 'html.parser')
 
     parsedFile = ""
-    
-    # x = soup.body.contents
-    # print(x)
-    # print()
 
     bodyContents = soup.body.contents
 
     for section in bodyContents:
-
-        # print()
-        # print(section.name)
 
         if section.name == "p":
             if len(section.text.strip()) != 0:
                 parsedFile += section.text + "\n"
 
         elif section.name == "ul":
-            # print("list")
-            # print(section)
             formattedList = _processHtmlList(section)
             parsedFile += formattedList + "\n"
-            # break
 
         elif section.name == None:
             continue
-            # print("unknown type")
 
+    # showInfo("Libre office")
+    # showInfo(str(type(parsedFile)))
     return parsedFile.strip()
 
 def _processHtmlList(soupHtmlList, level=1):
 
     formatedList = ""
 
-    # print(soupHtmlList.contents)
-    # print()
-    # print("scanner")
-
     for i in soupHtmlList.contents:
-        # print("i section")
-        # print(i)
-        # print()
         if i.name == "li":
-            # print("list")
-            # print()
             for k in i.contents:
-                # print("k is => ", k.name, ". k => ", k)
                 if (k.name == "p"):
                     stars = "*" * level
                     newText = _formatText(k.text)
+                    if (isinstance(newText, str) == False):
+                        newText = newText.encode("utf-8")
+
                     # TODO => only supports either comments or bullet points
                     if newText[0] != "#": 
                         newText = stars + " " + newText
@@ -144,7 +161,6 @@ def _processHtmlList(soupHtmlList, level=1):
                 else:
                     continue
 
-    # print(formatedList)
     return formatedList.strip()
 
 def _formatText(text):

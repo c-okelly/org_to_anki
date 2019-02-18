@@ -3,11 +3,12 @@
 import sys
 
 from .org_parser import parseData
-from .ankiConnectWrapper import AnkiConnector
+from .ankiConnectWrapper.AnkiConnector import AnkiConnector
+from .ankiConnectWrapper import AnkiPluginConnector
 from . import config
 
 
-def parseAndUploadOrgFile(filePath=None):
+def parseAndUploadOrgFile(filePath=None, embedded=False):
 
     # debugMode = False
     # for arg in sys.argv:
@@ -15,14 +16,17 @@ def parseAndUploadOrgFile(filePath=None):
     #         debugMode = True
     #         sys.argv.remove(arg)
 
-    if filePath is None:
+
+    if (filePath == None and embedded == True):
+        raise Exception("No file path was given while running in embedded mode.")
+    elif filePath is None:
         filePath = _getUploadFilePath()
 
     if "~" in filePath:
         filePath = filePath.replace("~", config.homePath)
 
     print("file is ", filePath)
-    _parseAndUpload(filePath)
+    _parseAndUpload(filePath, embedded)
 
 def _getUploadFilePath():
 
@@ -36,11 +40,14 @@ def _getUploadFilePath():
     return filePath
 
 
-def _parseAndUpload(filePath):
+def _parseAndUpload(filePath, embedded=False):
 
     deck = parseData.parse(filePath)
 
-    connector = AnkiConnector.AnkiConnector()
+    if (embedded == False):
+        connector = AnkiConnector()
+    else:
+        connector = AnkiPluginConnector.AnkiPluginConnector()
     connector.uploadNewDeck(deck)
 
 
