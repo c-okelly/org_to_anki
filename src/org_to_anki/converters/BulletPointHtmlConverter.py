@@ -141,7 +141,7 @@ def _formatBadlyParsedLibreOfficeList(soupHtmlList, level=1):
     formatedList = ""
 
     if len(soupHtmlList.contents[0]) == 0:
-        currentListItem = soupHtmlList.contents[1]
+        currentListItem = soupHtmlList.contents[1:]
     else:
         currentListItem = soupHtmlList
 

@@ -9,6 +9,6 @@ install:
   - pip install codecov
 # command to run tests
 script:
-  - python3 setup.py nosetests -v --with-coverage --cover-inclusive --cover-package=org_to_anki
+  - python3 setup.py nosetests -v --with-coverage --cover-package=org_to_anki
 after_success:
   - codecov

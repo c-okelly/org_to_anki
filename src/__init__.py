@@ -19,9 +19,11 @@ except:
     pass
 
 import traceback
+import logging
 
 errorTemplate = """
 Hey there! It seems an error has occurred while running the importer.
+Hit enter to dismiss this window!
 
 The error was {}.
 
@@ -41,6 +43,7 @@ def importNewFile():
     if len(filePath) == 0:
         showInfo("No file selected")
         return
+    # logging.info("File uploaded called: {}".format(filePath))
         
     # showInfo(filePath)
 
@@ -61,6 +64,7 @@ def importNewFile():
         errorMessage = str(e)
         trace = traceback.format_exc()
         showInfo(errorTemplate.format(errorMessage, trace))
+        # logging.error(errorTemplate.format(errorMessage, trace))
 
 
 
