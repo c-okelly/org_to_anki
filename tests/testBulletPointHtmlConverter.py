@@ -49,20 +49,36 @@ def testLibreOsxDocument():
 
     filename = "tests/testData/documents/bulletpoint-doc-libreOffice-osx.html"
     parsedFile = convertBulletPointsDocument(filename)
-
+    print(parsedFile)
 
     lines = parsedFile.split("\n")
 
-    print(lines)
-    assert(len(lines) == 7)
+    assert(len(lines) == 8)
     assert(lines[0] == "# Test document for org to anki")
     assert(lines[1] == "# docType=libre")
     assert(lines[2] == "* What is the capital of Ireland")
     assert(lines[3] == "# type = Basic")
     assert(lines[4] == "** Dublin")
-    assert(lines[5] == "* What is the Capital of Germany")
-    assert(lines[6] == "** Berlin")
+    assert(lines[6] == "* What is the Capital of Germany")
+    assert(lines[7] == "** Berlin")
 
+def testSecondLibreOsxDocument():
+    print("Osx libre document test - 2")
+
+    filename = "tests/testData/documents/bulletpoint-dock-libreOffice-osx-sinlge-multi.html"
+    parsedFile = convertBulletPointsDocument(filename)
+
+    lines = parsedFile.split("\n")
+
+    assert(lines[0] == "# lines with # are comments and are ignored")
+    assert(lines[1] == "* What is the capital of Ireland?")
+    assert(lines[2] == "** Dublin")
+    assert(lines[3] == "* What is the capital of France?")
+    assert(lines[4] == "** Paris")
+    assert(lines[5] == "* What is the capital of Germany?")
+    assert(lines[6] == "** Berlin")
+    assert(lines[7] == "* What is the capital of Australia?")
+    assert(lines[8] == "** Canberra")
 
 def testDocumentTypeDeterminedCorrectly():
 

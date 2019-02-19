@@ -72,7 +72,6 @@ def _parseWordBulletPoints(filePath):
 
         # TODO bullet points or # seem to be split by a line break in raw foramt. 
         # need to redesign how text is parsed here
-        # print(text)
         if (text[0].strip() == "#"):
             text[1] = "# " + text[1]
 
@@ -110,11 +109,7 @@ def _parseWordBulletPoints(filePath):
 def _parseLibreOfficeBulletPoints(filePath):
 
 
-    # TODO => python2 => io
     htmlFile = open(filePath, encoding="utf-8")
-    # htmlFile = io.open(filePath, encoding="utf-16")
-    # with open(filePath, 'r') as file:
-    #     htmlFile = file.read()
     soup = BeautifulSoup(htmlFile, 'html.parser')
 
     parsedFile = ""
@@ -128,7 +123,7 @@ def _parseLibreOfficeBulletPoints(filePath):
                 parsedFile += section.text + "\n"
 
         elif section.name == "ul":
-            formattedList = _processHtmlList(section)
+            formattedList = _formatBadlyParsedLibreOfficeList(section)
             parsedFile += formattedList + "\n"
 
         elif section.name == None:
@@ -137,6 +132,59 @@ def _parseLibreOfficeBulletPoints(filePath):
     # showInfo("Libre office")
     # showInfo(str(type(parsedFile)))
     return parsedFile.strip()
+
+def _formatBadlyParsedLibreOfficeList(soupHtmlList, level=1):
+
+    formatedList = ""
+
+    # print("len {}".format(len(soupHtmlList.contents)))
+    # print("Item 2:  {}".format(soupHtmlList.contents[0]))
+    if len(soupHtmlList.contents[0]) == 0:
+        currentListItem = soupHtmlList.contents[1] # TODO => why is the first item blank?
+    else:
+        currentListItem = soupHtmlList
+
+    for item in currentListItem.contents:
+
+        if (item.name == None):
+            continue
+        elif (item.name == "p"):
+            stars = "*" * level
+            formattedLine = _removeLineBreak(item.text)
+
+            if formattedLine[0] != "#": 
+                formattedLine = stars + " " + formattedLine
+
+            formatedList += formattedLine + "\n"
+        elif (item.name == "ul"):
+            newLevel = level + 1
+            formatedList += _formatBadlyParsedLibreOfficeList(item, newLevel)
+        elif (item.name == "li"):
+            # formatedList += _formatBadlyParsedLibreOfficeList(item, level)
+            # print()
+            # print(item.name)
+            # print("item: {}".format(item.contents))
+            formatedList += _formatBadlyParsedLibreOfficeList(item, level)
+        else:
+            print("error")
+        
+        # if item.name == "":
+        #     # do this
+        # elif item.name == "":
+        #     # do this
+        
+    # print(formatedList)
+    return formatedList
+
+def _removeLineBreak(text):
+
+    if "\n" not in text:
+        return text
+
+    formattedText = ""
+    for i in text.split("\n"):
+        formattedText += i.strip() + " "
+    return formattedText.strip()
 
 def _processHtmlList(soupHtmlList, level=1):
 
