@@ -142,7 +142,9 @@ File > Save As
 ```
 For "File type" select "HTML Document (.html)"
 
+### Basic example
 
+![Basic Libre Office Example](gifs/Basic_LibreOffice_Example.gif)
 
 ## File syntax
 
