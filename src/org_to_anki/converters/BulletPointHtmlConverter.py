@@ -133,14 +133,15 @@ def _parseLibreOfficeBulletPoints(filePath):
     # showInfo(str(type(parsedFile)))
     return parsedFile.strip()
 
+# LibreOffice does not close the <li> tags used in the html it generates. This causes 
+# a parseing issue when building the html tree. Ths function is written specifically to correct 
+# a for this issue. It should not be used to parse correctly formatted html lists
 def _formatBadlyParsedLibreOfficeList(soupHtmlList, level=1):
 
     formatedList = ""
 
-    # print("len {}".format(len(soupHtmlList.contents)))
-    # print("Item 2:  {}".format(soupHtmlList.contents[0]))
     if len(soupHtmlList.contents[0]) == 0:
-        currentListItem = soupHtmlList.contents[1] # TODO => why is the first item blank?
+        currentListItem = soupHtmlList.contents[1]
     else:
         currentListItem = soupHtmlList
 
@@ -160,20 +161,10 @@ def _formatBadlyParsedLibreOfficeList(soupHtmlList, level=1):
             newLevel = level + 1
             formatedList += _formatBadlyParsedLibreOfficeList(item, newLevel)
         elif (item.name == "li"):
-            # formatedList += _formatBadlyParsedLibreOfficeList(item, level)
-            # print()
-            # print(item.name)
-            # print("item: {}".format(item.contents))
             formatedList += _formatBadlyParsedLibreOfficeList(item, level)
         else:
             print("error")
         
-        # if item.name == "":
-        #     # do this
-        # elif item.name == "":
-        #     # do this
-        
-    # print(formatedList)
     return formatedList
 
 def _removeLineBreak(text):
@@ -185,39 +176,3 @@ def _removeLineBreak(text):
     for i in text.split("\n"):
         formattedText += i.strip() + " "
     return formattedText.strip()
-
-def _processHtmlList(soupHtmlList, level=1):
-
-    formatedList = ""
-
-    for i in soupHtmlList.contents:
-        if i.name == "li":
-            for k in i.contents:
-                if (k.name == "p"):
-                    stars = "*" * level
-                    newText = _formatText(k.text)
-                    if (isinstance(newText, str) == False):
-                        newText = newText.encode("utf-8")
-
-                    # TODO => only supports either comments or bullet points
-                    if newText[0] != "#": 
-                        newText = stars + " " + newText
-                    formatedList += newText + "\n"
-                elif (k.name == "ul"):
-                    newLevel = level + 1
-                    formatedList += _processHtmlList(k, newLevel) + "\n"
-                else:
-                    continue
-
-    return formatedList.strip()
-
-def _formatText(text):
-
-    formattedText = ""
-    splitText = text.split("\n")
-
-    for i in splitText:
-        formattedText += i.strip() + " "
-    
-    return formattedText.strip()
-

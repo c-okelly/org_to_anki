@@ -65,7 +65,7 @@ def testLibreOsxDocument():
 def testSecondLibreOsxDocument():
     print("Osx libre document test - 2")
 
-    filename = "tests/testData/documents/bulletpoint-dock-libreOffice-osx-sinlge-multi.html"
+    filename = "tests/testData/documents/bulletpoint-dock-libreOffice-osx-single-multi.html"
     parsedFile = convertBulletPointsDocument(filename)
 
     lines = parsedFile.split("\n")
@@ -74,11 +74,14 @@ def testSecondLibreOsxDocument():
     assert(lines[1] == "* What is the capital of Ireland?")
     assert(lines[2] == "** Dublin")
     assert(lines[3] == "* What is the capital of France?")
-    assert(lines[4] == "** Paris")
-    assert(lines[5] == "* What is the capital of Germany?")
-    assert(lines[6] == "** Berlin")
-    assert(lines[7] == "* What is the capital of Australia?")
-    assert(lines[8] == "** Canberra")
+    assert(lines[4] == "# A comment of some kind")
+    assert(lines[5] == "** Paris")
+    assert(lines[6] == "* What is the capital of Germany?")
+    assert(lines[7] == "** Berlin")
+    assert(lines[8] == "* What is the capital of Australia?")
+    assert(lines[9] == "** Canberra")
+    assert(lines[10] == "*** Sub list item 1")
+    assert(lines[11] == "*** Sub list item 2")
 
 def testDocumentTypeDeterminedCorrectly():
 
