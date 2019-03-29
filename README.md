@@ -17,8 +17,7 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 4. [Installation](#installation)
 5. [Comand line scripts](#command-line-scripts)
 6. [Running tests](#testing)
-7. [Future features](#future-features)
-8. [Contributing](#contributing)
+7. [Contributing](#contributing)
 
 ## Supported file types
 
