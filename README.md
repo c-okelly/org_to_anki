@@ -12,22 +12,21 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 0. [Supported file types](#supported-file-types) 
 1. [What is an org file](#what-is-an-org-file)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Comannd line scripts](#command-line-scripts)
-5. [Using Word or LibreOffice files](#word-or-libreoffice-files) 
-6. [File syntax](#file-syntax)
-7. [Parameters](#parameters)
-8. [Running tests](#testing)
-9. [Future features](#future-features)
+2. [Using Org or text files](#org-or-text-files)
+3. [Using Word or LibreOffice files](#word-or-libreoffice-files) 
+4. [Installation](#installation)
+5. [Comand line scripts](#command-line-scripts)
+6. [Running tests](#testing)
+7. [Future features](#future-features)
+8. [Contributing](#contributing)
 
 <!-- 8. [Debug mode](#debug-mode) -->
 
 ## Supported file types
 
-This project supports reading from both .org and .txt files. 
+This project supports reading from both .org, .txt, .docx (Word) and odt (LibreOffice) files. 
 
-Bullet points are supported through the use of Word and LibreOffice files. These must be saved as HTML / HTM (Web) files in order to work correctly. Please refer to the section on this.
+To use Word or LibreOffice files these must first be saved as HTML files. Please read the documentation on this.
 
 ## What is an org file?
 
@@ -44,7 +43,6 @@ This is all you need to know for this project.
 
 Examples are provided below.
 
-This project will takes corretcly formated .org files and convert them to Anki cards.
 
 ### Here is some example syntax for how question should be laid out
 
@@ -62,7 +60,18 @@ Org mode is for keeping notes, maintaining TODO lists, planning projects, and au
 
 [orgmode homepage](https://orgmode.org/)
 
-## Requirements
+## Org and Text files 
+
+[Documentation on Org and Text files](documentation/ordReadme.md)
+
+## LibreOffice and Word
+
+[Documentation on LibreOffice or Word files](documentation/docReadme.md)
+
+
+## Installation
+
+### Requirements
 
 1. Have the [Anki app](https://apps.ankiweb.net/) installed.
 2. Installing the Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159).
@@ -70,8 +79,6 @@ Org mode is for keeping notes, maintaining TODO lists, planning projects, and au
 	i. For OSX users of anki-connect see [note for OSX users](https://foosoft.net/projects/anki-connect/#installation)
 	
 	ii. For Windows users of anki-connect see [notes for Windows users](https://foosoft.net/projects/anki-connect/#installation) 
-
-## Installation
 
 To install this module from source on Linux or OSx.
 
@@ -95,291 +102,7 @@ org_to_anki /path/to/your/org/file.org
 ```
 * Upload the specified file to Anki
 
-### ankiq
 
-* New questions are added to the default file stored at ~/orgNotes/quickOrgNotes.org
-* This file is created by default if it does not already exist
-
-```bash
-ankiq
-```
-* Will start a Python input reply.
-* Takes a questions and a series of anwers
-* Empty line add a new question to the default org file
-
-## Word or LibreOffice files
-
-### Specific file syntax
-
-Word and LibreOffice files are now support using bulletpoints for the question answers.
-
-Instead of using * or ** you can use bulletpoint list instead. All other syntax rules apply.
-
-Format of question ansewers
-
-* What is the capital of Ireland
-
-	`# type = basic`
-	* Dublin
-* What is the capital of Germany
-	* Berlin
-
-
-
-### Saving Word or LibreOffice files correctly
-
-In order to parse Word or LibreOffice files these must first be saved as HTML / HTM files. Unsaved examples are both located in `exampleLibreOfficeAndWordFiles` folder.
-
-Saving a Word file
-```
-File > Save As
-```
-For "File Format" select "Web Page (.htm)"
-
-Saving a LibreOffice file
-```
-File > Save As
-```
-For "File type" select "HTML Document (.html)"
-
-### Basic example
-
-![Basic Libre Office Example](gifs/Basic_LibreOffice_Example.gif)
-
-## File syntax
-
-* Currently supports two different types of org or txt files
-* All questions and answers should start with an asterix
-* All comment lines start with a \#
-```org
-# Line comments
-* Question
-** Answer
-```
-
-* Each org file will be converted into its own deck in Anki
-
-### Global Parameters 
-
-* Parameters to be inherited by all questions / decks should be specified at the top file.
-* These will be overwritten by parameters lower down the tree.
-
-```org
-# Basic Example
-# type=Basic
-
-* Question
-** Answer
-* Second Question
-# type=Basic (and reversed card)
-** Second Answer
-```
-
-### Basic org file syntax
-
-* Sample answer and question in org or txt file
-
- ```org
- * What is the capital of Ireland?
- ** Dublin
- ```
-
-* This will produce the following 1 Anki note in the same deck
-
-```org
-What is the capital of Ireland?
-_______________________________________________________________________
-Dublin
-```
- 
-### Topics file syntax
-
-* Each topic will be turned into its own subdeck. The name of this deck is given by the first line. E.G Capitals cities and Spoken languages.
-* Allows for a group of related topics to be managed in a single file.
-
-* Sample answer and questions for topics org or txt file.
-
- ```org
- #fileType = topics
- * Capital cities
- ** What is the capital of Ireland?
- *** Dublin
- * Spoken languages
- ** What are the main spoken languages in Ireland?
- *** English
- *** Irish
- ```
-
-* This will produce the following 2 Anki note in separate decks
-
-```org
-What is the capital of Ireland?
-_______________________________________________________________________
-Dublin
-```
-
-```org
-What are the main spoken languages in Ireland?
-_______________________________________________________________________
-English
-Irish
-```
-
-### Organised File syntax
-
-* All topics are combined into the same deck to be uploaded to Anki
-
-* In this case top level bullet points are used to organise the sub-questions. The top level are not part of any question. 
-
-* Sample answer and questions for flatTopics org or txt file.
-
- ```org
- #fileType = organisedFile
-* Chapter 1
-** First main rule of scalability?
-*** Each server behind load balancer
-* Chapter 2
-** What is the main purpose of the factory pattern?
-*** Allow reference to objects via an interface
- ```
-
-* This will produce the following 2 Anki notes in the same deck
-
-```org
-First main rule of scalability?
-_______________________________________________________________________
-Each server behind load balancer
-```
-
-```org
-What is the main purpose of the factory pattern?
-_______________________________________________________________________
-Allow reference to objects via an interface
-```
-
-### FlatTopics file syntax
-
-* All topics are combined into the same deck to be uploaded to Anki
-
-* The name of each topic is added to the top of each card. An example is shown below
-
-* Sample answer and questions for flatTopics org or txt file.
-
- ```org
- #fileType = flatTopics
- * Capital cities
- ** What is the capital of Ireland?
- *** Dublin
- * Spoken languages
- ** What are the main spoken languages in Ireland?
- *** English
- *** Irish
- ```
-
-* This will produce the following 2 Anki notes in the same deck
-
-```org
-Capital Cities
-What is the capital of Ireland?
-_______________________________________________________________________
-Dublin
-```
-
-```org
-Spoken Languages
-What are the main spoken languages in Ireland
-_______________________________________________________________________
-English
-Irish
-```
-
-### OrganisedFlatFile syntax
-
- * All topics are combined into the same deck to be uploaded to Anki
- * In this case the second level of bullet points (e.g Scalability intro blog) are considered only to be for organizational purposes and are ignored for the actual questions
- * Sample answer and questions for flatTopics org or txt file.
-
-```org
- #fileType = organisedFlatFile
-* Systems design primer
-** Scalability intro blog
-*** First main rule of scalability?
-**** Each server behind load balancer
-* Programming design patterns (online version)
-** Factory pattern
-*** What is the main purpose of the factory pattern? (2)
-**** To allow object creation without exposing the creation logic to client
-**** Allow reference to objects via an interface
-```
-
- * This will produce the following 2 Anki notes in the same deck
-
-```org
-Systems design primer
-First main rule of scalability?
-_______________________________________________________________________
-Dublin
-```
-
-```org
-Programming design patterns (online version)
-What is the main purpose of the factory pattern? (2)
-_______________________________________________________________________
-To allow object creation without exposing the creation logic to client
-Allow reference to objects via an interface
-```
-### Adding images
-
-* You can add an image as one of your answers by correctly referancing as follows
-	* Note: The image path should be relative to the file location
-	* The file will name will not change on upload. 
-		* In this case => "composite pattern.png"
-		* This could lead to a conflict on Anki if files are named badly
-* Check out the examples folder for a sample
-
-```org
-* What does the UML diagram for the compsite pattern look like?
-** Image is displayed below
-** [images_folder/composite pattern.png]
-```
-
-### Parameters
-
-* Supported parameter syntax.
-
-1. Each line must start with a hashtag
-```org 
-# type=Basic
-# type = Basic
-```
-
-* Currently supported parameters are questions type
-
-1. File type
-* Org or txt files will default to type basic.
-* If you want to use a topics layout this must be specified at the top of the file.
-
-```org
-# Comment line
-# fileType=topics
-
-* Topics 1
-** Questions 1
-*** Answer 1
-```
-
-2. Question type. Used to set the type of the Anki note.
-    i. Default value is Basic
-
-```org
-# type=Basic
-# type=Basic (and reversed card)
-```
-
-#### Parameter inheritance
-
-* Questions and decks will inhert parameters from parent Decks
-* Parameters inhereted will not override existing parameters.
 
 ## Config values
 
@@ -396,14 +119,7 @@ A number of extra libraries are used in testing
 python3 setup.py nosetests
 ```
 
-## Debug mode
+## Contributing 
 
-TODO: implement a debug mode
-To activate debug 
-
-## Future features
-
-* Check to see if note exists before sending to Anki
-* Expanded support for different paramters types
-* If you have a feature you would like to see please open an issue!
- 
+All contributions are welcome. Please open a issue first to discuss your ideas!
+4. [Using Word or LibreOffice files](#word-or-libreoffice-files) 
