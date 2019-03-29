@@ -12,15 +12,13 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 0. [Supported file types](#supported-file-types) 
 1. [What is an org file](#what-is-an-org-file)
-2. [Using Org or text files](#org-or-text-files)
-3. [Using Word or LibreOffice files](#word-or-libreoffice-files) 
+2. [Using Org or text files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md)
+3. [Using Word or LibreOffice files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/docReadme.md) 
 4. [Installation](#installation)
 5. [Comand line scripts](#command-line-scripts)
 6. [Running tests](#testing)
 7. [Future features](#future-features)
 8. [Contributing](#contributing)
-
-<!-- 8. [Debug mode](#debug-mode) -->
 
 ## Supported file types
 
