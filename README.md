@@ -59,11 +59,11 @@ Org mode is for keeping notes, maintaining TODO lists, planning projects, and au
 
 ## Org and Text files 
 
-[Documentation on Org and Text files](documentation/ordReadme.md)
+[Documentation on Org and Text files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md)
 
 ## LibreOffice and Word
 
-[Documentation on LibreOffice or Word files](documentation/docReadme.md)
+[Documentation on LibreOffice or Word files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/docReadme.md)
 
 
 ## Installation
