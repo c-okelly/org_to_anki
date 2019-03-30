@@ -39,4 +39,4 @@ For "File type" select "HTML Document (.html)"
 
 ### Basic example
 
-![Basic Libre Office Example](gifs/Basic_LibreOffice_Example.gif)
+![Basic Libre Office Example](../gifs/Basic_LibreOffice_Example.gif)
