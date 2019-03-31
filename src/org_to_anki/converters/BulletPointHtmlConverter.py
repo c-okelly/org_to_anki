@@ -153,7 +153,9 @@ def _formatBadlyParsedLibreOfficeList(soupHtmlList, level=1):
             stars = "*" * level
             formattedLine = _removeLineBreak(item.text)
 
-            if formattedLine[0] != "#": 
+            if len(formattedLine.strip()) == 0: # Empty line
+               pass 
+            elif formattedLine[0] != "#": 
                 formattedLine = stars + " " + formattedLine
 
             formatedList += formattedLine + "\n"
