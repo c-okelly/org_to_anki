@@ -14,12 +14,17 @@ class AnkiQuestionFactory:
         self.currentAnswers = []
         self.currentComments = []
         self.questionsCreated = 0
+        self.codeLanguage = None
+        self.codeSection = []
 
     # Clear the current data
     def clearData(self):
         self.currentQuestions = []
         self.currentAnswers = []
         self.currentComments = []
+        self.questionsCreated = 0
+        self.codeLanguage = None
+        self.codeSection = []
 
     def hasData(self):
         return len(self.currentQuestions) == 0 or len(self.currentAnswers) == 0 and len(self.currentComments) == 0
@@ -33,9 +38,16 @@ class AnkiQuestionFactory:
     def addCommentLine(self, comment):
         self.currentComments.append(comment)
 
+    def addCode(self, codeLanguage, codeSection):
+        if self.codeLanguage == None and len(self.codeSection) == 0:
+            self.codeLanguage = codeLanguage
+            self.codeSection = codeSection
+        else:
+            raise Exception("Only one code section per a question is supported.")
+
     ### Utility
     def questionHasAnswers(self):
-        return len(self.currentAnswers) > 0
+        return len(self.currentAnswers) > 0 or len(self.codeSection) > 0
 
     # Build question based upon current data input
     # Should return an Question object
@@ -51,7 +63,8 @@ class AnkiQuestionFactory:
             newQuestion.addQuestion(line)
 
         # Add answers
-        noQuestionAsterisk = self.utils.countAsterisk(self.currentAnswers[0])
+        if len(self.currentAnswers) > 0: # Ignore adding question when codeSection is present
+            noQuestionAsterisk = self.utils.countAsterisk(self.currentAnswers[0])
         while len(self.currentAnswers) > 0:
             line = self.currentAnswers.pop(0)
             noAsterisks = self.utils.countAsterisk(line)
@@ -79,11 +92,15 @@ class AnkiQuestionFactory:
             else:
                 raise Exception("Line incorrectly processed.")
 
+        # Add comments
         for comment in self.currentComments:
             newQuestion.addComment(comment)
             parameters = ParserUtils.convertLineToParameters(comment)
             for key in parameters.keys():
                 newQuestion.addParameter(key, parameters.get(key))
+        
+        # Add code
+        newQuestion.addCode(self.codeLanguage, self.codeSection)
 
         # Clear data and return
         self.clearData()

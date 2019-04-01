@@ -180,6 +180,20 @@ class DeckBuilder:
                 # Now comments are for deck and not for question
                 questionFactory.addCommentLine(line)
 
+            # Code line
+            elif line.strip().startswith("```"):
+                codeSection = []
+                line = line.strip()
+                language = None
+                if len(line) > 3:
+                    language = line[3:]
+                while len(questions) > 0:
+                    codeLine = questions.pop(0)
+                    if codeLine.startswith("```"):
+                        break
+                    else:
+                        codeSection.append(codeLine)
+                questionFactory.addCode(language, codeSection) 
             else:
                 print("Current line is not recognised: " + line)
         

@@ -1,0 +1,14 @@
+# Code question
+
+# Answer line and code
+* How to output to std out in python?
+** As below
+```python
+print("hello world")
+```
+# Answer is only code
+* If statement python?
+```python
+if (this):
+    print("worked")
+```

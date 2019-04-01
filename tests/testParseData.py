@@ -234,3 +234,15 @@ def testOrganisedFlatTopics():
     assert(question3.getQuestions()[0] == "Programming design patterns (online version)\nWhat is the main purpose of the factory pattern? (2)")
     assert(question3.getAnswers()[0] == "To allow object creation without exposing the creation logic to client")
     assert(question3.getAnswers()[1] == "Allow reference to objects via an interface")
+
+def testParseCodeInBackQuotes():
+
+    filename = "tests/testData/codeQuestion.org"
+    actualDeck = parseData.parse(filename)
+
+    questions = actualDeck.getQuestions()
+
+    assert(questions[0].getCodeLanguage() == "python")
+    assert(questions[0].getCodeSection() == ["print(\"hello world\")"])
+    assert(questions[1].getCodeLanguage() == "python")
+    assert(questions[1].getCodeSection() == ["if (this):", "    print(\"worked\")"])
