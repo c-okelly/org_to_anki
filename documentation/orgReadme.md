@@ -7,7 +7,8 @@
 0. [Basic syntax](#) 
 1. [File types for organisation](#File-types-for-organisation) 
 2. [Adding images](#Adding-images) 
-3. [Supported parameters](#Supported-parameters) 
+3. [HTML code and LaTeX](#html-code-and-latex)
+4. [Supported parameters](#Supported-parameters) 
 
 ## Basic syntax
 
@@ -289,6 +290,54 @@ Allow reference to objects via an interface
 ```org
 # type=Basic
 # type=Basic (and reversed card)
+```
+
+### HTML code and LaTeX
+
+* By default both HTML and Latex should be supported as they are in Anki
+
+#### HTML
+
+* HTML formatting will be displayed as expected in Anki 
+    * An example is show below
+
+
+#### LaTeX
+
+* The best source on how to use LaTeX is the official documentation.
+    * [Anki Documentation on Latex use](https://apps.ankiweb.net/docs/manual.html#latex-support)
+* LaTeX added in any of the below formats will be rendered by Anki
+
+Anki supports 3 different types of LaTeX formatting
+
+* General LaTeX
+
+```latex
+[latex]...User specific latex..[/latex]
+```
+
+* Math Latex
+
+```latex
+[latex]\begin{math}...user specific latex...\end{math}[/latex]
+```
+
+This is shortened as follows
+
+```org
+[$]...[/$]
+```
+
+* DisplayMath LaTeX
+
+```latex
+[latex]\begin{math}...user specific latex...\end{math}[/latex]
+```
+
+This is shortened as follows
+
+```org
+[$$]...user specific latex...[/$$]
 ```
 
 ### Parameter inheritance
