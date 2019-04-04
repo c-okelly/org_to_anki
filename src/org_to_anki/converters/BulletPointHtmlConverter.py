@@ -102,8 +102,9 @@ def _parseWordBulletPoints(filePath):
         if len(newLine) != 0:
             parsedFile += newLine + "\n"
 
-    # showInfo("Word")
-    # showInfo(str(parsedFile))
+    # Post processing
+    parsedFile = _removeSpecialCharacters(parsedFile)
+
     return parsedFile.strip()
 
 def _parseLibreOfficeBulletPoints(filePath):
@@ -129,13 +130,16 @@ def _parseLibreOfficeBulletPoints(filePath):
         elif section.name == None:
             continue
 
-    # showInfo("Libre office")
-    # showInfo(str(type(parsedFile)))
+    # Post processing
+    parsedFile = _removeSpecialCharacters(parsedFile)
+    parsedFile = _postLibreOfficeTextForCode(parsedFile) 
+
     return parsedFile.strip()
 
 # LibreOffice does not close the <li> tags used in the html it generates. This causes 
-# a parseing issue when building the html tree. Ths function is written specifically to correct 
-# a for this issue. It should not be used to parse correctly formatted html lists
+# a parseing issue when building the html tree with the default beautifulsoup parser.
+# Ths function is written specifically to correct a for this issue. It should NOT be 
+# used to parse correctly formatted html lists
 def _formatBadlyParsedLibreOfficeList(soupHtmlList, level=1):
 
     formatedList = ""
@@ -178,3 +182,42 @@ def _removeLineBreak(text):
     for i in text.split("\n"):
         formattedText += i.strip() + " "
     return formattedText.strip()
+
+
+def _removeSpecialCharacters(text):
+
+    # Unicode quote marks
+    text = text.replace("“","\"")
+    text = text.replace("”","\"")
+
+    return text
+
+def _postLibreOfficeTextForCode(text):
+
+    formattedText = ""
+    lines = text.split("\n")
+
+    while len(lines) > 0:
+        line = lines.pop(0)
+        sections = line.split(" ")
+        initialAsteriskCount = 0
+        if len(sections) > 1 and sections[1].startswith("```"):
+            initialAsteriskCount = len(sections[0])
+            formattedText += line[initialAsteriskCount+1:] + "\n"
+            while True:
+                line = lines.pop(0)
+                sections = line.split(" ")
+                # Reach end of code section
+                if len(sections) > 1 and sections[1].startswith("```"):
+                    noAsterisk = len(sections[0])
+                    formattedText += line[noAsterisk:].strip() + "\n"
+                    break
+                # Create standard line
+                else:
+                    noAsterisk = len(sections[0])
+                    indentation = noAsterisk - initialAsteriskCount
+                    formattedText += ("\t" * indentation) + line[noAsterisk+1:] + "\n"
+        else:
+            formattedText += line + "\n"
+
+    return(formattedText)

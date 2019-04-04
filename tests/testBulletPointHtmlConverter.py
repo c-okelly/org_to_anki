@@ -95,6 +95,57 @@ def testDocumentTypeDeterminedCorrectly():
     assert(checkDocumentType(wordOsxFile) == "word")
     assert(checkDocumentType(wordWindowsFile) == "word")
 
+def testLibreOfficeCodeSection():
+
+    libreOfficeFileName = "tests/testData/documents/libreOffice-code.html"
+    libreOfficeFile = convertBulletPointsDocument(libreOfficeFileName)
+
+    lines = libreOfficeFile.split("\n")
+
+    # Test section with bulletpoint indents
+    assert(lines[2] == "```python")
+    assert(lines[3] == "print(\"level1\")")
+    assert(lines[4] == "	print(\"level2\")")
+    assert(lines[5] == "```")
+    # Test section with left aligned tab indents
+    assert(lines[8] == "```python")
+    assert(lines[9] == "print(\"level1\")")
+    assert(lines[10] == "	print(\"level2\")")
+    assert(lines[11] == "```")
+    # Test section with left aligned space indents
+    assert(lines[14] == "```python")
+    assert(lines[15] == "print(\"level1\")")
+    assert(lines[16] == "    print(\"level2\")")
+    assert(lines[17] == "```")
+
+def testWordCodeSection():
+
+    wordFileName = "tests/testData/documents/word-osx-code.html"
+    wordFile = convertBulletPointsDocument(wordFileName)
+    lines = wordFile.split("\n")
+
+    print(lines)
+    # Test section with bulletpoint indents
+    assert(lines[1] == "```python")
+    assert(lines[2] == "print(\"level1\")")
+    assert(lines[3] == " print(\"level2\")")
+    assert(lines[4] == "```")
+    # Test section with left aligned tab indents
+    assert(lines[6] == "```python")
+    assert(lines[7] == "print(\"level1\")")
+    assert(lines[8] == " print(\"level2\")")
+    assert(lines[9] == "```")
+    # Test section with left aligned space indents
+    assert(lines[11] == "```python")
+    assert(lines[12] == "print(\"level1\")")
+    assert(lines[13] == " print(\"level2\")")
+    assert(lines[14] == "```")
+
+### Documents Formatting tests
+
+# TODO
+
+
 ### Component parse test ###
 
 def testBulletPointDocsAreHandeledBy_parseData():
