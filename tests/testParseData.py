@@ -178,6 +178,7 @@ def testMultiLineQuestion():
     expectedQuestion.addAnswer("Answer")
 
     assert(deck.getQuestions()[0].question == expectedQuestion.question)
+    print(deck.getQuestions()[0]._answers)
     assert(deck.getQuestions()[0]._answers == expectedQuestion._answers)
 
 # Test flat topics layout
@@ -246,3 +247,14 @@ def testParseCodeInBackQuotes():
     assert(questions[0].getCodeSection() == ["print(\"hello world\")"])
     assert(questions[1].getCodeLanguage() == "python")
     assert(questions[1].getCodeSection() == ["if (this):", "    print(\"worked\")"])
+
+def testParseCodeIsFormatted():
+
+    filename = "tests/testData/codeQuestion.org"
+    actualDeck = parseData.parse(filename)
+
+    questions = actualDeck.getQuestions()
+
+    print(questions[0].getAnswers()[1])
+    assert(questions[0].getAnswers()[1] == """<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;hello world&quot;</span>)</pre></div>""")
+    assert(questions[1].getAnswers()[0] == """<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">if</span> (this):    <span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;worked&quot;</span>)</pre></div>""")
