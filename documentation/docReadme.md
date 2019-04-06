@@ -18,7 +18,18 @@ Format of question ansewers
 	* Dublin
 * What is the capital of Germany
 	* Berlin
+	
+## Multi-level files
 
+Question with sublists are also currently supported. Example below:
+
+* A question
+	* Group 1
+		* Item A
+		* Item B
+	* Group 2
+		* Item C
+		* Item D
 
 
 ## Saving Word or LibreOffice files 
