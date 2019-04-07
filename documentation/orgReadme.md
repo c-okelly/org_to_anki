@@ -382,13 +382,14 @@ Example syntax below:
 
 ```org
 * Give me some basic python
-\`\`\`python3
+```python3
 print("Hello world!")
 
 if (True):
     print("Even indents!")
-\`\`\`
-
 ```
+```
+
+[code file][../gifs/code_card.png]
 
 This would produce the following card:
