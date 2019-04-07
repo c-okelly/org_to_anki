@@ -381,13 +381,13 @@ This parser support code highlighting using the Pygments library.
 Example syntax below:
 
 ```org
-* Give me some basic python
-```python3
-print("Hello world!")
+	* Give me some basic python
+	```python3
+	print("Hello world!")
 
-if (True):
-    print("Even indents!")
-!```
+	if (True):
+		print("Even indents!")
+	```
 ```
 
 This would produce the following card:
