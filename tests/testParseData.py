@@ -256,5 +256,5 @@ def testParseCodeIsFormatted():
     questions = actualDeck.getQuestions()
 
     print(questions[0].getAnswers()[1])
-    assert(questions[0].getAnswers()[1] == """<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;hello world&quot;</span>)<br></pre></div>""")
-    assert(questions[1].getAnswers()[0] == """<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">if</span> (this):<br>    <span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;worked&quot;</span>)<br></pre></div>""")
+    assert(questions[0].getAnswers()[1] == """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;hello world&quot;</span>)<br></pre></div> </div>""")
+    assert(questions[1].getAnswers()[0] == """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">if</span> (this):<br>    <span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;worked&quot;</span>)<br></pre></div> </div>""")

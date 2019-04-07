@@ -6,7 +6,7 @@ from org_to_anki.converters.codeHighlighter import highLightCode
 def testCodeHighlightingWithMultipleLines():
 
     unformattedCode= """print("Hello World!)"\n\nif(True):\n  print("indent") """
-    expectedCode = """<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;Hello World!)&quot;</span><br><br><span style="color: #008800; font-weight: bold">if</span>(<span style="color: #008800; font-weight: bold">True</span>):<br>  <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;indent&quot;</span>) <br></pre></div>"""
+    expectedCode = """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;Hello World!)&quot;</span><br><br><span style="color: #008800; font-weight: bold">if</span>(<span style="color: #008800; font-weight: bold">True</span>):<br>  <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;indent&quot;</span>) <br></pre></div> </div>"""
 
     formattedCode = highLightCode(unformattedCode, "python3")
 
@@ -15,7 +15,7 @@ def testCodeHighlightingWithMultipleLines():
 def testCodeHighlightingWithColorfulStyle():
 
     unformattedCode= """print("Hello World!)" """
-    expectedCode = """<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;Hello World!)&quot;</span> <br></pre></div>"""
+    expectedCode = """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;Hello World!)&quot;</span> <br></pre></div> </div>"""
 
     formattedCode = highLightCode(unformattedCode, "python3")
 
@@ -24,7 +24,7 @@ def testCodeHighlightingWithColorfulStyle():
 def testCodeHighlightingWithManniStyle():
 
     unformattedCode= """print("Hello World!)" """
-    expectedCode = """<div class="highlight" style="background: #f0f3f3"><pre style="line-height: 125%"><span></span><span style="color: #336666">print</span>(<span style="color: #CC3300">&quot;Hello World!)&quot;</span> <br></pre></div>"""
+    expectedCode = """<div style="text-align:left"> <div class="highlight" style="background: #f0f3f3"><pre style="line-height: 125%"><span></span><span style="color: #336666">print</span>(<span style="color: #CC3300">&quot;Hello World!)&quot;</span> <br></pre></div> </div>"""
 
     formattedCode = highLightCode(unformattedCode, "python3", "manni")
 

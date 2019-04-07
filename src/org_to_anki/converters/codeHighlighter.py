@@ -26,4 +26,7 @@ def highLightCode(code, language, style="colorful"):
 
     formattedCode = highlight(code, lexer, formatter)
 
+    # Ensure code is always aligned
+    formattedCode = """<div style="text-align:left"> {} </div>""".format(formattedCode)
+
     return formattedCode.replace("\n", "")
