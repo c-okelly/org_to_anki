@@ -18,7 +18,7 @@ def highLightCode(code, language, style="colorful"):
         return code + "\n" + errorMessage
     
     try:
-        formatter = HtmlFormatter(style=style, noclasses=True)
+        formatter = HtmlFormatter(style=style, noclasses=True, lineseparator="<br>")
     except:
         errorMessage = "Was unable to find a suitable Style for phrase: {}".format(style)
         return code + "\n" + errorMessage
