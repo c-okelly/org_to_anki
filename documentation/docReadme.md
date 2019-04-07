@@ -78,6 +78,7 @@ if (True):
 ```
 ```
 
-[code file][../gifs/code_card.png]
 
 This would produce the following card:
+
+![code file](../gifs/code_card.png)
