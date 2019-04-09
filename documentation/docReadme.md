@@ -4,6 +4,11 @@
 1. [File syntax](#File-syntax) 
 2. [Saving files](#Saving-Word-or-LibreOffice-files) 
 
+## Microsoft Word support
+
+Currently Microsoft Word is partially supported. I am experianced a number of bugs from users and working to get back to full support. In the mean time I would advice users to use [LibreOffce](https://www.libreoffice.org/) instead. This is free, open source.
+
+
 ## File syntax
 
 Word and LibreOffice files are now support using bulletpoints for the question answers.
