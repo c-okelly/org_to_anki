@@ -14,8 +14,7 @@ setup(name='org_to_anki',
       include_package_data=True,
       entry_points={
           'console_scripts': [
-              'org_to_anki = org_to_anki.main:parseAndUploadOrgFile',
-              'ankiq = org_to_anki.quickNote:quickNote'
+              'org_to_anki = src.org_to_anki.main:parseAndUploadOrgFile'
           ]
       }
       )

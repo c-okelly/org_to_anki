@@ -10,5 +10,6 @@ install:
 # command to run tests
 script:
   - python3 setup.py nosetests -v --with-coverage --cover-package=org_to_anki
+  - python3 tests/installTest.py
 after_success:
   - codecov
