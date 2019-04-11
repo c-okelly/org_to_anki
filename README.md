@@ -73,15 +73,24 @@ Org mode is for keeping notes, maintaining TODO lists, planning projects, and au
 1. Have the [Anki app](https://apps.ankiweb.net/) installed.
 2. Installing the Anki plugin [AnkiConnect](https://ankiweb.net/shared/info/2055492159).
 
-	i. For OSX users of anki-connect see [note for OSX users](https://foosoft.net/projects/anki-connect/#installation)
+	i. For macOS users of anki-connect see [note for macOS users](https://foosoft.net/projects/anki-connect/#installation)
 	
 	ii. For Windows users of anki-connect see [notes for Windows users](https://foosoft.net/projects/anki-connect/#installation) 
 
-To install this module from source on Linux or OSx.
+To install this module from source on Linux or macOS:
 
 ```bash
 git clone https://github.com/c-okelly/org_to_anki
 cd org_to_ani
+python3 setup.py install
+```
+
+If the ```org_to_anki``` command returns a ```module not found``` error try the using the following command:
+```bash
+pip3 install ./
+``` 
+instead of 
+```bash
 python3 setup.py install
 ```
 
