@@ -84,7 +84,15 @@ git clone https://github.com/c-okelly/org_to_anki
 cd org_to_ani
 python3 setup.py install
 ```
-If the ```org_to_anki``` command returns a ```module not found``` error try ```pip3 install ./``` instead of ```python3 setup.py install```.
+
+If the ```org_to_anki``` command returns a ```module not found``` error try the using the following command:
+```bash
+pip3 install ./
+``` 
+instead of 
+```bash
+python3 setup.py install
+```
 
 ## Command line scripts
 
