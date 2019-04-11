@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(name='org_to_anki',
-      version='0.1',
+      version='0.2.3',
       description='Org to Anki notes parser',
       author='Conor OKelly',
       author_email='okellyconor@gmail.com',
       url='https://github.com/c-okelly/org_to_anki',
       python_requires='>3.4',
-      install_requires=['requests', 'bs4'], #'lxml'],
+      install_requires=['requests', 'bs4'],
       tests_require=['responses', 'nose', 'coverage'],
       test_suite="nose.collector",
       packages=find_packages(),
