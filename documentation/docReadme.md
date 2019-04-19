@@ -3,6 +3,8 @@
 
 1. [File syntax](#File-syntax) 
 2. [Saving files](#Saving-Word-or-LibreOffice-files) 
+3. [Supported parameters](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#Supported-parameters)
+3. [HTML code and LaTeX](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#html-code-and-latex)
 
 ## Microsoft Word support
 

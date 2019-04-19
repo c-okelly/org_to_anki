@@ -30,6 +30,7 @@ URL_TIMEOUT = 10
 import base64
 import hashlib
 
+# This class imports anki and is used to interact with the database
 class AnkiBridge:
 
     def __init__(self):

@@ -7,8 +7,8 @@
 0. [Basic syntax](#) 
 1. [File types for organisation](#File-types-for-organisation) 
 2. [Adding images](#Adding-images) 
-3. [HTML code and LaTeX](#html-code-and-latex)
-4. [Supported parameters](#Supported-parameters) 
+3. [Supported parameters](#Supported-parameters) 
+4. [HTML code and LaTeX](#html-code-and-latex)
 
 ## Basic syntax
 
@@ -259,8 +259,6 @@ Allow reference to objects via an interface
 
 ## Supported parameters
 
-* Supported parameter syntax.
-
 1. Each line must start with a hashtag
 ```org 
 # type=Basic
@@ -269,7 +267,7 @@ Allow reference to objects via an interface
 
 * Currently supported parameters are questions type
 
-1. File type => ```fileType```
+### File type => ```fileType```
     * Org or txt files will default to type basic.
     * If you want to use a topics layout this must be specified at the top of the file.
 
@@ -282,27 +280,54 @@ Allow reference to objects via an interface
 *** Answer 1
 ```
 
-2. Question type => ```type```
+### Anki Note type => ```noteType```
     * Used to set the type of the Anki note.
     * Default value is Basic
     * This is case sensitive and can be used to set any card type
 
 ```org
-# type=Basic
-# type=Basic (and reversed card)
+# noteType=Basic
+# noteType=Basic (and reversed card)
 ```
 
-### HTML code and LaTeX
+### HTML list types => ```list``
+
+    * Answers on cards are displayed as list
+    * By default this will use an unordered
+
+#### Unordered list (Default)
+```org
+# list=ul
+# list=unordered
+```
+
+#### Ordered list 
+```org
+# list=ol
+# list=ordered
+```
+
+#### No list 
+```org
+# list=false
+# list=None
+```
+
+## HTML code and LaTeX
 
 * By default both HTML and Latex should be supported as they are in Anki
 
-#### HTML
+### HTML
 
 * HTML formatting will be displayed as expected in Anki 
     * An example is show below
 
+```org
+* Question
+** <b>Bold answer</b>
+```
 
-#### LaTeX
+### LaTeX
 
 * The best source on how to use LaTeX is the official documentation.
     * [Anki Documentation on Latex use](https://apps.ankiweb.net/docs/manual.html#latex-support)

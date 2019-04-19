@@ -1,6 +1,7 @@
 from .AnkiConnectorUtils import AnkiConnectorUtils
 from ..ankiClasses import AnkiQuestion
 from ..ankiClasses.AnkiDeck import AnkiDeck
+from .AnkiNoteBuilder import AnkiNoteBuilder
 from .. import config
 import base64
 
@@ -15,6 +16,7 @@ class AnkiConnector:
         self.defaultDeck = defaultDeck
         self.currentDecks = []
         self.connector = AnkiConnectorUtils(self.url)
+        self.AnkiNoteBuilder = AnkiNoteBuilder()
 
     def uploadNewDeck(self, deck): # (AnkiDeck)
 
@@ -72,67 +74,9 @@ class AnkiConnector:
 
         notes = []
         for i in ankiQuestions:
-            notes.append(self._buildNote(i))
+            notes.append(self.AnkiNoteBuilder.buildNote(i))
 
         finalNotes = {}
         finalNotes["notes"] = notes
         return finalNotes
 
-    def _buildNote(self, ankiQuestion): # AnkiQuestion
-
-        # All decks stored under default deck
-        if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
-            # TODO log note was built on default deck
-            deckName = self.defaultDeck
-        else:
-            deckName = self._getFullDeckPath(ankiQuestion.deckName)
-
-        # TODO: Verify model name correctly and use parameters
-        if ankiQuestion.getParameter("type") is not None:
-            modelName = ankiQuestion.getParameter("type")
-        else:
-            modelName = "Basic"
-
-        note = {"deckName": deckName, "modelName": modelName}
-        note["tags"] = ankiQuestion.getTags()
-
-        # Generate fields
-        fields = {}
-        fields["Front"] = self._createQuestionString(ankiQuestion.getQuestions())
-        fields["Back"] = self._createAnswerString(ankiQuestion.getAnswers())
-
-        note["fields"] = fields
-        return note
-
-    def _createQuestionString(self, questions): # [str]
-
-        if len(questions) == 1:
-            question =  questions[0].replace("\n", "<br>")
-            return question
-        else:
-            questionString = ""
-            for q in questions:
-                q = q.strip().replace("\n", "<br>")
-                questionString += q + " <br>"
-            return questionString
-            
-
-    def _createAnswerString(self, answers, bulletPoints = True): #([str], bool)
-        result = ""
-        if not bulletPoints:
-            for i in answers:
-                result += i + "<br>"  # HTML link break
-        else:
-            # Can only can create single level of indentation. Align
-            # bulletpoints.
-            result += "<ul style='list-style-position: inside;'>"
-            for i in answers:
-                if isinstance(i, str):
-                    result += "<li>" + i + "</li>"
-                elif isinstance(i, list):
-                    result += self._createAnswerString(i)
-                else:
-                    raise Exception("Unsupported action with answer string")
-
-            result += "</ul>"
-        return result
