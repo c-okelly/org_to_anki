@@ -55,8 +55,8 @@ class AnkiQuestion:
     def addParameter(self, key, value): # (str, str)
         self._parameters[key] = value
 
-    def getParameter(self, key):
-        return self._parameters.get(key, None)
+    def getParameter(self, key, default=None):
+        return self._parameters.get(key, default)
     
     def getAllParamters(self):
         return self._parameters.copy()

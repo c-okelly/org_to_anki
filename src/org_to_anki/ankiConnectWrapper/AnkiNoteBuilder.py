@@ -15,10 +15,12 @@ class AnkiNoteBuilder:
             deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
         # TODO: Verify model name correctly and use parameters
+        # Defaults to basic type by default
+        modelName = ankiQuestion.getParameter("noteType", "Basic")
+
+        # Legacy support to note types
         if ankiQuestion.getParameter("type") is not None:
             modelName = ankiQuestion.getParameter("type")
-        else:
-            modelName = "Basic"
 
         note = {"deckName": deckName, "modelName": modelName}
         note["tags"] = ankiQuestion.getTags()
@@ -53,7 +55,7 @@ class AnkiNoteBuilder:
         listType = ankiParamters.get("list", "unordered").lower()
 
         
-        if listType == "false": 
+        if listType == "false" or listType == "none": 
             for i in answers:
                 i = self._formatString(i)
                 answerString += i + "<br>"  # HTML link break

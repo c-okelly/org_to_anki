@@ -9,7 +9,6 @@ from org_to_anki import config
 
 def testBuildBasicNote():
 
-
     #Build basic quesions
     q = AnkiQuestion("Capital of dublin")
     q.addAnswer("Dublin")
@@ -26,6 +25,34 @@ def testBuildBasicNote():
     assert(noteData["tags"] == [])
     assert(noteData["fields"]["Front"] == "Capital of dublin")
     assert(noteData["fields"]["Back"] == "<ul style='list-style-position: inside;'><li>Dublin</li></ul>")
+    
+def testModelTypeWorks():
+
+    q = AnkiQuestion("Capital of dublin")
+    q.addAnswer("Dublin")
+    q.addParameter("noteType","testType")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    assert(noteData["modelName"] == "testType")
+
+
+def testLegacyModelTypeWorks():
+
+    q = AnkiQuestion("Capital of dublin")
+    q.addAnswer("Dublin")
+    q.addParameter("type","testType")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    assert(noteData["modelName"] == "testType")
+
 
 def testQuestionTypeCorrectlyUsed():
 

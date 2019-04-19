@@ -280,14 +280,14 @@ Allow reference to objects via an interface
 *** Answer 1
 ```
 
-### Anki Note type => ```type```
+### Anki Note type => ```noteType```
     * Used to set the type of the Anki note.
     * Default value is Basic
     * This is case sensitive and can be used to set any card type
 
 ```org
-# type=Basic
-# type=Basic (and reversed card)
+# noteType=Basic
+# noteType=Basic (and reversed card)
 ```
 
 ### HTML list types => ```list``
@@ -310,6 +310,7 @@ Allow reference to objects via an interface
 #### No list 
 ```org
 # list=false
+# list=None
 ```
 
 ## HTML code and LaTeX
