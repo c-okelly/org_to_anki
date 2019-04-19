@@ -39,10 +39,10 @@ def testCodeFailsWithUnknownLanguage():
 
     assert(formattedCode == expectedCode)
 
-def testCodeFailsWithUnknownStyle():
+def testCodeWithUnknownStyleDefaultsToColourful():
 
     unformattedCode= """print("Hello World!)" """
-    expectedCode = """print("Hello World!)" \nWas unable to find a suitable Style for phrase: xyz"""
+    expectedCode = """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;Hello World!)&quot;</span> <br></pre></div> </div>"""
 
     formattedCode = highLightCode(unformattedCode, "python3", "xyz")
 

@@ -20,8 +20,10 @@ def highLightCode(code, language, style="colorful"):
     try:
         formatter = HtmlFormatter(style=style, noclasses=True, lineseparator="<br>")
     except:
-        errorMessage = "Was unable to find a suitable Style for phrase: {}".format(style)
-        return code + "\n" + errorMessage
+        # TODO => Error is getting buried here and reverting to default style
+        errorMessage = "Was unable to find a suitable Style for phrase: {}. Falling back to colorful style.".format(style)
+        formatter = HtmlFormatter(style="colorful", noclasses=True, lineseparator="<br>")
+        print(errorMessage)
 
 
     formattedCode = highlight(code, lexer, formatter)

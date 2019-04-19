@@ -69,6 +69,8 @@ class AnkiQuestion:
         return self._tags
     
     def addCode(self, codeLanguage, codeSection):
+        if type(codeSection) != list:
+            raise Exception("Only list can be added as code section to Anki Question.")
         self._codeLanguage = codeLanguage
         self._codeSection = codeSection
         self._hasCode = True
@@ -84,8 +86,10 @@ class AnkiQuestion:
     
     def _formatCodeSection(self, codeLanguage, codeSection):
         codeString = "\n".join(codeSection).strip()
-        # TODO check to see if another style has been specified
-        fromattedString = highLightCode(codeString, codeLanguage)
+        if self.getParameter("codeStyle", None) != None:
+            fromattedString = highLightCode(codeString, codeLanguage, self.getParameter("codeStyle"))
+        else:
+            fromattedString = highLightCode(codeString, codeLanguage)
         return fromattedString
 
     # String representation
