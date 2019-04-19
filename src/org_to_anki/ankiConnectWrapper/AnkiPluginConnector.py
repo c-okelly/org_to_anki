@@ -9,6 +9,7 @@ import os
 
 from .. import config
 from .AnkiBridge import AnkiBridge
+from .AnkiNoteBuilder import AnkiNoteBuilder
 
 # Anki imports
 try:
@@ -22,6 +23,7 @@ class AnkiPluginConnector:
     def __init__(self):
         self.AnkiBridge = AnkiBridge()
         self.defaultDeck = config.defaultDeck
+        self.AnkiNoteBuilder = AnkiNoteBuilder()
 
     def uploadNewDeck(self, deck): # AnkiDeck
 
@@ -70,8 +72,6 @@ class AnkiPluginConnector:
         for deck in newDeckPaths:
             self.AnkiBridge.createDeck(deck)
 
-    def _getFullDeckPath(self, deckName): # (str)
-        return str(self.defaultDeck + "::" + deckName)
 
     def _checkForDefaultDeck(self):
         self.currentDecks = self.AnkiBridge.deckNames()
@@ -83,7 +83,7 @@ class AnkiPluginConnector:
 
         notes = []
         for i in ankiQuestions:
-            notes.append(self._buildNote(i))
+            notes.append(self.AnkiNoteBuilder.buildNote(i))
 
         finalNotes = {}
         finalNotes["notes"] = notes
@@ -93,78 +93,6 @@ class AnkiPluginConnector:
 
         allNotes = []
         for i in ankiQuestions:
-            # singleNote = {}
-            # singleNote["notes"] = self._buildNote(i)
-            allNotes.append(self._buildNote(i))
+            allNotes.append(self.AnkiNoteBuilder.buildNote(i))
         
         return allNotes
-
-    def _buildNote(self, ankiQuestion): # AnkiQuestion
-
-        # All decks stored under default deck
-        if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
-            # TODO log note was built on default deck
-            deckName = self.defaultDeck
-        else:
-            deckName = self._getFullDeckPath(ankiQuestion.deckName)
-
-        # TODO: Verify model name correctly and use parameters
-        if ankiQuestion.getParameter("type") is not None:
-            modelName = ankiQuestion.getParameter("type")
-        else:
-            modelName = "Basic"
-
-        note = {"deckName": deckName, "modelName": modelName}
-        note["tags"] = ankiQuestion.getTags()
-
-        # Generate fields
-        fields = {}
-        fields["Front"] = self._createQuestionString(ankiQuestion.getQuestions())
-        fields["Back"] = self._createAnswerString(ankiQuestion.getAnswers())
-
-        note["fields"] = fields
-        return note
-
-    def _createQuestionString(self, questions): #([str])
-
-        if len(questions) == 1:
-            question =  questions[0].replace("\n", "<br>")
-            return question
-        else:
-            questionString = ""
-            for q in questions:
-                q = self._formatString(q)
-                q = q.strip().replace("\n", "<br>")
-                questionString += q + " <br>"
-            return questionString
-            
-
-    def _createAnswerString(self, answers, bulletPoints=True): # ([str], bool)
-
-        result = ""
-        if not bulletPoints:
-            for i in answers:
-                i = self._formatString(i)
-                result += i + "<br>"  # HTML link break
-        else:
-            # Can only can create single level of indentation. Align
-            # bulletpoints.
-            result += "<ul style='list-style-position: inside;'>"
-            for i in answers:
-                i = self._formatString(i)
-                if isinstance(i, str):
-                    result += "<li>" + i + "</li>"
-                elif isinstance(i, list):
-                    result += self._createAnswerString(i)
-                else:
-                    raise Exception("Unsupported action with answer string from => " + str(i))
-
-            result += "</ul>"
-        return result
-
-    def _formatString(self, unformattedString):
-
-        # if (isinstance(unformattedString, unicode) == True):
-        #     return unformattedString.encode("utf-8")
-        # else:
-        return unformattedString
