@@ -6,18 +6,14 @@ from . import ParserUtils
 
 def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
-    deckBuilder = DeckBuilder()
 
-    # Validate data
-    fileExtension = filePath.split(".")[-1] # Unhandled index error here
-    if (fileExtension == "org" or fileExtension == "txt"):
-        data = _formatFile(filePath)
-    # 
-    elif ((fileExtension == "html") or (fileExtension == "htm")):
-        formatedData = convertBulletPointsDocument(filePath)
-        data = formatedData.split("\n")
-    else:
-        raise TypeError("Inccorrect file format given")
+    data = _loadFile(filePath)
+
+    return _buildDeck(data, filePath)
+
+def _buildDeck(data, filePath):
+
+    deckBuilder = DeckBuilder()
     fileName = filePath.split("/")[-1].split(".")[0]
 
     comments, content = _sortData(data)
@@ -32,8 +28,24 @@ def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
         deck.addParameter(key, globalParameters[key])
     for comment in comments:
         deck.addComment(comment)
-
+    
     return deck
+
+def _loadFile(filePath):
+
+    # Validate data
+    fileExtension = filePath.split(".")[-1] # Unhandled index error here
+    if (fileExtension == "org" or fileExtension == "txt"):
+        data = _formatFile(filePath)
+    # 
+    elif ((fileExtension == "html") or (fileExtension == "htm")):
+        formatedData = convertBulletPointsDocument(filePath)
+        data = formatedData.split("\n")
+    else:
+        raise TypeError("Inccorrect file format given")
+    
+    return data
+
 
 
 def _formatFile(filePath):# (filePath: str):
@@ -53,6 +65,9 @@ def _sortData(rawFileData): #(rawFileData: [str]) -> ([str], [str]):
         currentItem = rawFileData[i]
         if len(currentItem) > 0:
             firstLetter = currentItem.strip()[0]
+            # Check if line is empty
+            if (len(currentItem.replace("*", "").strip()) == 0 or len(currentItem.replace("#", "").strip()) == 0):
+                continue
             if firstLetter == "#" and questionsSection is False:
                 comments.append(currentItem)
             elif firstLetter == "*" or questionsSection:

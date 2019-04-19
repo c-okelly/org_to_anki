@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../org_to_anki')
 
-from org_to_anki.org_parser import parseData
+from org_to_anki.org_parser import parseData 
 from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 from org_to_anki.org_parser.DeckBuilder import DeckBuilder
@@ -258,3 +258,24 @@ def testParseCodeIsFormatted():
     print(questions[0].getAnswers()[1])
     assert(questions[0].getAnswers()[1] == """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;hello world&quot;</span>)<br></pre></div> </div>""")
     assert(questions[1].getAnswers()[0] == """<div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">if</span> (this):<br>    <span style="color: #008800; font-weight: bold">print</span>(<span style="background-color: #fff0f0">&quot;worked&quot;</span>)<br></pre></div> </div>""")
+
+
+def testEmptyLinesAreIgnored():
+
+    data = ["* ","** ","* order list","** Answer"]
+
+    deck = parseData._buildDeck(data, "test.org")
+
+    assert(len(deck.getQuestions()) == 1)
+    assert(deck.getQuestions()[0].getQuestions() == ["order list"])
+    assert(deck.getQuestions()[0].getAnswers() == ["Answer"])
+
+def testStrangeOrgData():
+
+    data = ["* Planner [0/0]", "** Planner [/]", "#type=notes","** Something",":LOGBOOK:","CLOCK: [2019-04-19 Fri 14:27]--[2019-04-19 Fri 14:27] =>  0:00", ":END:","* order list","** Answer"]
+
+    deck = parseData._buildDeck(data, "test.org")
+
+    assert(len(deck.getQuestions()) == 1)
+    assert(deck.getQuestions()[0].getQuestions() == ["order list"])
+    assert(deck.getQuestions()[0].getAnswers() == ["Answer"])
