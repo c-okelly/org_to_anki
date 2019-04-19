@@ -192,6 +192,7 @@ def _removeSpecialCharacters(text):
 
     return text
 
+# This is only use for sections of bullet pointed code
 def _postLibreOfficeTextForCode(text):
 
     formattedText = ""

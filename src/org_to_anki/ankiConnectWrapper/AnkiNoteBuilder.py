@@ -25,6 +25,7 @@ class AnkiNoteBuilder:
         note = {"deckName": deckName, "modelName": modelName}
         note["tags"] = ankiQuestion.getTags()
 
+        # formattedQuestion = [ankiQuestion.getFormattedCodeSection()]
         # Generate fields
         fields = {}
         fields["Front"] = self.createQuestionString(ankiQuestion.getAllParamters(), ankiQuestion.getQuestions())
@@ -68,18 +69,21 @@ class AnkiNoteBuilder:
         elif listType == "ordered" or listType == "ol":
             listTag = "ol"
 
-        # Can only can create single level of indentation. Align bulletpoints
-        answerString += "<{} style='list-style-position: inside;'>".format(listTag)
-        for i in answers:
-            i = self._formatString(i)
-            if isinstance(i, str):
-                answerString += "<li>" + i + "</li>"
-            elif isinstance(i, list):
-                answerString += self.createAnswerString(ankiParamters, i)
-            else:
-                raise Exception("Unsupported action with answer string from => " + str(i))
+        # Only create list if answers exits
+        if len(answers) > 0:
+            # Can only can create single level of indentation. Align bulletpoints
+            answerString += "<{} style='list-style-position: inside;'>".format(listTag)
+            for i in answers:
+                i = self._formatString(i)
+                if isinstance(i, str):
+                    answerString += "<li>" + i + "</li>"
+                elif isinstance(i, list):
+                    answerString += self.createAnswerString(ankiParamters, i)
+                else:
+                    raise Exception("Unsupported action with answer string from => " + str(i))
 
-        answerString += "</{}>".format(listTag)
+            answerString += "</{}>".format(listTag)
+
         return answerString
 
     def _getFullDeckPath(self, deckName): # (str)

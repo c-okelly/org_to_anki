@@ -109,7 +109,6 @@ def testManyMultiLineQuestionLines():
 def testQuestionWithoutListTags():
 
     q = AnkiQuestion("Capital of dublin")
-    q.addQuestion("Second line")
     q.addAnswer("Dublin 1")
     q.addAnswer("Dublin 2")
     q.addParameter("list", "false")
@@ -124,7 +123,6 @@ def testQuestionWithoutListTags():
 def testQuestionOrderedList():
 
     q = AnkiQuestion("Capital of dublin")
-    q.addQuestion("Second line")
     q.addAnswer("Dublin 1")
     q.addAnswer("Dublin 2")
     q.addParameter("list", "ol")
@@ -135,3 +133,32 @@ def testQuestionOrderedList():
     noteData = a.buildNote(deck.getQuestions()[0])
 
     assert(noteData["fields"]["Back"] == "<ol style='list-style-position: inside;'><li>Dublin 1</li><li>Dublin 2</li></ol>")
+
+
+# TODO => make build outside of list
+def testCodeQuestionBuildsWithListSection():
+
+    q = AnkiQuestion("Capital of dublin")
+    q.addCode("python3", ["print('Hello')"])
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    print(noteData["fields"]["Back"])
+
+    assert(noteData["fields"]["Back"] == """<ul style='list-style-position: inside;'><li><div style="text-align:left"> <div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello&#39;</span>)<br></pre></div> </div></li></ul>""")
+
+def testCodeQuestionBuildsWithListStyle():
+
+    q = AnkiQuestion("Capital of dublin")
+    q.addParameter("codeStyle", "manni")
+    q.addCode("python3", ["print('Hello')"])
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    assert(noteData["fields"]["Back"] == """<ul style='list-style-position: inside;'><li><div style="text-align:left"> <div class="highlight" style="background: #f0f3f3"><pre style="line-height: 125%"><span></span><span style="color: #336666">print</span>(<span style="color: #CC3300">&#39;Hello&#39;</span>)<br></pre></div> </div></li></ul>""")

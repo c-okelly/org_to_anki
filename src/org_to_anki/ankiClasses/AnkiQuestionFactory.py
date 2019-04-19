@@ -100,7 +100,8 @@ class AnkiQuestionFactory:
                 newQuestion.addParameter(key, parameters.get(key))
         
         # Add code
-        newQuestion.addCode(self.codeLanguage, self.codeSection)
+        if self.codeSection != []:
+            newQuestion.addCode(self.codeLanguage, self.codeSection)
 
         # Clear data and return
         self.clearData()

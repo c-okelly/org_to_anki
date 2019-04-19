@@ -4,11 +4,12 @@
 * Each org file will be converted into its own deck in Anki
     * The name of the deck will be the name of the file
 
-0. [Basic syntax](#) 
-1. [File types for organisation](#File-types-for-organisation) 
-2. [Adding images](#Adding-images) 
-3. [Supported parameters](#Supported-parameters) 
-4. [HTML code and LaTeX](#html-code-and-latex)
+0. [Basic syntax](#basic-syntax) 
+1. [File types for organisation](#file-types-for-organisation) 
+2. [Adding images](#adding-images) 
+3. [HTML code and LaTeX](#html-code-and-latex)
+4. [Supported parameters](#supported-parameters) 
+5. [Code Highlighting](#code-highlighting)
 
 ## Basic syntax
 
@@ -369,3 +370,26 @@ This is shortened as follows
 
 * Questions and decks will inhert parameters from parent Decks
 * Parameters inhereted will not override existing parameters.
+
+
+## Code Highlighting
+
+This parser support code highlighting using the Pygments library.
+
+[Supported Languages](http://pygments.org/languages/)
+
+Example syntax below:
+
+```org
+	* Give me some basic python
+	```python3
+	print("Hello world!")
+
+	if (True):
+		print("Even indents!")
+	```
+```
+
+This would produce the following card:
+
+![code file](../gifs/code_card.png)

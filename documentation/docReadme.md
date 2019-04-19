@@ -3,8 +3,9 @@
 
 1. [File syntax](#File-syntax) 
 2. [Saving files](#Saving-Word-or-LibreOffice-files) 
-3. [Supported parameters](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#Supported-parameters)
-3. [HTML code and LaTeX](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#html-code-and-latex)
+3. [Code Highlighting](#code-highlighting)
+4. [Supported parameters](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#Supported-parameters)
+5. [HTML code and LaTeX](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#html-code-and-latex)
 
 ## Microsoft Word support
 
@@ -58,3 +59,27 @@ For "File type" select "HTML Document (.html)"
 ### Basic example
 
 ![Basic Libre Office Example](../gifs/Basic_LibreOffice_Example.gif)
+
+
+## Code Highlighting
+
+This parser support code highlighting using the Pygments library.
+
+[Supported Languages](http://pygments.org/languages/)
+
+Example syntax below:
+
+```org
+	* Give me some basic python
+	```python3
+	print("Hello world!")
+
+	if (True):
+		print("Even indents!")
+	```
+```
+
+
+This would produce the following card:
+
+![code file](../gifs/code_card.png)

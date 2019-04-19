@@ -1,4 +1,5 @@
 from .AnkiQuestionMedia import AnkiQuestionMedia
+from ..converters.codeHighlighter import highLightCode
 
 class AnkiQuestion:
 
@@ -68,15 +69,28 @@ class AnkiQuestion:
         return self._tags
     
     def addCode(self, codeLanguage, codeSection):
+        if type(codeSection) != list:
+            raise Exception("Only list can be added as code section to Anki Question.")
         self._codeLanguage = codeLanguage
         self._codeSection = codeSection
         self._hasCode = True
+        # Generate formatted code
+        formattedCode = self._formatCodeSection(codeLanguage, codeSection)
+        self.addAnswer(formattedCode)
 
     def getCodeLanguage(self):
         return self._codeLanguage
 
     def getCodeSection(self):
         return self._codeSection
+    
+    def _formatCodeSection(self, codeLanguage, codeSection):
+        codeString = "\n".join(codeSection).strip()
+        if self.getParameter("codeStyle", None) != None:
+            fromattedString = highLightCode(codeString, codeLanguage, self.getParameter("codeStyle"))
+        else:
+            fromattedString = highLightCode(codeString, codeLanguage)
+        return fromattedString
 
     # String representation
     def __str__(self):
