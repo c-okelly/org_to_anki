@@ -23,16 +23,12 @@ import logging
 
 errorTemplate = """
 Hey there! It seems an error has occurred while running the importer.
-Hit enter to dismiss this window!
 
 The error was {}.
 
 If you would like me to fix it please report it here: https://github.com/c-okelly/org_to_anki/issues
 
-Please be sure to provide as much information as possible, specifically the error below!
-
-Error report:
-{}
+Please be sure to provide as much information as possible. Specifically the file the caused the error.
 """
 def importNewFile():
 
@@ -63,7 +59,7 @@ def importNewFile():
     except Exception as e:
         errorMessage = str(e)
         trace = traceback.format_exc()
-        showInfo(errorTemplate.format(errorMessage, trace))
+        showInfo(errorTemplate.format(errorMessage))
         # logging.error(errorTemplate.format(errorMessage, trace))
 
 
