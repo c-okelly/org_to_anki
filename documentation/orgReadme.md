@@ -291,7 +291,7 @@ Allow reference to objects via an interface
 # noteType=Basic (and reversed card)
 ```
 
-### HTML list types => ```list``
+### HTML list types => ```list```
 
     * Answers on cards are displayed as list
     * By default this will use an unordered
