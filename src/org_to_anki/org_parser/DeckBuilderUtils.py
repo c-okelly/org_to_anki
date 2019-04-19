@@ -20,7 +20,7 @@ class DeckBuilderUtils:
                 baseDirectory = os.path.dirname(filePath) 
                 imagePath = os.path.join(baseDirectory, relativeImagePath)
 
-                if len(relativeImagePath) > 0 and os.path.exists(imagePath):
+                if len(relativeImagePath) > 0 and os.path.exists(imagePath) and os.path.isfile(imagePath):
 
                     currentDeck.addImage(fileName, imagePath)
                     answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
