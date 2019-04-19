@@ -72,6 +72,8 @@ class AnkiPluginConnector:
         for deck in newDeckPaths:
             self.AnkiBridge.createDeck(deck)
 
+    def _getFullDeckPath(self, deckName): # (str)
+        return str(self.defaultDeck + "::" + deckName)
 
     def _checkForDefaultDeck(self):
         self.currentDecks = self.AnkiBridge.deckNames()

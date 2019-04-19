@@ -32,17 +32,12 @@ Please be sure to provide as much information as possible. Specifically the file
 """
 def importNewFile():
 
-    # show a message box
-    # showInfo("Card count: %d. Wowo this really worked did it?" % cardCount)
     d = QFileDialog(mw)
     filePath = d.getOpenFileName()[0]
     if len(filePath) == 0:
         showInfo("No file selected")
         return
-    # logging.info("File uploaded called: {}".format(filePath))
         
-    # showInfo(filePath)
-
     ## Do real main
     try:
         parseAndUploadOrgFile(filePath, embedded=True)
@@ -60,7 +55,6 @@ def importNewFile():
         errorMessage = str(e)
         trace = traceback.format_exc()
         showInfo(errorTemplate.format(errorMessage))
-        # logging.error(errorTemplate.format(errorMessage, trace))
 
 
 
