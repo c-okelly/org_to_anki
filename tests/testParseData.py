@@ -279,3 +279,40 @@ def testStrangeOrgData():
     assert(len(deck.getQuestions()) == 1)
     assert(deck.getQuestions()[0].getQuestions() == ["order list"])
     assert(deck.getQuestions()[0].getAnswers() == ["Answer"])
+
+
+def testParsingExtraFieldLinesWithMultipleFields():
+
+    data = ["* Question", "** Answer", "#fieldType=Front hint, x=y", "** front hint","#fieldType=Back hint", "** back hint"]
+
+    deck = parseData._buildDeck(data, "test.org")
+
+    assert(len(deck.getQuestions()) == 1)
+
+    assert(deck.getQuestions()[0].getQuestions() == ["Question"])
+    assert(deck.getQuestions()[0].getAnswers() == ["Answer"])
+
+    namedFields = deck.getQuestions()[0].getNamedFields()
+
+    assert(len(namedFields))
+    assert(namedFields[0].getFieldName() == "Front hint")
+    assert(namedFields[0].getLines() == ["front hint"])
+    assert(namedFields[1].getFieldName() == "Back hint")
+    assert(namedFields[1].getLines() == ["back hint"])
+
+# def testParsingExtraFieldLinesForMultipleQuestions():
+
+#     data = ["* Qusetion 1", "** Answer 1", "#fieldType=Front", "** front hint","* Question 2", "** Answer 2"]
+
+#     deck = parseData._buildDeck(data, "test.org")
+
+#     assert(len(deck.getQuestions()) == 2)
+#     assert(False)
+
+# def testSepcailFileTypes():
+
+#     data = ["#fileType = flatTopics","* Topics", "** Qusetion", "*** Answer"]
+
+#     deck = parseData._buildDeck(data, "test.org")
+
+#     assert(False)

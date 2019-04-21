@@ -1,7 +1,9 @@
 from .AnkiQuestionMedia import AnkiQuestionMedia
+from .NamedNoteField import NamedNoteField
 from ..converters.codeHighlighter import highLightCode
 
 class AnkiQuestion:
+
 
     def __init__(self, question = None):
         self.deckName = None
@@ -16,6 +18,7 @@ class AnkiQuestion:
         self._hasCode = False
         self._codeLanguage = None
         self._codeSection = []
+        self._namedNoteFields = {}
 
     def setDeckName(self, deckName): # (str)
         self.deckName = deckName
@@ -41,8 +44,12 @@ class AnkiQuestion:
         return self._media
 
     # Getters and setters #
-    def addAnswer(self, answer): # (str)
-        self._answers.append(answer)
+    def addAnswer(self, answer, fieldName=None): # (str)
+        # Check if answer line is for specific field or add to default
+        if fieldName is not None:
+            self.addLineToNamedField(fieldName, answer)
+        else:
+            self._answers.append(answer)
 
     def getAnswers(self):
         return self._answers
@@ -91,11 +98,25 @@ class AnkiQuestion:
         else:
             fromattedString = highLightCode(codeString, codeLanguage)
         return fromattedString
+    
+    def addNoteField(self, fieldName):
+        namedField = NamedNoteField(fieldName)
+        self._namedNoteFields[fieldName] = namedField
+    
+    def addLineToNamedField(self, fieldName, line):
+        if self._namedNoteFields.get(fieldName, None) == None:
+            self.addNoteField(fieldName)
+
+        namedField = self._namedNoteFields.get(fieldName)
+        namedField.addLine(line)
+    
+    def getNamedFields(self):
+        return list(self._namedNoteFields.values())
 
     # String representation
     def __str__(self):
-        return ("DeckName: %s. Question: %s. \nAsnwers: %s. \nTags: %s.\nComments: %s.\nParameters: %s,\nMedia: %s,\nCodeLanguage: %s,\nCode: %s") % (
-            self.deckName, self.question, self.getAnswers(), self.getTags(), self.getComments(), self._parameters, self._media, self._codeLanguage, self._codeSection)
+        return ("DeckName: {}. Question: {}. \nAsnwers: {}. \nTags: {}.\nComments: {}.\nParameters: {},\nMedia: {},\nCodeLanguage: {},\nCode: {}, NamedFields: {}").format(
+            self.deckName, self.question, self.getAnswers(), self.getTags(), self.getComments(), self._parameters, self._media, self._codeLanguage, self._codeSection, self.getNamedFields())
 
     # Comparison to other questions
     def __eq__(self, other):
@@ -104,4 +125,5 @@ class AnkiQuestion:
 
         return self.question == other.question and self.getAnswers() == other.getAnswers() and self.getTags() == other.getTags(
         ) and self.deckName == other.deckName and self.getComments() == other.getComments() and self._parameters == other._parameters and self.getMedia(
-        ) == other.getMedia() and self.getCodeLanguage() == other.getCodeLanguage() and self.getCodeSection() == other.getCodeSection()
+        ) == other.getMedia() and self.getCodeLanguage() == other.getCodeLanguage() and self.getCodeSection() == other.getCodeSection() and self.getNamedFields() == other.getNamedFields()
+
