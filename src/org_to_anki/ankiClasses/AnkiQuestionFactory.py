@@ -107,7 +107,7 @@ class AnkiQuestionFactory:
         while len(answers) > 0:
             dataLine = answers.pop(0)
             line = dataLine.get("line")
-            fieldType = dataLine.get("metadata").get("fieldType", None)
+            fieldName = dataLine.get("metadata").get("fieldName", None)
 
             noAsterisks = self.utils.countAsterisk(line)
 
@@ -115,7 +115,7 @@ class AnkiQuestionFactory:
             if noAsterisks == noQuestionAsterisk:
                 line = self.utils.removeAsterisk(line)
                 line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
-                newQuestion.addAnswer(line, fieldType)
+                newQuestion.addAnswer(line, fieldName)
 
             # Sublist in question
             elif noAsterisks > noQuestionAsterisk:
@@ -126,13 +126,13 @@ class AnkiQuestionFactory:
                 while len(answers) > 0 and self.utils.countAsterisk(answers[0].get("line")) > noQuestionAsterisk:
                     dataLine= answers.pop(0)
                     line = dataLine.get("line")
-                    fieldType = dataLine.get("metadata").get("fieldType", None)
+                    fieldName = dataLine.get("metadata").get("fieldName", None)
 
                     line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
                     subList.append(line)
 
                 formatedSubList = self.utils.generateSublist(subList)
-                newQuestion.addAnswer(formatedSubList, fieldType)
+                newQuestion.addAnswer(formatedSubList, fieldName)
 
             else:
                 raise Exception("Line incorrectly processed.")

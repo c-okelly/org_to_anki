@@ -212,11 +212,11 @@ def testAnkiQuestionFactoryAnswerMetaDataSystem():
     metadata = {}
     a.addAnswerLine("** a1")
 
-    metadata["fieldType"] = "1"
+    metadata["fieldName"] = "1"
     metadata["x"] = "y"
     a.addAnswerLine("** a2", metadata)
 
-    metadata["fieldType"] = "2"
+    metadata["fieldName"] = "2"
     a.addAnswerLine("** a3", metadata)
 
     data = a.currentAnswers
@@ -227,9 +227,9 @@ def testAnkiQuestionFactoryAnswerMetaDataSystem():
 
     # Test metadata set and not overwritten by latter update
     assert(data[1].get("line") == "** a2")
-    assert(data[1].get("metadata") == {'fieldType': '1', 'x': 'y'})
+    assert(data[1].get("metadata") == {'fieldName': '1', 'x': 'y'})
 
     # Test data is updated
     assert(data[2].get("line") == "** a3")
-    assert(data[2].get("metadata") == {'fieldType': '2', 'x': 'y'})
+    assert(data[2].get("metadata") == {'fieldName': '2', 'x': 'y'})
 

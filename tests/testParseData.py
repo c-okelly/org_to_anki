@@ -283,7 +283,7 @@ def testStrangeOrgData():
 
 def testParsingExtraFieldLinesWithMultipleFields():
 
-    data = ["* Question", "** Answer", "#fieldType=Front hint, x=y", "** front hint","#fieldType=Back hint", "** back hint"]
+    data = ["* Question", "** Answer", "#fieldName=Front hint, x=y", "** front hint","#fieldName=Back hint", "** back hint"]
 
     deck = parseData._buildDeck(data, "test.org")
 
@@ -302,7 +302,7 @@ def testParsingExtraFieldLinesWithMultipleFields():
 
 def testParsingExtraFieldLinesForMultipleQuestions():
 
-    data = ["* Qusetion 1", "** Answer 1", "#fieldType=Front", "** front hint","* Question 2", "** Answer 2"]
+    data = ["* Qusetion 1", "** Answer 1", "#fieldName=Front", "** front hint","* Question 2", "** Answer 2"]
 
     deck = parseData._buildDeck(data, "test.org")
 
