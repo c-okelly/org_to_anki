@@ -8,6 +8,9 @@ FILE_NAME="release_${GIT_HASH}.zip"
 find . -name "*.pyc" -type f -delete
 find . -name "*__pycache__" -type d -delete
 
-zip -r ${FILE_NAME} src/__init__.py src/org_to_anki
+cd src
+zip -r ../${FILE_NAME} __init__.py org_to_anki/
+
+cd ..
 
 echo "Relase zip created: $FILE_NAME"
