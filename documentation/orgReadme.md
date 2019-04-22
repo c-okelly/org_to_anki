@@ -345,7 +345,12 @@ Answer 2
 ### Note fields => ```fieldName```
 
 Can be used to create a card with extra named fields such as a Hint for the question.
-You are also required to set the note type.
+You are also required to set the note type. 
+
+Assumptions on default:
+
+* Question `feildName` is Front
+* Answer `feildName` is Back 
 
 ```
 * Question
@@ -354,6 +359,10 @@ You are also required to set the note type.
 # fieldName=Front Hint
 ** Front hint
 ```
+
+Example Card
+
+![code file](../gifs/fieldName.png)
 
 ## HTML code and LaTeX
 
