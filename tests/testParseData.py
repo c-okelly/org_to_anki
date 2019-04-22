@@ -300,14 +300,14 @@ def testParsingExtraFieldLinesWithMultipleFields():
     assert(namedFields[1].getFieldName() == "Back hint")
     assert(namedFields[1].getLines() == ["back hint"])
 
-# def testParsingExtraFieldLinesForMultipleQuestions():
+def testParsingExtraFieldLinesForMultipleQuestions():
 
-#     data = ["* Qusetion 1", "** Answer 1", "#fieldType=Front", "** front hint","* Question 2", "** Answer 2"]
+    data = ["* Qusetion 1", "** Answer 1", "#fieldType=Front", "** front hint","* Question 2", "** Answer 2"]
 
-#     deck = parseData._buildDeck(data, "test.org")
+    deck = parseData._buildDeck(data, "test.org")
 
-#     assert(len(deck.getQuestions()) == 2)
-#     assert(False)
+    assert(len(deck.getQuestions()) == 2)
+    assert(len(deck.getQuestions()[1].getNamedFields()) == 0)
 
 # def testSepcailFileTypes():
 

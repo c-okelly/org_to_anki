@@ -88,8 +88,9 @@ class AnkiQuestionFactory:
         self.clearData()
 
         print("Single question: " + str(self.questionsCreated))
-        print("Question:", newQuestion.question)
-        print("Answers:", newQuestion._answers)
+        print("Question: {}".format(newQuestion.question))
+        print("Answers: {}".format(newQuestion._answers))
+        print("Fields: {}".format(newQuestion.getNamedFields()))
         print()
 
         return newQuestion
