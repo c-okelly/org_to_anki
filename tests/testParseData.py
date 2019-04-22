@@ -295,11 +295,16 @@ def testParsingExtraFieldLinesWithMultipleFields():
     namedFields = deck.getQuestions()[0].getNamedFields()
 
     assert(len(namedFields))
-    print(namedFields[0].getFieldName())
-    assert(namedFields[0].getFieldName() == "Front hint")
-    assert(namedFields[0].getLines() == ["front hint"])
-    assert(namedFields[1].getFieldName() == "Back hint")
-    assert(namedFields[1].getLines() == ["back hint"])
+    # No guarantee of ordering
+    if namedFields[0].getFieldName() == "Front hint":
+        a, b = 0, 1
+    else:
+        a, b = 1, 0
+
+    assert(namedFields[a].getFieldName() == "Front hint")
+    assert(namedFields[a].getLines() == ["front hint"])
+    assert(namedFields[b].getFieldName() == "Back hint")
+    assert(namedFields[b].getLines() == ["back hint"])
 
 def testParsingExtraFieldLinesForMultipleQuestions():
 

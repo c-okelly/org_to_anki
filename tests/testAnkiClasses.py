@@ -193,11 +193,16 @@ def testMultipleNamedNoteField():
     a.addLineToNamedField("testField1", "data1")
     namedFields = a.getNamedFields()
 
-    print(namedFields[0].getFieldName())
-    assert(namedFields[0].getFieldName() == "testField")
-    assert(namedFields[0].getLines() == ["data"])
-    assert(namedFields[1].getFieldName() == "testField1")
-    assert(namedFields[1].getLines() == ["data1"])
+    # No guarantee of ordering
+    if namedFields[0].getFieldName() == "testField":
+        a, b = 0, 1
+    else:
+        a, b = 1, 0
+
+    assert(namedFields[a].getFieldName() == "testField")
+    assert(namedFields[a].getLines() == ["data"])
+    assert(namedFields[b].getFieldName() == "testField1")
+    assert(namedFields[b].getLines() == ["data1"])
 
 def testNameNoteField():
 
