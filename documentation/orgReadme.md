@@ -260,7 +260,8 @@ Allow reference to objects via an interface
 
 ## Supported parameters
 
-1. Each line must start with a hashtag
+* Each line must start with a hashtag
+
 ```org 
 # type=Basic
 # type = Basic
@@ -302,10 +303,28 @@ Allow reference to objects via an interface
 # list=unordered
 ```
 
+Produces a card like below
+
+```org
+Question
+_______________________________________________________________________
+* Answer 1
+* Answer 2
+```
+
 #### Ordered list 
 ```org
 # list=ol
 # list=ordered
+```
+
+Produces a card like below
+
+```org
+Question
+_______________________________________________________________________
+1. Answer 1
+2. Answer 2
 ```
 
 #### No list 
@@ -313,6 +332,37 @@ Allow reference to objects via an interface
 # list=false
 # list=None
 ```
+
+Produces a card like below
+
+```org
+Question
+_______________________________________________________________________
+Answer 1
+Answer 2
+```
+
+### Note fields => ```fieldName```
+
+Can be used to create a card with extra named fields such as a Hint for the question.
+You are also required to set the note type. 
+
+Assumptions on default:
+
+* Question `feildName` is Front
+* Answer `feildName` is Back 
+
+```
+* Question
+# noteType=Hint Card
+** Answer
+# fieldName=Front Hint
+** Front hint
+```
+
+Example Card
+
+![code file](../gifs/fieldName.png)
 
 ## HTML code and LaTeX
 

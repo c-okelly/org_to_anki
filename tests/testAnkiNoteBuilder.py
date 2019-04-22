@@ -162,3 +162,20 @@ def testCodeQuestionBuildsWithListStyle():
     noteData = a.buildNote(deck.getQuestions()[0])
 
     assert(noteData["fields"]["Back"] == """<ul style='list-style-position: inside;'><li><div style="text-align:left"> <div class="highlight" style="background: #f0f3f3"><pre style="line-height: 125%"><span></span><span style="color: #336666">print</span>(<span style="color: #CC3300">&#39;Hello&#39;</span>)<br></pre></div> </div></li></ul>""")
+
+
+def testBuildingMultiFieldNotes():
+
+    q = AnkiQuestion("Question")
+    q.addAnswer("Answer")
+    q.addLineToNamedField("field1", "Value 1")
+    q.addLineToNamedField("field1", "Value 2")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    expectedString = "<ul style='list-style-position: inside;'><li>Value 1</li><li>Value 2</li></ul>"
+    assert(noteData.get("fields").get("field1", None) != None)
+    assert(noteData.get("fields").get("field1") == expectedString)

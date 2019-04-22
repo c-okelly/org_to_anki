@@ -31,6 +31,12 @@ class AnkiNoteBuilder:
         fields["Front"] = self.createQuestionString(ankiQuestion.getAllParamters(), ankiQuestion.getQuestions())
         fields["Back"] = self.createAnswerString(ankiQuestion.getAllParamters(), ankiQuestion.getAnswers())
 
+        for namedField in ankiQuestion.getNamedFields():
+            fieldName = namedField.getFieldName()
+            lines = namedField.getLines()
+            fields[fieldName] = self.createAnswerString(ankiQuestion.getAllParamters(), lines)
+
+
         note["fields"] = fields
         return note
 

@@ -29,8 +29,10 @@ class AnkiQuestionFactory:
     def hasData(self):
         return len(self.currentQuestions) == 0 or len(self.currentAnswers) == 0 and len(self.currentComments) == 0
 
-    def addAnswerLine(self, answer):
-        self.currentAnswers.append(answer)
+    def addAnswerLine(self, line, metadata={}):
+        # Check for answers for other fields
+        metadata = dict(metadata)
+        self.currentAnswers.append({"line":line, "metadata":metadata})
 
     def addQuestionLine(self, question):
         self.currentQuestions.append(question)
@@ -63,34 +65,13 @@ class AnkiQuestionFactory:
             newQuestion.addQuestion(line)
 
         # Add answers
+        noQuestionAsterisk = None
         if len(self.currentAnswers) > 0: # Ignore adding question when codeSection is present
-            noQuestionAsterisk = self.utils.countAsterisk(self.currentAnswers[0])
-        while len(self.currentAnswers) > 0:
-            line = self.currentAnswers.pop(0)
-            noAsterisks = self.utils.countAsterisk(line)
+            noQuestionAsterisk = self.utils.countAsterisk(self.currentAnswers[0].get("line"))
 
-            # Answer line
-            if noAsterisks == noQuestionAsterisk:
-                line = self.utils.removeAsterisk(line)
-                line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
-                newQuestion.addAnswer(line)
 
-            # Sublist in question
-            elif noAsterisks > noQuestionAsterisk:
-
-                subList = []
-                subList.append(line)
-
-                while len(self.currentAnswers) > 0 and self.utils.countAsterisk(self.currentAnswers[0]) > noQuestionAsterisk:
-                    line = self.currentAnswers.pop(0)
-                    line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
-                    subList.append(line)
-
-                formatedSubList = self.utils.generateSublist(subList)
-                newQuestion.addAnswer(formatedSubList)
-
-            else:
-                raise Exception("Line incorrectly processed.")
+        # TODO refactor to take into account metadata
+        self.addAnswerToNewQuestion(self.currentAnswers, newQuestion, noQuestionAsterisk)
 
         # Add comments
         for comment in self.currentComments:
@@ -107,8 +88,52 @@ class AnkiQuestionFactory:
         self.clearData()
 
         print("Single question: " + str(self.questionsCreated))
-        print("Question:", newQuestion.question)
-        print("Answers:", newQuestion._answers)
+        print("Question: {}".format(newQuestion.question))
+        print("Answers: {}".format(newQuestion._answers))
+        print("Fields: {}".format(newQuestion.getNamedFields()))
         print()
 
         return newQuestion
+    
+    def addAnswerToNewQuestion(self, answers, newQuestion, noQuestionAsterisk):
+        
+        # newAnswers = []
+        # for answer in answers:
+        #     newAnswers.append(answer.get("line"))
+            
+        # answers = newAnswers
+
+
+        while len(answers) > 0:
+            dataLine = answers.pop(0)
+            line = dataLine.get("line")
+            fieldName = dataLine.get("metadata").get("fieldName", None)
+
+            noAsterisks = self.utils.countAsterisk(line)
+
+            # Answer line
+            if noAsterisks == noQuestionAsterisk:
+                line = self.utils.removeAsterisk(line)
+                line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
+                newQuestion.addAnswer(line, fieldName)
+
+            # Sublist in question
+            elif noAsterisks > noQuestionAsterisk:
+
+                subList = []
+                subList.append(line)
+
+                while len(answers) > 0 and self.utils.countAsterisk(answers[0].get("line")) > noQuestionAsterisk:
+                    dataLine= answers.pop(0)
+                    line = dataLine.get("line")
+                    fieldName = dataLine.get("metadata").get("fieldName", None)
+
+                    line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
+                    subList.append(line)
+
+                formatedSubList = self.utils.generateSublist(subList)
+                newQuestion.addAnswer(formatedSubList, fieldName)
+
+            else:
+                raise Exception("Line incorrectly processed.")
+

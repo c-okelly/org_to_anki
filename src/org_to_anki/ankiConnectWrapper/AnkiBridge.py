@@ -38,7 +38,6 @@ class AnkiBridge:
         self.x = "test"
         
     ### Core methods ###
-    # TODO => addNote(note)
     def addNote(self, note):
         ankiNote = self.createNote(note)
 
@@ -74,12 +73,10 @@ class AnkiBridge:
 
         return ankiNote.id
 
-    # TODO => storeMediaFile(filename, base64File)
     def storeMediaFile(self, filename, data):
         self.deleteMediaFile(filename)
         self.media().writeData(filename, base64.b64decode(data))
 
-    # TODO => createDeck(deckName)
     def createDeck(self, deck):
         try:
             self.startEditing()
@@ -89,7 +86,6 @@ class AnkiBridge:
 
         return did
 
-    # TODO => deckNames()
     def deckNames(self):
         return self.decks().allNames()
 

@@ -279,3 +279,46 @@ def testStrangeOrgData():
     assert(len(deck.getQuestions()) == 1)
     assert(deck.getQuestions()[0].getQuestions() == ["order list"])
     assert(deck.getQuestions()[0].getAnswers() == ["Answer"])
+
+
+def testParsingExtraFieldLinesWithMultipleFields():
+
+    data = ["* Question", "** Answer", "#fieldName=Front hint, x=y", "** front hint","#fieldName=Back hint", "** back hint"]
+
+    deck = parseData._buildDeck(data, "test.org")
+
+    assert(len(deck.getQuestions()) == 1)
+
+    assert(deck.getQuestions()[0].getQuestions() == ["Question"])
+    assert(deck.getQuestions()[0].getAnswers() == ["Answer"])
+
+    namedFields = deck.getQuestions()[0].getNamedFields()
+
+    assert(len(namedFields))
+    # No guarantee of ordering
+    if namedFields[0].getFieldName() == "Front hint":
+        a, b = 0, 1
+    else:
+        a, b = 1, 0
+
+    assert(namedFields[a].getFieldName() == "Front hint")
+    assert(namedFields[a].getLines() == ["front hint"])
+    assert(namedFields[b].getFieldName() == "Back hint")
+    assert(namedFields[b].getLines() == ["back hint"])
+
+def testParsingExtraFieldLinesForMultipleQuestions():
+
+    data = ["* Qusetion 1", "** Answer 1", "#fieldName=Front", "** front hint","* Question 2", "** Answer 2"]
+
+    deck = parseData._buildDeck(data, "test.org")
+
+    assert(len(deck.getQuestions()) == 2)
+    assert(len(deck.getQuestions()[1].getNamedFields()) == 0)
+
+# def testSepcailFileTypes():
+
+#     data = ["#fileType = flatTopics","* Topics", "** Qusetion", "*** Answer"]
+
+#     deck = parseData._buildDeck(data, "test.org")
+
+#     assert(False)

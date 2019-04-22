@@ -140,6 +140,9 @@ class DeckBuilder:
         if len(questions) == 0:
             return deck
 
+        # Get current metadata 
+        sectionMetadata = {}
+
         # Get deck comments
         while questions[0].strip()[0] == "#":
             comment = questions.pop(0)
@@ -147,12 +150,15 @@ class DeckBuilder:
             parameters = ParserUtils.convertLineToParameters(comment)
             for key in parameters.keys():
                 deck.addParameter(key, parameters.get(key))
+            for key in parameters.keys():
+                sectionMetadata[key] = parameters.get(key)
 
         # Answer are indented by a single or more Asterisks
         numberOfQuestionAsterisk = questionLine
         numberOfAnswerAsterisk = answerLine
         questionFactory = AnkiQuestionFactory(deckName, filePath)
 
+        questionMetadata = {}
         while len(questions) > 0:
             line = questions.pop(0)
             noAsterisk = self.utils.countAsterisk(line)
@@ -164,7 +170,9 @@ class DeckBuilder:
                 # Allow for multi line questions
                 # If new question => generate ankiQuestion and start new
                 if questionFactory.questionHasAnswers() == True:
-                    newQuestion = questionFactory.buildQuestion()
+                    questionMetadata = {} # Clear questionMetadata
+                    # TODO => special file type bugs?
+                    newQuestion = questionFactory.buildQuestion() # Possibly include sectionMetadata here?
                     if (newQuestion.getParameter("type") != 'notes'):
                         deck.addQuestion(newQuestion)
                     questionFactory.addQuestionLine(line)
@@ -173,12 +181,16 @@ class DeckBuilder:
 
             # Answer line
             elif noAsterisk > numberOfQuestionAsterisk:
-                questionFactory.addAnswerLine(line) ### No subquestion line => logic should be moved when answers are built ###
+                questionFactory.addAnswerLine(line, questionMetadata) ### No subquestion line => logic should be moved when answers are built ###
 
             # Comment line
             elif line.strip()[0] == "#":
                 # Now comments are for deck and not for question
                 questionFactory.addCommentLine(line)
+                # Parse comment for parameters and add to questionMetadata
+                parameters = ParserUtils.convertLineToParameters(line)
+                for key in parameters.keys():
+                    questionMetadata[key] = parameters.get(key)
 
             # Code line
             elif line.strip().startswith("```"):
@@ -199,7 +211,8 @@ class DeckBuilder:
         
         # Add last question
         if questionFactory.questionHasAnswers():
-            newQuestion = questionFactory.buildQuestion()
+            # TODO take meta stuff into account
+            newQuestion = questionFactory.buildQuestion()  # Possibly include sectionMetadata here?
             if (newQuestion.getParameter("type") != 'notes'):
                 deck.addQuestion(newQuestion)
 

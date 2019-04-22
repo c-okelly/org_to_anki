@@ -5,6 +5,7 @@ sys.path.append('../org_to_anki')
 # Anki deck
 from org_to_anki.ankiClasses.AnkiDeck import AnkiDeck
 from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
+from org_to_anki.ankiClasses.NamedNoteField import NamedNoteField
 from org_to_anki.ankiClasses.AnkiQuestionMedia import AnkiQuestionMedia
 from org_to_anki.ankiClasses.AnkiQuestionFactory import AnkiQuestionFactory
 
@@ -166,3 +167,75 @@ def testAddMultiLineQuestion():
     q = questionFactory.buildQuestion()
 
     assert(q.question[0] == "test question\nsecond line")
+
+
+def testCreationOfNamedNoteFieldWithinAnkiQuestion():
+
+    a = AnkiQuestion("question")
+    a.addAnswer("answer")
+
+    a.addNoteField("testField")
+    a.addLineToNamedField("testField", "data")
+
+    namedFields = a.getNamedFields()
+
+    namedFields = a.getNamedFields()
+    n = NamedNoteField("testField")
+    n.addLine("data")
+    assert(namedFields[0] == n)
+
+def testMultipleNamedNoteField():
+
+    a = AnkiQuestion("question")
+    a.addAnswer("answer")
+
+    a.addLineToNamedField("testField", "data")
+    a.addLineToNamedField("testField1", "data1")
+    namedFields = a.getNamedFields()
+
+    # No guarantee of ordering
+    if namedFields[0].getFieldName() == "testField":
+        a, b = 0, 1
+    else:
+        a, b = 1, 0
+
+    assert(namedFields[a].getFieldName() == "testField")
+    assert(namedFields[a].getLines() == ["data"])
+    assert(namedFields[b].getFieldName() == "testField1")
+    assert(namedFields[b].getLines() == ["data1"])
+
+def testNameNoteField():
+
+    n = NamedNoteField("name")
+    n.addLine("new line")
+    assert(n.getFieldName() == "name")
+    assert(n.getLines() == ["new line"])
+
+def testAnkiQuestionFactoryAnswerMetaDataSystem():
+
+    a = AnkiQuestionFactory("test", "")
+
+    metadata = {}
+    a.addAnswerLine("** a1")
+
+    metadata["fieldName"] = "1"
+    metadata["x"] = "y"
+    a.addAnswerLine("** a2", metadata)
+
+    metadata["fieldName"] = "2"
+    a.addAnswerLine("** a3", metadata)
+
+    data = a.currentAnswers
+
+    # Test metadata remains empty
+    assert(data[0].get("line") == "** a1")
+    assert(data[0].get("metadata") == {})
+
+    # Test metadata set and not overwritten by latter update
+    assert(data[1].get("line") == "** a2")
+    assert(data[1].get("metadata") == {'fieldName': '1', 'x': 'y'})
+
+    # Test data is updated
+    assert(data[2].get("line") == "** a3")
+    assert(data[2].get("metadata") == {'fieldName': '2', 'x': 'y'})
+
