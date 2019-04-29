@@ -87,11 +87,11 @@ class AnkiQuestionFactory:
         # Clear data and return
         self.clearData()
 
-        print("Single question: " + str(self.questionsCreated))
-        print("Question: {}".format(newQuestion.question))
-        print("Answers: {}".format(newQuestion._answers))
-        print("Fields: {}".format(newQuestion.getNamedFields()))
-        print()
+        # print("Single question: " + str(self.questionsCreated))
+        # print("Question: {}".format(newQuestion.question))
+        # print("Answers: {}".format(newQuestion._answers))
+        # print("Fields: {}".format(newQuestion.getNamedFields()))
+        # print()
 
         return newQuestion
     
