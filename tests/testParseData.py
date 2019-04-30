@@ -315,6 +315,19 @@ def testParsingExtraFieldLinesForMultipleQuestions():
     assert(len(deck.getQuestions()) == 2)
     assert(len(deck.getQuestions()[1].getNamedFields()) == 0)
 
+def testParsingUnicodeCharacters():
+
+    # data = ['* Hello world in Chinese?', '** 你好']
+
+    # deck = parseData._buildDeck(data, "test.org")
+    filename = "tests/testData/unicode.org"
+    actualDeck = parseData.parse(filename)
+
+    print(actualDeck.getQuestions()[0])
+    question = actualDeck.getQuestions()[0]
+    assert(question.getQuestions()[0] == "Hello world in Chinese?")
+    assert(question.getAnswers()[0] == "你好")
+
 # def testSepcailFileTypes():
 
 #     data = ["#fileType = flatTopics","* Topics", "** Qusetion", "*** Answer"]
