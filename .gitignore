@@ -7,3 +7,4 @@ files.txt
 build/
 dist/
 .eggs/
+release_*.zip

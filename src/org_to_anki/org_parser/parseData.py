@@ -50,7 +50,7 @@ def _loadFile(filePath):
 
 def _formatFile(filePath):# (filePath: str):
 
-    with open(filePath, 'r') as file:
+    with open(filePath, mode="r", encoding="utf-8") as file:
         data = file.read().split('\n')
 
     return data

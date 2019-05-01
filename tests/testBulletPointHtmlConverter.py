@@ -141,6 +141,17 @@ def testWordCodeSection():
     assert(lines[13] == " print(\"level2\")")
     assert(lines[14] == "```")
 
+def testUnicodeLibreOfficeDocument():
+
+    wordFileName = "tests/testData/documents/libreOffice-unicode-characters.html"
+    wordFile = convertBulletPointsDocument(wordFileName)
+    lines = wordFile.split("\n")
+
+    print(lines)
+
+    assert(lines[0] == "* Hello world in Chinese?")
+    assert(lines[1] == "** 你好")
+
 ### Documents Formatting tests
 
 # TODO
