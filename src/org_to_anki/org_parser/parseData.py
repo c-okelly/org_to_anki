@@ -8,8 +8,33 @@ def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
 
     data = _loadFile(filePath)
+    print("data")
+    print(data)
+    print()
 
     return _buildDeck(data, filePath)
+
+# TODO test properly
+
+# def buildNamedDeck(orgList, deckName):
+
+#     deckBuilder = DeckBuilder()
+#     filePath = ""
+
+#     comments, content = _sortData(orgList)
+
+#     globalParameters = ParserUtils.convertCommentsToParameters(comments)
+#     fileType = globalParameters.get("fileType", "basic")
+
+#     deck = deckBuilder.buildDeck(content, deckName, filePath, fileType)
+
+#     # TODO refactor this section into DeckBuilder
+#     for key in globalParameters:
+#         deck.addParameter(key, globalParameters[key])
+#     for comment in comments:
+#         deck.addComment(comment)
+    
+#     return deck
 
 def _buildDeck(data, filePath):
 

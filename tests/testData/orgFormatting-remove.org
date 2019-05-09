@@ -1,0 +1,18 @@
+# Notes for malware analysis
+# fileType=organisedFile 
+* Planning
+  # type = notes
+** Time planner
+   :LOGBOOK:
+   CLOCK: [2019-04-15 Mon 12:52]--[2019-04-15 Mon 13:17] =>  0:25
+   :END:
+**  Sections
+     1. [X] l1
+     13. [ ] l10?
+* L1 Intro
+** What are the 3 main motivations for malware?
+*** money
+*** hacktivism
+*** nation state
+** What is an APT?
+*** Advanced persistent threat

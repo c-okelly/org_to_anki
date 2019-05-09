@@ -105,5 +105,7 @@ class AnkiDeck:
             self.deckName, self.subDecks, self._ankiQuestions, self._parameters, self._comments, self._media)
 
     def __eq__(self, other):
+        if other == None:
+            return False
         return self.deckName == other.deckName and self.getDeckNames() == other.getDeckNames() and self.getQuestions() == other.getQuestions(
         ) and self.subDecks == other.subDecks and self._parameters == other._parameters and self._comments == other._comments and self._media == other._media
