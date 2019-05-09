@@ -118,23 +118,13 @@ def testMainDeckHasParameters():
     params = {'fileType': 'topics'}
     assert(actualDeck._parameters == params)
 
-def testSubDeck1HasParamters():
-    
-    filename = "tests/testData/topicsLayout.org"
-    actualDeck = parseData.parse(filename)
-
-    params = {'type': 'basic'}
-    comments = ["#type=basic"]
-    assert(actualDeck.subDecks[1]._comments == comments)
-    assert(actualDeck.subDecks[1]._parameters == params)
-
 def testSubDeck1QuestionHasParamters():
 
     filename = "tests/testData/topicsLayout.org"
     actualDeck = parseData.parse(filename)
     
     params = {'type': 'Basic (and reversed card)'}
-    comments = ["#type=Basic (and reversed card)"]
+    comments = ["# type = basic","#type=Basic (and reversed card)"]
     assert(actualDeck.subDecks[1].getQuestions()[0]._parameters == params)
     assert(actualDeck.subDecks[1].getQuestions()[0]._comments == comments)
 
@@ -328,10 +318,41 @@ def testParsingUnicodeCharacters():
     assert(question.getQuestions()[0] == "Hello world in Chinese?")
     assert(question.getAnswers()[0] == "你好")
 
-# def testSepcailFileTypes():
 
-#     data = ["#fileType = flatTopics","* Topics", "** Qusetion", "*** Answer"]
+def testOrgFormattingIsParsedWithoutError():
 
-#     deck = parseData._buildDeck(data, "test.org")
+    data = ['* Planning', '  # type = notes', '** Time planner', '   :LOGBOOK:', '   CLOCK: [2019-04-15 Mon 12:52]--[2019-04-15 Mon 13:17] =>  0:25', '   :END:', '**  Sections', '     1. [X] l1', '     13. [ ] l10?']
+    deck = parseData._buildDeck(data, "test.org")
 
-#     assert(False)
+    assert(deck)
+
+
+def testSectionAreConvertedIntoDecksIndependnatlyForOrganisedFile():
+
+    # filename = "tests/testData/orgFormatting.org"
+    # actualDeck = parseData.parse(filename)
+    data = ['# fileType=organisedFile ', '* Planning', '  # type = notes', '** Time planner', '* L1 Intro', '** What are the 3 main motivations for malware?', '*** money', '*** hacktivism', '*** nation state', '** What is an APT?', '*** Advanced persistent threat']
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    assert(len(actualDeck.getQuestions()[0].getQuestions()) == 1)
+    assert(actualDeck.getQuestions()[0].getQuestions()[0] == "What are the 3 main motivations for malware?")
+    assert(actualDeck.getQuestions()[0]._parameters == {'fileType': 'organisedFile'})
+
+def testTopicsDeckHasEachSectionParsedIndependently():
+    
+    filename = "tests/testData/topicsLayout1.org"
+    actualDeck = parseData.parse(filename)
+
+    params = {'type': 'basic'}
+    comments = ["#type=basic"]
+
+    assert(len(actualDeck.subDecks) == 2)
+
+    assert(actualDeck.subDecks[0]._comments == [])
+    assert(actualDeck.subDecks[0]._parameters == {})
+
+    assert(actualDeck.subDecks[1].getQuestions()[0]._comments == ['# type = basic', '#type=Basic (and reversed card)'])
+    assert(actualDeck.subDecks[1].getQuestions()[0]._parameters == {'type': 'Basic (and reversed card)'})
+
+    assert(actualDeck.subDecks[1].getQuestions()[1]._comments == ['# type = basic'])
+    assert(actualDeck.subDecks[1].getQuestions()[1]._parameters == {'type': 'basic'})

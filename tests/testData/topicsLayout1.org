@@ -1,0 +1,14 @@
+# More advanced org file layout. Each topics has its own questions.
+#fileType = topics
+
+* Capital cites
+** What is the capital of Ireland
+*** Dublin
+* Languages of countries
+#type=basic
+** What are the main languages in Ireland
+#type=Basic (and reversed card)
+*** English
+*** Irish
+** Main language of Germany?
+*** German

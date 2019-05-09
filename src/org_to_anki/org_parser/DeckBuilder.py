@@ -50,48 +50,52 @@ class DeckBuilder:
         if (self.utils.countAsterisk(subSections[0][0]) != 1):
             raise Exception('Topics file is not correctly formatted')
 
-        allQuestion = []
-        for i in subSections:
-            allQuestion.extend(i)
+        deck = AnkiDeck(deckName)
 
-        formattedQuestions = []
-        currentTopic = questions.pop(0).replace("*", "")
-        while len(questions) > 0:
-            q = questions.pop(0)
-            if (self.utils.countAsterisk(q) == 1):
-                currentTopic = q.replace("*", "")
-            elif (self.utils.countAsterisk(q) == 2):
-                q = q.replace("*", "")
-                q = "** " + currentTopic + "\n" + q
-                formattedQuestions.append(q)
-            else:
-                formattedQuestions.append(q)
+        for section in subSections:
+            formattedQuestions = []
 
-        deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3)
+            currentTopic = questions.pop(0).replace("*", "")
+            while len(section) > 0:
+                q = section.pop(0)
+                if (self.utils.countAsterisk(q) == 1):
+                    currentTopic = q.replace("*", "")
+                elif (self.utils.countAsterisk(q) == 2):
+                    q = q.replace("*", "")
+                    q = "** " + currentTopic + "\n" + q
+                    formattedQuestions.append(q)
+                else:
+                    formattedQuestions.append(q)
+            deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3, deck)
+
         return deck
 
     def _buildOrganisedFile(self, questions, deckName, filePath):
 
         subSections = self._sortTopicsSubDeck(questions)
 
-        formattedQuestions = []
-
+        deck = AnkiDeck(deckName)
         for section in subSections:
+            formattedQuestions = []
             for q in section:
                 if (self.utils.countAsterisk(q) == 1):
                     continue
                 else:
                     formattedQuestions.append(q)
+            deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3, deck)
         
-        deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 2, 3)
         return deck
 
     def _buildOrganisedFlatFile(self, questions, deckName, filePath):
 
         subSections = self._sortTopicsSubDeck(questions)
 
-        formattedQuestions = []
+
+        # TODO each section on it's own
+        deck = AnkiDeck(deckName)
         for section in subSections:
+
+            formattedQuestions = []
             currentTopic = section.pop(0).replace("*", "")
 
             while len(section) > 0:
@@ -105,10 +109,8 @@ class DeckBuilder:
                     formattedQuestions.append(q)
                 else:
                     formattedQuestions.append(q)
+            deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 3, 4, deck)
 
-        # for i in formattedQuestions:
-        #     print(i)
-        deck = self._buildNewDeck(formattedQuestions, deckName, filePath, 3, 4)
         return deck
 
     def _sortTopicsSubDeck(self, questions):
@@ -128,28 +130,36 @@ class DeckBuilder:
             elif noAsterisk > 1 or line.strip()[0] == "#":
                 currentSection.append(line)
             else:
-                raise Exception("Issue parsing topics deck.")
+                # print("Unknown line: {}".format(line))
+                currentSection.append(line)
 
         subSections.append(currentSection[:])
 
         return subSections
 
-    def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2):
+    def _buildNewDeck(self, questions, deckName, filePath, questionLine=1, answerLine=2, currentDeck=None):
 
-        deck = AnkiDeck(deckName)
+        if currentDeck == None:
+            deck = AnkiDeck(deckName)
+        else:
+            deck = currentDeck
+        # deck = AnkiDeck(deckName)
+
         if len(questions) == 0:
             return deck
 
         # Get current metadata 
         sectionMetadata = {}
 
-        # Get deck comments
+        # Get section comments
+        # Should this really add to the deck?
+        commentTemplate = "# {} = {}"
         while questions[0].strip()[0] == "#":
-            comment = questions.pop(0)
-            deck.addComment(comment)
-            parameters = ParserUtils.convertLineToParameters(comment)
-            for key in parameters.keys():
-                deck.addParameter(key, parameters.get(key))
+            # comment = questions.pop(0)
+            # deck.addComment(comment)
+            parameters = ParserUtils.convertLineToParameters(questions.pop(0))
+            # for key in parameters.keys():
+            #     deck.addParameter(key, parameters.get(key))
             for key in parameters.keys():
                 sectionMetadata[key] = parameters.get(key)
 
@@ -157,6 +167,10 @@ class DeckBuilder:
         numberOfQuestionAsterisk = questionLine
         numberOfAnswerAsterisk = answerLine
         questionFactory = AnkiQuestionFactory(deckName, filePath)
+
+        # Add metadata for section to new Question
+        for key in sectionMetadata: # This is a bit lazy
+            questionFactory.addCommentLine("# {} = {}".format(key, sectionMetadata[key]))
 
         questionMetadata = {}
         while len(questions) > 0:
@@ -171,10 +185,16 @@ class DeckBuilder:
                 # If new question => generate ankiQuestion and start new
                 if questionFactory.questionHasAnswers() == True:
                     questionMetadata = {} # Clear questionMetadata
-                    # TODO => special file type bugs?
+
+
+
                     newQuestion = questionFactory.buildQuestion() # Possibly include sectionMetadata here?
                     if (newQuestion.getParameter("type") != 'notes'):
                         deck.addQuestion(newQuestion)
+                    # Add metadata for section to new Question
+                    for key in sectionMetadata: # This is a bit lazy
+                        questionFactory.addCommentLine("# {} = {}".format(key, sectionMetadata[key]))
+
                     questionFactory.addQuestionLine(line)
                 else:
                     questionFactory.addQuestionLine(line)
