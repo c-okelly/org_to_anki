@@ -27,7 +27,7 @@ Comment lines start with a \#
 ```
 Arguments or paremeters are passed via comments using an equals
 ```org
-# noteType=someNoteType
+# type=someNoteType
 ```
 Empty lines are ignored
 
@@ -282,14 +282,14 @@ Allow reference to objects via an interface
 *** Answer 1
 ```
 
-### Anki Note type => ```noteType```
+### Anki Note type => ```type```
     * Used to set the type of the Anki note.
     * Default value is Basic
     * This is case sensitive and can be used to set any card type
 
 ```org
-# noteType=Basic
-# noteType=Basic (and reversed card)
+# type=Basic
+# type=Basic (and reversed card)
 ```
 
 ### HTML list types => ```list```
@@ -354,7 +354,7 @@ Assumptions on default:
 
 ```
 * Question
-# noteType=Hint Card
+# type=Hint Card
 ** Answer
 # fieldName=Front Hint
 ** Front hint
