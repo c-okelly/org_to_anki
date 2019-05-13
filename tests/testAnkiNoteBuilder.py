@@ -179,3 +179,30 @@ def testBuildingMultiFieldNotes():
     expectedString = "<ul style='list-style-position: inside;'><li>Value 1</li><li>Value 2</li></ul>"
     assert(noteData.get("fields").get("field1", None) != None)
     assert(noteData.get("fields").get("field1") == expectedString)
+
+def testBuildingClozeNotes():
+
+    q = AnkiQuestion("When was Dublin founded {{c1::1204}}")
+    q.addAnswer("Some Extra info")
+    q.addParameter("type", "Cloze")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    assert(noteData["fields"]["Text"] == "When was Dublin founded {{c1::1204}}")
+    assert(noteData["fields"]["Extra"] == "<ul style='list-style-position: inside;'><li>Some Extra info</li></ul>")
+
+def testBuildingSingleFieldClozeNote():
+
+    q = AnkiQuestion("When was Dublin founded {{c1::1204}}")
+    q.addParameter("type", "Cloze")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+
+    assert(noteData["fields"]["Text"] == "When was Dublin founded {{c1::1204}}")
+    assert(noteData["fields"]["Extra"] == "")

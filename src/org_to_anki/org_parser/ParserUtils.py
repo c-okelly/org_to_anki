@@ -21,3 +21,10 @@ def convertLineToParameters(line): # str
             parameters[parts[0].strip()] = parts[1].strip()
 
     return parameters
+
+# def validGlobalParameter(key, value):
+
+#     if key == "type" or key == "noteType":
+#         if 
+#     else:
+#         return True

@@ -9,7 +9,8 @@
 2. [Adding images](#adding-images) 
 3. [HTML code and LaTeX](#html-code-and-latex)
 4. [Supported parameters](#supported-parameters) 
-5. [Code Highlighting](#code-highlighting)
+5. [Supported Note Models](#supported-note-models)
+6. [Code Highlighting](#code-highlighting)
 
 ## Basic syntax
 
@@ -27,7 +28,7 @@ Comment lines start with a \#
 ```
 Arguments or paremeters are passed via comments using an equals
 ```org
-# type=someNoteType
+# type=sometype
 ```
 Empty lines are ignored
 
@@ -292,6 +293,8 @@ Allow reference to objects via an interface
 # type=Basic (and reversed card)
 ```
 
+For more information on support models => [Supported Note Models](#supported-note-models)
+
 ### HTML list types => ```list```
 
     * Answers on cards are displayed as list
@@ -349,8 +352,8 @@ You are also required to set the note type.
 
 Assumptions on default:
 
-* Question `feildName` is Front
-* Answer `feildName` is Back 
+* Question `fieldName` is Front
+* Answer `fieldName` is Back 
 
 ```
 * Question
@@ -420,6 +423,56 @@ This is shortened as follows
 
 * Questions and decks will inhert parameters from parent Decks
 * Parameters inhereted will not override existing parameters.
+
+### Supported note models
+
+The following assumption is made in each case except Cloze:
+
+* Question `fieldName` is Front.
+* Answers `fieldName` is Back.
+* A question must have either code or an answer to be valid.
+
+
+By default the following model types are supported with examples:
+
+* Basic
+
+```org
+* Basic Question
+** Basic Answer
+```
+
+* Basic (and reversed card)
+
+```org
+* Basic and reversed cards question
+# type = Basic (and reversed card)
+** Answer
+```
+
+* Basic (optional reversed card)
+
+```org
+* Basic and reversed cards question
+# type = Basic (and reversed card)
+** Answer
+# fieldName=Add Reverse
+** If card should be reversed 
+```
+
+
+* Cloze
+    * Cloze in can not be set for all cards in a deck and must be specified for each card
+    * Two example are below
+
+```org
+* When was Dublin founded {{c1::1204}}
+# type=Cloze
+** Extra Info
+
+* When was Germany founded {{c1::1204}}
+# type=Cloze
+```
 
 
 ## Code Highlighting

@@ -25,11 +25,13 @@ class AnkiNoteBuilder:
         note = {"deckName": deckName, "modelName": modelName}
         note["tags"] = ankiQuestion.getTags()
 
-        # formattedQuestion = [ankiQuestion.getFormattedCodeSection()]
-        # Generate fields
         fields = {}
-        fields["Front"] = self.createQuestionString(ankiQuestion.getAllParamters(), ankiQuestion.getQuestions())
-        fields["Back"] = self.createAnswerString(ankiQuestion.getAllParamters(), ankiQuestion.getAnswers())
+        if (modelName == "Cloze"):
+            fields["Text"] = self.createQuestionString(ankiQuestion.getAllParamters(), ankiQuestion.getQuestions())
+            fields["Extra"] = self.createAnswerString(ankiQuestion.getAllParamters(), ankiQuestion.getAnswers())
+        else:
+            fields["Front"] = self.createQuestionString(ankiQuestion.getAllParamters(), ankiQuestion.getQuestions())
+            fields["Back"] = self.createAnswerString(ankiQuestion.getAllParamters(), ankiQuestion.getAnswers())
 
         for namedField in ankiQuestion.getNamedFields():
             fieldName = namedField.getFieldName()

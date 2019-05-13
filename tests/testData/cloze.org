@@ -1,0 +1,10 @@
+* When was Dublin founded {{c1::1204}}
+    # type=Cloze
+** Some extra info
+* When was Dublin founded {{c1::1204}}
+    # type=Cloze
+* When was Dublin founded {{c1::1204}}
+* Some extra info
+    # type=Cloze
+* Normal Question
+** Normal answer
