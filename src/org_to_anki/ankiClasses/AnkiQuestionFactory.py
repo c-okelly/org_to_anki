@@ -16,6 +16,7 @@ class AnkiQuestionFactory:
         self.questionsCreated = 0
         self.codeLanguage = None
         self.codeSection = []
+        self.parameters = {}
 
     # Clear the current data
     def clearData(self):
@@ -25,6 +26,7 @@ class AnkiQuestionFactory:
         self.questionsCreated = 0
         self.codeLanguage = None
         self.codeSection = []
+        self.parameters = {}
 
     def hasData(self):
         return len(self.currentQuestions) == 0 or len(self.currentAnswers) == 0 and len(self.currentComments) == 0
@@ -39,6 +41,9 @@ class AnkiQuestionFactory:
 
     def addCommentLine(self, comment):
         self.currentComments.append(comment)
+        parameters = ParserUtils.convertLineToParameters(comment)
+        for key in parameters.keys():
+            self.parameters[key] = parameters.get(key)
 
     def addCode(self, codeLanguage, codeSection):
         if self.codeLanguage == None and len(self.codeSection) == 0:
@@ -48,8 +53,12 @@ class AnkiQuestionFactory:
             raise Exception("Only one code section per a question is supported.")
 
     ### Utility
-    def questionHasAnswers(self):
-        return len(self.currentAnswers) > 0 or len(self.codeSection) > 0
+    def isValidQuestion(self):
+        # Check for one of following three conditions
+        # 1. Has answers
+        # 2. Has a code section
+        # 3. Has card type cloze 
+        return len(self.currentAnswers) > 0 or len(self.codeSection) > 0 or self.parameters.get("type") == "Cloze" or self.parameters.get("type") == "Cloze" 
 
     # Build question based upon current data input
     # Should return an Question object

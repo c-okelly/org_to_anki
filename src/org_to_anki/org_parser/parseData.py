@@ -8,9 +8,6 @@ def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
 
     data = _loadFile(filePath)
-    print("data")
-    print(data)
-    print()
 
     return _buildDeck(data, filePath)
 
@@ -41,18 +38,18 @@ def _buildDeck(data, filePath):
     deckBuilder = DeckBuilder()
     fileName = filePath.split("/")[-1].split(".")[0]
 
-    comments, content = _sortData(data)
+    # comments, content = _sortData(data)
 
-    globalParameters = ParserUtils.convertCommentsToParameters(comments)
-    fileType = globalParameters.get("fileType", "basic")
+    # globalParameters = ParserUtils.convertCommentsToParameters(comments)
+    # fileType = globalParameters.get("fileType", "basic")
 
-    deck = deckBuilder.buildDeck(content, fileName, filePath, fileType)
+    deck = deckBuilder.buildDeck(data, fileName, filePath)
 
-    # TODO refactor this section into DeckBuilder
-    for key in globalParameters:
-        deck.addParameter(key, globalParameters[key])
-    for comment in comments:
-        deck.addComment(comment)
+    # # TODO refactor this section into DeckBuilder
+    # for key in globalParameters:
+    #     deck.addParameter(key, globalParameters[key])
+    # for comment in comments:
+    #     deck.addComment(comment)
     
     return deck
 
@@ -81,22 +78,3 @@ def _formatFile(filePath):# (filePath: str):
     return data
 
 
-def _sortData(rawFileData): #(rawFileData: [str]) -> ([str], [str]):
-
-    comments, questions = [], []
-
-    questionsSection = False
-    for i in range(0, len(rawFileData)):
-        currentItem = rawFileData[i]
-        if len(currentItem) > 0:
-            firstLetter = currentItem.strip()[0]
-            # Check if line is empty
-            if (len(currentItem.replace("*", "").strip()) == 0 or len(currentItem.replace("#", "").strip()) == 0):
-                continue
-            if firstLetter == "#" and questionsSection is False:
-                comments.append(currentItem)
-            elif firstLetter == "*" or questionsSection:
-                questionsSection = True
-                questions.append(currentItem)
-
-    return (comments, questions)

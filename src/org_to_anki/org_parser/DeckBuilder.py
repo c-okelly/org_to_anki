@@ -12,27 +12,40 @@ class DeckBuilder:
 
     utils = DeckBuilderUtils.DeckBuilderUtils()
 
-    def buildDeck(self, questions, deckName, filePath, fileType ='basic'): # ([str], str, str, str)
+    def buildDeck(self, data, deckName, filePath, fileType ='basic'): # ([str], str, str, str)
+
+        deck = AnkiDeck(deckName)
+
+        comments, questions = self._sortData(data)
+        globalParameters = ParserUtils.convertCommentsToParameters(comments)
+
+        # Add global params to deck
+        for key in globalParameters:
+            if self._checkValidGlobalParameter(key, globalParameters[key]):
+                deck.addParameter(key, globalParameters[key])
+        for comment in comments:
+            deck.addComment(comment)
+
+        fileType = globalParameters.get("fileType", "basic")
 
         # TODO: Remove lower
         if fileType.lower() == 'basic':
-            deck = self._buildNewDeck(questions, deckName, filePath)
+            deck = self._buildNewDeck(questions, deckName, filePath, currentDeck=deck)
         elif fileType.lower() == 'topics':
-            deck = self._buildTopics(questions, deckName, filePath)
+            deck = self._buildTopics(questions, deckName, filePath, deck)
         elif fileType.lower() == 'flattopics':
-            deck = self._buildFlatTopics(questions, deckName, filePath)
+            deck = self._buildFlatTopics(questions, deckName, filePath, deck)
         elif fileType.lower() == 'organisedflatfile':
-            deck = self._buildOrganisedFlatFile(questions, deckName, filePath)
+            deck = self._buildOrganisedFlatFile(questions, deckName, filePath, deck)
         elif fileType.lower() == 'organisedfile':
-            deck = self._buildOrganisedFile(questions, deckName, filePath)
+            deck = self._buildOrganisedFile(questions, deckName, filePath, deck)
         else:
             raise Exception('Unsupported file type: ' + fileType)
 
+
         return deck
 
-    def _buildTopics(self, questions, deckName, filePath):
-
-        deck = AnkiDeck(deckName)
+    def _buildTopics(self, questions, deckName, filePath, deck):
 
         subSections = self._sortTopicsSubDeck(questions)
 
@@ -43,14 +56,12 @@ class DeckBuilder:
 
         return deck
 
-    def _buildFlatTopics(self, questions, deckName, filePath):
+    def _buildFlatTopics(self, questions, deckName, filePath, deck):
 
         subSections = self._sortTopicsSubDeck(questions)
 
         if (self.utils.countAsterisk(subSections[0][0]) != 1):
             raise Exception('Topics file is not correctly formatted')
-
-        deck = AnkiDeck(deckName)
 
         for section in subSections:
             formattedQuestions = []
@@ -70,11 +81,10 @@ class DeckBuilder:
 
         return deck
 
-    def _buildOrganisedFile(self, questions, deckName, filePath):
+    def _buildOrganisedFile(self, questions, deckName, filePath, deck):
 
         subSections = self._sortTopicsSubDeck(questions)
 
-        deck = AnkiDeck(deckName)
         for section in subSections:
             formattedQuestions = []
             for q in section:
@@ -86,13 +96,10 @@ class DeckBuilder:
         
         return deck
 
-    def _buildOrganisedFlatFile(self, questions, deckName, filePath):
+    def _buildOrganisedFlatFile(self, questions, deckName, filePath, deck):
 
         subSections = self._sortTopicsSubDeck(questions)
 
-
-        # TODO each section on it's own
-        deck = AnkiDeck(deckName)
         for section in subSections:
 
             formattedQuestions = []
@@ -130,7 +137,6 @@ class DeckBuilder:
             elif noAsterisk > 1 or line.strip()[0] == "#":
                 currentSection.append(line)
             else:
-                # print("Unknown line: {}".format(line))
                 currentSection.append(line)
 
         subSections.append(currentSection[:])
@@ -143,7 +149,6 @@ class DeckBuilder:
             deck = AnkiDeck(deckName)
         else:
             deck = currentDeck
-        # deck = AnkiDeck(deckName)
 
         if len(questions) == 0:
             return deck
@@ -152,14 +157,8 @@ class DeckBuilder:
         sectionMetadata = {}
 
         # Get section comments
-        # Should this really add to the deck?
-        commentTemplate = "# {} = {}"
         while questions[0].strip()[0] == "#":
-            # comment = questions.pop(0)
-            # deck.addComment(comment)
             parameters = ParserUtils.convertLineToParameters(questions.pop(0))
-            # for key in parameters.keys():
-            #     deck.addParameter(key, parameters.get(key))
             for key in parameters.keys():
                 sectionMetadata[key] = parameters.get(key)
 
@@ -182,11 +181,10 @@ class DeckBuilder:
             # Question line
             if noAsterisk == numberOfQuestionAsterisk:
                 # Allow for multi line questions
-                # If new question => generate ankiQuestion and start new
-                if questionFactory.questionHasAnswers() == True:
+                # If new question line and question is already valid 
+                # => generate ankiQuestion and start new
+                if questionFactory.isValidQuestion():
                     questionMetadata = {} # Clear questionMetadata
-
-
 
                     newQuestion = questionFactory.buildQuestion() # Possibly include sectionMetadata here?
                     if (newQuestion.getParameter("type") != 'notes'):
@@ -230,10 +228,38 @@ class DeckBuilder:
                 print("Current line is not recognised: " + line)
         
         # Add last question
-        if questionFactory.questionHasAnswers():
+        if questionFactory.isValidQuestion():
             # TODO take meta stuff into account
             newQuestion = questionFactory.buildQuestion()  # Possibly include sectionMetadata here?
             if (newQuestion.getParameter("type") != 'notes'):
                 deck.addQuestion(newQuestion)
 
         return deck
+
+    def _checkValidGlobalParameter(self, key, value):
+
+        # Number of key types are not supported at the section level
+        if (key != "type" or key != "noteType") and value == "Cloze":
+            return False 
+        else:
+            return True 
+
+    def _sortData(self, rawFileData): #(rawFileData: [str]) -> ([str], [str]):
+
+        comments, questions = [], []
+
+        questionsSection = False
+        for i in range(0, len(rawFileData)):
+            currentItem = rawFileData[i]
+            if len(currentItem) > 0:
+                firstLetter = currentItem.strip()[0]
+                # Check if line is empty
+                if (len(currentItem.replace("*", "").strip()) == 0 or len(currentItem.replace("#", "").strip()) == 0):
+                    continue
+                if firstLetter == "#" and questionsSection is False:
+                    comments.append(currentItem)
+                elif firstLetter == "*" or questionsSection:
+                    questionsSection = True
+                    questions.append(currentItem)
+
+        return (comments, questions)

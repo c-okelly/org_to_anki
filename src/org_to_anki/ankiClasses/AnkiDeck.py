@@ -33,6 +33,9 @@ class AnkiDeck:
 
     def addParameter(self, key, value): # (str, str)
         self._parameters[key] = value
+    
+    def getParameters(self):
+        return dict(self._parameters)
 
     def getParameter(self, key):
         return self._parameters.get(key, None)

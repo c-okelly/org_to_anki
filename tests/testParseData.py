@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../org_to_anki')
+sys.path.append('../src/org_to_anki')
 
 from org_to_anki.org_parser import parseData 
 from org_to_anki.ankiClasses.AnkiQuestion import AnkiQuestion
@@ -78,7 +78,7 @@ badlyformated line
 """.split("\n")
 
     assert(len(lines) == 8)
-    comments, content = parseData._sortData(lines)
+    comments, content = DeckBuilder()._sortData(lines)
 
     assert(len(comments) == 2)
     assert(len(content) == 4)
@@ -329,8 +329,6 @@ def testOrgFormattingIsParsedWithoutError():
 
 def testSectionAreConvertedIntoDecksIndependnatlyForOrganisedFile():
 
-    # filename = "tests/testData/orgFormatting.org"
-    # actualDeck = parseData.parse(filename)
     data = ['# fileType=organisedFile ', '* Planning', '  # type = notes', '** Time planner', '* L1 Intro', '** What are the 3 main motivations for malware?', '*** money', '*** hacktivism', '*** nation state', '** What is an APT?', '*** Advanced persistent threat']
     actualDeck = parseData._buildDeck(data, "test.org")
 
@@ -356,3 +354,35 @@ def testTopicsDeckHasEachSectionParsedIndependently():
 
     assert(actualDeck.subDecks[1].getQuestions()[1]._comments == ['# type = basic'])
     assert(actualDeck.subDecks[1].getQuestions()[1]._parameters == {'type': 'basic'})
+
+def testParsingClozeQuestions():
+
+    filename = "tests/testData/cloze.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(len(actualDeck.getQuestions()) == 4)
+
+    assert(actualDeck.getQuestions()[0].getQuestions() == ["When was Dublin founded {{c1::1204}}"])
+    assert(actualDeck.getQuestions()[0].getAnswers() == ["Some extra info"])
+    assert(actualDeck.getQuestions()[0].getParameter("type") == "Cloze")
+
+    # Check can form Cloze card without answer
+    assert(actualDeck.getQuestions()[1].getQuestions() == ["When was Dublin founded {{c1::1204}}"])
+    assert(actualDeck.getQuestions()[1].getAnswers() == [])
+
+    # Check that 4th questions is not affect by previous cloze types
+    assert(actualDeck.getQuestions()[3].getQuestions() == ["Normal Question"])
+
+def testSectionLevelClozeCardsAreIgnored():
+
+
+    data = ['# cardType=Cloze', '#type=Cloze','* Question 1', '** Answer 1']
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    assert(actualDeck.getQuestions()[0].getParameter("cardType") == None)
+    assert(actualDeck.getQuestions()[0].getParameter("type") == None)
+
+def testClozeQuestionCreatedCorrectly():
+
+    # TODO
+    pass
