@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='org_to_anki',
-      version='0.2.3',
+      version='1.3.1',
       description='Org to Anki notes parser',
       author='Conor OKelly',
       author_email='okellyconor@gmail.com',
