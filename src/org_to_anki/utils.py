@@ -1,5 +1,6 @@
 import os
 from . import config
+from .ankiConnectWrapper.AnkiPluginConnector import AnkiPluginConnector
 
 
 def createQuickNotesFile(directory=None):
@@ -8,3 +9,7 @@ def createQuickNotesFile(directory=None):
 
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+def getAnkiPluginConnector():
+
+    return AnkiPluginConnector()
