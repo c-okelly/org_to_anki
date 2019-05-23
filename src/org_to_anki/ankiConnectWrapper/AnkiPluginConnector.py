@@ -98,3 +98,28 @@ class AnkiPluginConnector:
             allNotes.append(self.AnkiNoteBuilder.buildNote(i))
         
         return allNotes
+
+    ### These methods are still in beta and are subject to change ###
+
+    # Get deck Notes
+    def getDeckNotes(self, deckName):
+        # TODO => revisit return type
+        self.AnkiBridge.getDeckNotes(deckName)
+
+    # Add new notes
+    def addNote(self, note):
+
+        # TODO need to verify this note is logically correct
+        builtNote = self.buildIndividualAnkiNotes(note)
+        self.AnkiBridge.addNote(builtNote)
+
+    # Delete notes
+    def deleteNotes(self, noteIds):
+        # TODO ensure that noteID is an array
+        self.AnkiBridge.deleteNotes(noteIds)
+
+    # Update Note fields
+    def updateNoteFields(self, note):
+
+        # TODO ensure note is logically correct
+        self.AnkiBridge.updateNoteFields(note)
