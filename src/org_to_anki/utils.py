@@ -1,6 +1,7 @@
 import os
 from . import config
 from .ankiConnectWrapper.AnkiPluginConnector import AnkiPluginConnector
+from .ankiConnectWrapper.AnkiNoteBuilder import AnkiNoteBuilder
 
 
 def createQuickNotesFile(directory=None):
@@ -13,3 +14,7 @@ def createQuickNotesFile(directory=None):
 def getAnkiPluginConnector():
 
     return AnkiPluginConnector()
+
+def getAnkiNoteBuilder():
+
+    return AnkiNoteBuilder()
