@@ -106,12 +106,17 @@ class AnkiPluginConnector:
         # TODO => revisit return type
         self.AnkiBridge.getDeckNotes(deckName)
 
-    # Add new notes
+    # Add new note
     def addNote(self, note):
 
         # TODO need to verify this note is logically correct
-        builtNote = self.buildIndividualAnkiNotes(note)
-        self.AnkiBridge.addNote(builtNote)
+        # builtNote = self.buildIndividualAnkiNotes(note)
+        if (isinstance(note, list) == False):
+            note = [note]
+
+        builtNotes = self.buildIndividualAnkiNotes([note])
+        for n in builtNotes:
+            self.AnkiBridge.addNote(n)
 
     # Delete notes
     def deleteNotes(self, noteIds):
