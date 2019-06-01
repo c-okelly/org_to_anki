@@ -20,10 +20,10 @@ except:
 
 class AnkiPluginConnector:
 
-    def __init__(self):
+    def __init__(self, defaultDeck=config.defaultDeck):
         self.AnkiBridge = AnkiBridge()
-        self.defaultDeck = config.defaultDeck
-        self.AnkiNoteBuilder = AnkiNoteBuilder()
+        self.defaultDeck = defaultDeck
+        self.AnkiNoteBuilder = AnkiNoteBuilder(self.defaultDeck)
 
     def uploadNewDeck(self, deck): # AnkiDeck
 
