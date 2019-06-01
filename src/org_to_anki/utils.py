@@ -11,9 +11,12 @@ def createQuickNotesFile(directory=None):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def getAnkiPluginConnector():
+def getAnkiPluginConnector(defaultDeck=None):
 
-    return AnkiPluginConnector()
+    if defaultDeck == None:
+        return AnkiPluginConnector()
+    else: 
+        return AnkiPluginConnector(defaultDeck)
 
 def getAnkiNoteBuilder():
 
