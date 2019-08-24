@@ -2,11 +2,12 @@
 
 [![Build Status](https://travis-ci.org/c-okelly/org_to_anki.svg?branch=master)](https://travis-ci.org/c-okelly/org_to_anki) [![codecov](https://codecov.io/gh/c-okelly/org_to_anki/branch/master/graph/badge.svg)](https://codecov.io/gh/c-okelly/org_to_anki)
 
-Python module to convert org or txt files into Anki question decks.
+Python module to convert org or txt files into Anki question decks. Also offered as an Add-on for Anki [Lists to Anki](https://ankiweb.net/shared/info/1029306148)
 
 Provides two command line scripts. First is to upload an org or txt files to Anki. The second allow quick notetaking and storage.
  
 Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for Anki that provides a HTTP api for Anki.
+
 
 ## Contents
 
