@@ -5,12 +5,13 @@
     * The name of the deck will be the name of the file
 
 0. [Basic syntax](#basic-syntax) 
-1. [File types for organisation](#file-types-for-organisation) 
-2. [Adding images](#adding-images) 
-3. [HTML code and LaTeX](#html-code-and-latex)
-4. [Supported parameters](#supported-parameters) 
-5. [Supported Note Models](#supported-note-models)
-6. [Code Highlighting](#code-highlighting)
+1. [Card tags](#note-tags)
+2. [File types for organisation](#file-types-for-organisation) 
+3. [Adding images](#adding-images) 
+4. [HTML code and LaTeX](#html-code-and-latex)
+5. [Supported parameters](#supported-parameters) 
+6. [Supported Note Models](#supported-note-models)
+7. [Code Highlighting](#code-highlighting)
 
 ## Basic syntax
 
@@ -40,6 +41,21 @@ Empty lines are ignored
 * Question
 ** Answer
 ```
+
+## Note tags
+
+Tags can be added via the tags key work in paramters. Each comma seperated item after the = is considered a seperated tag.
+Example syntax:
+`tags=1,2,3` => Tags card with `1`, `2` and `3` 
+
+
+Adding the tags `1`, `2` and `3` to a single card:
+```org
+* Question
+# tags=1,2,3
+** Answer
+```
+
 
 ### More on parameters
 

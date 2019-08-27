@@ -66,7 +66,7 @@ class AnkiQuestion:
         # Parameters is a tag
         if key == "tag" or key == "tags":
             for tag in value.split(","):
-                self.addTag(tag)
+                self.addTag(tag.strip())
 
 
     def getParameter(self, key, default=None):

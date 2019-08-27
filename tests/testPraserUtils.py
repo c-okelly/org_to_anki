@@ -39,5 +39,9 @@ def testCommaSeperatedDataForTags():
     data = ParserUtils.convertLineToParameters("# tags=a, b, c")
     assert(data == {'tags': 'a, b, c'})
 
+    # Whitespace test
+    data = ParserUtils.convertLineToParameters("# tags=a something, b, c")
+    assert(data == {'tags': 'a something, b, c'})
+
     data = ParserUtils.convertLineToParameters("# tag=a, tag=b, tag=c")
     assert(data == {'tag': 'a,b,c'})
