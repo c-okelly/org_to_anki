@@ -1,4 +1,5 @@
 from ..ankiClasses.AnkiDeck import AnkiDeck
+from .ParserUtils import getImageFromUrl
 
 import os
 
@@ -12,9 +13,15 @@ class DeckBuilderUtils:
             # print(answerLine)
             # print(filePath)
 
-            # TODO get image from url
-            if "http://" in answerLine or "www." in answerLine:
-                raise Exception("Line could not be parsed: " + answerLine)
+            if "http" in answerLine or "www." in answerLine:
+                if "[image=" in answerLine:
+                    print("Trying to get image using: " + answerLine)
+
+                    # TODO names should make some sense
+                    url = answerLine[7:-1]
+                    imageData = getImageFromUrl(url)
+                    currentDeck.addImage(url, imageData)
+                    answerLine = '<img src="' + url + '" />'
 
             # Get image from 
             elif answerLine.count("[") == 1 and answerLine.count("]") == 1:
@@ -23,11 +30,7 @@ class DeckBuilderUtils:
                 baseDirectory = os.path.dirname(filePath) 
                 imagePath = os.path.join(baseDirectory, relativeImagePath)
 
-                # if len(relativeImagePath) > 0 and os.path.exists(imagePath) and os.path.isfile(imagePath):
                 if len(relativeImagePath) > 0 and os.path.exists(imagePath) and os.path.isfile(imagePath):
-
-                    # TODO add image either by url or file 
-                    # TODO path validation for urls
                     with open(imagePath, "rb") as file:
                         data = file.read()
                         currentDeck.addImage(fileName, data)
@@ -40,10 +43,6 @@ class DeckBuilderUtils:
         
         return answerLine
     
-    def extractImage(self, line):
-
-        return
-
     def removeAsterisk(self, line): # (str)
         if line.strip()[0] == "*":
             line = line.strip().split(" ")[1:]

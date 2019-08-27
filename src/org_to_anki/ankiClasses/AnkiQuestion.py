@@ -2,14 +2,7 @@ from .AnkiQuestionMedia import AnkiQuestionMedia
 from .NamedNoteField import NamedNoteField
 from ..converters.codeHighlighter import highLightCode
 
-# TODO refactor into a utility
-try:
-    from anki.sync import AnkiRequestsClient
-except:
-    pass
-
 class AnkiQuestion:
-
 
     def __init__(self, question = None):
         self.deckName = None
@@ -39,24 +32,7 @@ class AnkiQuestion:
         return self.question
 
     def addImage(self, fileName, fileData): 
-
         self._media.append(AnkiQuestionMedia("image", fileName, fileData))
-        return
-
-        # # TODO test if path is local or remote
-        # if "http" in filePath:
-        #     print("is url")
-        #     contents = None
-        #     client = AnkiRequestsClient()
-        #     client.timeout = URL_TIMEOUT
-        #     resp = client.get(filePath)
-        #     contents = client.streamContent(resp)
-
-        #     self._media.append(AnkiQuestionMedia("image", fileName, contents))
-        # else:
-        #     with open(filePath, "rb") as file:
-        #         print(filePath)
-        #         self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
 
     def hasMedia(self):
         return len(self._media) > 0
