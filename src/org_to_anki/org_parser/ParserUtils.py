@@ -2,6 +2,7 @@
 # Get Anki sync or urllib2
 try:
     from anki.sync import AnkiRequestsClient
+    anki = "set"
 except:
     anki = None
     import requests
@@ -9,7 +10,7 @@ except:
     
 def getImageFromUrl(url):
 
-    if anki != None:
+    if anki == "set":
         client = AnkiRequestsClient()
         client.timeout = URL_TIMEOUT
         resp = client.get(url)
