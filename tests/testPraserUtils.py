@@ -18,3 +18,30 @@ def testConvertLineToParameter():
     assert(ParserUtils.convertLineToParameters("#type = Basic") == {'type' : 'Basic'})
     assert(ParserUtils.convertLineToParameters("# type = Basic") == {'type' : 'Basic'})
     assert(ParserUtils.convertLineToParameters("# type = Basic (and reversed card), sec=1") == {'type' : 'Basic (and reversed card)', 'sec':'1'})
+
+def testMultipleParameters():
+
+    line = "#type0=a, type1=b, type2=c"
+    data = ParserUtils.convertLineToParameters(line)
+
+    assert(data == {'type0': 'a', 'type1': 'b', 'type2': 'c'})
+
+def testEmptyLine():
+
+    line = "# Only a commnet! No data"
+    data = ParserUtils.convertLineToParameters(line)
+
+    assert(data == {})
+
+
+def testCommaSeperatedDataForTags():
+
+    data = ParserUtils.convertLineToParameters("# tags=a, b, c")
+    assert(data == {'tags': 'a, b, c'})
+
+    # Whitespace test
+    data = ParserUtils.convertLineToParameters("# tags=a something, b, c")
+    assert(data == {'tags': 'a something, b, c'})
+
+    data = ParserUtils.convertLineToParameters("# tag=a, tag=b, tag=c")
+    assert(data == {'tag': 'a,b,c'})

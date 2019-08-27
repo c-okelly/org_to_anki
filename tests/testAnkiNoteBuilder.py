@@ -206,3 +206,16 @@ def testBuildingSingleFieldClozeNote():
 
     assert(noteData["fields"]["Text"] == "When was Dublin founded {{c1::1204}}")
     assert(noteData["fields"]["Extra"] == "")
+
+def testBuildNoteWithTags():
+
+    # Build Generic question
+    q = AnkiQuestion("When was Dublin founded {{c1::1204}}")
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    q.addParameter("tags", "a,b,c")
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+    assert(noteData.get("tags") == ['a', 'b', 'c'])

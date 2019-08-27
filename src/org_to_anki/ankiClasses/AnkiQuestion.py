@@ -63,6 +63,12 @@ class AnkiQuestion:
     def addParameter(self, key, value): # (str, str)
         self._parameters[key] = value
 
+        # Parameters is a tag
+        if key == "tag" or key == "tags":
+            for tag in value.split(","):
+                self.addTag(tag.strip())
+
+
     def getParameter(self, key, default=None):
         return self._parameters.get(key, default)
     
