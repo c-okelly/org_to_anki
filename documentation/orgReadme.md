@@ -5,7 +5,7 @@
     * The name of the deck will be the name of the file
 
 0. [Basic syntax](#basic-syntax) 
-1. [Card tags](#note-tags)
+1. [Note tags](#note-tags)
 2. [File types for organisation](#file-types-for-organisation) 
 3. [Adding images](#adding-images) 
 4. [HTML code and LaTeX](#html-code-and-latex)
