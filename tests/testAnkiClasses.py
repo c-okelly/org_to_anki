@@ -148,7 +148,8 @@ def testAddImageForAnkiQuestion():
     deck = AnkiDeck("Test deck")
     question = AnkiQuestion("test question")
     deck.addQuestion(question)
-    question.addImage("image.png", fullImagePath)
+    with open(fullImagePath, 'rb') as data:
+        question.addImage("image.png", data.read())
 
     with open(fullImagePath, 'rb') as data:
         mediaItem = AnkiQuestionMedia("image", "image.png", data.read())

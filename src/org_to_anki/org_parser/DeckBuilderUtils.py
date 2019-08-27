@@ -11,18 +11,27 @@ class DeckBuilderUtils:
         if "[" in answerLine and "]" in answerLine:
             # print(answerLine)
             # print(filePath)
+
+            # TODO get image from url
             if "http://" in answerLine or "www." in answerLine:
                 raise Exception("Line could not be parsed: " + answerLine)
 
-            elif answerLine.count("[") == 1:
+            # Get image from 
+            elif answerLine.count("[") == 1 and answerLine.count("]") == 1:
                 relativeImagePath = answerLine.split("[")[1].split("]")[0]
                 fileName = os.path.basename(relativeImagePath)
                 baseDirectory = os.path.dirname(filePath) 
                 imagePath = os.path.join(baseDirectory, relativeImagePath)
 
+                # if len(relativeImagePath) > 0 and os.path.exists(imagePath) and os.path.isfile(imagePath):
                 if len(relativeImagePath) > 0 and os.path.exists(imagePath) and os.path.isfile(imagePath):
 
-                    currentDeck.addImage(fileName, imagePath)
+                    # TODO add image either by url or file 
+                    # TODO path validation for urls
+                    with open(imagePath, "rb") as file:
+                        data = file.read()
+                        currentDeck.addImage(fileName, data)
+
                     answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
                 else:
                     print("Could not find image on line:", answerLine)
@@ -30,6 +39,10 @@ class DeckBuilderUtils:
                 print("Could not parse image from line: " + answerLine)
         
         return answerLine
+    
+    def extractImage(self, line):
+
+        return
 
     def removeAsterisk(self, line): # (str)
         if line.strip()[0] == "*":
