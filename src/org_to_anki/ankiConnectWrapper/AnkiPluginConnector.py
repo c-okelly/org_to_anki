@@ -2,10 +2,9 @@
 import sys
 # sys.path.insert(0, "org_to_anki/anki-connect/AnkiConnect.py")
 import os
-# TODO => need to embbeded the AnkiConnectCode
-# dirname = os.path.dirname(__file__)
-# ankiConnectPath = os.path.join(dirname, "../anki-connect/AnkiConnect.py")
-# sys.path.append(ankiConnectPath)
+
+# TODO This was missing due to poor testing
+import base64
 
 from .. import config
 from .AnkiBridge import AnkiBridge
@@ -18,6 +17,7 @@ try:
     from aqt.utils import showInfo
 except:
     pass
+
 class AnkiPluginConnector:
 
     def __init__(self, defaultDeck=config.defaultDeck):
