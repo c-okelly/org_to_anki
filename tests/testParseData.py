@@ -382,6 +382,20 @@ def testSectionLevelClozeCardsAreIgnored():
     assert(actualDeck.getQuestions()[0].getParameter("cardType") == None)
     assert(actualDeck.getQuestions()[0].getParameter("type") == None)
 
+def testDeckWithTagsData():
+
+    data = ['# tags=a,b,c', '* Question 1', '** Answer 1']
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    assert(actualDeck.getQuestions()[0].getTags() == ['a', 'b', 'c'])
+
+def testCardsWithTagsData():
+
+    data = ['* Question 1', '# tags=a,b,c', '** Answer 1']
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    assert(actualDeck.getQuestions()[0].getTags() == ['a', 'b', 'c'])
+
 def testClozeQuestionCreatedCorrectly():
 
     # TODO
