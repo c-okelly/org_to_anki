@@ -10,13 +10,14 @@ except:
     
 def getImageFromUrl(url):
 
+    URL_TIMEOUT = 5
     if anki == "set":
         client = AnkiRequestsClient()
         client.timeout = URL_TIMEOUT
         resp = client.get(url)
         content = client.streamContent(resp)
     else:
-        resp = requests.get(url)
+        resp = requests.get(url, timeout=URL_TIMEOUT)
         content = resp.content
 
     return content
