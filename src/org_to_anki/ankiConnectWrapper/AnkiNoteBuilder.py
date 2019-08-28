@@ -67,7 +67,10 @@ class AnkiNoteBuilder:
         if listType == "false" or listType == "none": 
             for i in answers:
                 i = self._formatString(i)
-                answerString += i + "<br>"  # HTML link break
+                if isinstance(i, str):
+                    answerString += i + "<br>"  # HTML link break
+                elif isinstance(i, list):
+                    answerString += self.createAnswerString(ankiParamters, i)
             return answerString
         
         listTag = "ul" # Default option

@@ -219,3 +219,16 @@ def testBuildNoteWithTags():
     a = AnkiNoteBuilder()
     noteData = a.buildNote(deck.getQuestions()[0])
     assert(noteData.get("tags") == ['a', 'b', 'c'])
+
+def testMultiLevelListWith_listEqualToFalseParameter():
+
+    q = AnkiQuestion("Question")
+    q.addParameter("list","false")
+    q.addAnswer("answer 1")
+    q.addAnswer(["sub answer 1"])
+    deck = AnkiDeck("Capitals")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+    assert(noteData.get("fields").get("Back") == "answer 1<br>sub answer 1<br>")
