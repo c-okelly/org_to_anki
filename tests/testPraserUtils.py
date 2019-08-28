@@ -45,3 +45,13 @@ def testCommaSeperatedDataForTags():
 
     data = ParserUtils.convertLineToParameters("# tag=a, tag=b, tag=c")
     assert(data == {'tag': 'a,b,c'})
+
+
+def test_getImageFromUrl_CommandLineMode():
+
+    googleDocsImageUrl = "https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM"
+
+    imageData = ParserUtils.getImageFromUrl(googleDocsImageUrl)
+
+    # Poor way to assert an image
+    assert(len(imageData) == 92858)

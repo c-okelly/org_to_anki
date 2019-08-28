@@ -4,7 +4,6 @@ from ..converters.codeHighlighter import highLightCode
 
 class AnkiQuestion:
 
-
     def __init__(self, question = None):
         self.deckName = None
         self.question = []
@@ -32,10 +31,8 @@ class AnkiQuestion:
     def getQuestions(self):
         return self.question
 
-    def addImage(self, fileName, filePath): 
-        with open(filePath, "rb") as file:
-            print(filePath)
-            self._media.append(AnkiQuestionMedia("image", fileName, file.read()))
+    def addImage(self, fileName, fileData): 
+        self._media.append(AnkiQuestionMedia("image", fileName, fileData))
 
     def hasMedia(self):
         return len(self._media) > 0

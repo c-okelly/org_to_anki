@@ -396,6 +396,14 @@ def testCardsWithTagsData():
 
     assert(actualDeck.getQuestions()[0].getTags() == ['a', 'b', 'c'])
 
+def testCardWithImageUrl_CommandLineMode():
+
+    data = ["* Question", "** Image below", "** [image=https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM]"]
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    assert(len(actualDeck.getQuestions()[0].getMedia()[0].data) == 92858)
+
+
 def testClozeQuestionCreatedCorrectly():
 
     # TODO

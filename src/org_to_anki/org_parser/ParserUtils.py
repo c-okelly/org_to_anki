@@ -1,4 +1,26 @@
 
+# Get Anki sync or urllib2
+try:
+    from anki.sync import AnkiRequestsClient
+    anki = "set"
+except:
+    anki = None
+    import requests
+
+    
+def getImageFromUrl(url):
+
+    if anki == "set":
+        client = AnkiRequestsClient()
+        client.timeout = URL_TIMEOUT
+        resp = client.get(url)
+        content = client.streamContent(resp)
+    else:
+        resp = requests.get(url)
+        content = resp.content
+
+    return content
+
 def convertCommentsToParameters(comments): # ([str])
 
     parameters = {}
