@@ -18,7 +18,7 @@ class DeckBuilderUtils:
                     print("Trying to get image using: " + answerLine)
 
                     # TODO names should make some sense
-                    url = answerLine[7:-1]
+                    url = answerLine.strip()[7:-1]
                     imageData = getImageFromUrl(url)
                     currentDeck.addImage(url, imageData)
                     answerLine = '<img src="' + url + '" />'
