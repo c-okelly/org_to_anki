@@ -251,7 +251,7 @@ class DeckBuilder:
         questionsSection = False
         for i in range(0, len(rawFileData)):
             currentItem = rawFileData[i]
-            if len(currentItem) > 0:
+            if len(currentItem.strip()) > 0:
                 firstLetter = currentItem.strip()[0]
                 # Check if line is empty
                 if (len(currentItem.replace("*", "").strip()) == 0 or len(currentItem.replace("#", "").strip()) == 0):
