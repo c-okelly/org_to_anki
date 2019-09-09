@@ -2,6 +2,7 @@ from ..ankiClasses.AnkiDeck import AnkiDeck
 from .ParserUtils import getImageFromUrl
 
 import os
+import re
 
 class DeckBuilderUtils:
 
@@ -18,10 +19,12 @@ class DeckBuilderUtils:
                     print("Trying to get image using: " + answerLine)
 
                     # TODO names should make some sense
-                    url = answerLine.strip()[7:-1]
-                    imageData = getImageFromUrl(url)
-                    currentDeck.addImage(url, imageData)
-                    answerLine = '<img src="' + url + '" />'
+                    potentialUrls = re.findall("\[image=[^]]+\]", answerLine.strip())
+                    if len(potentialUrls) != 0:
+                        url = potentialUrls[0].split("=")[1][:-1]
+                        imageData = getImageFromUrl(url)
+                        currentDeck.addImage(url, imageData)
+                        answerLine = '<img src="' + url + '" />'
 
             # Get image from 
             elif answerLine.count("[") == 1 and answerLine.count("]") == 1:

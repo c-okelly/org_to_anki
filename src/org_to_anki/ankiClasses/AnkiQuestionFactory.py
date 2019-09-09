@@ -71,6 +71,7 @@ class AnkiQuestionFactory:
         for line in self.currentQuestions:
             line = self.utils.removeAsterisk(line)
             line = self.utils.formatLine(line)
+            line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
             newQuestion.addQuestion(line)
 
         # Add answers
