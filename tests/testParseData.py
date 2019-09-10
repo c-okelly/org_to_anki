@@ -408,7 +408,10 @@ def testCardWithImageUrl_CommandLineMode_imageInQuestion_bug():
     data = ["* Question [image=https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM]", "** Answer"]
     actualDeck = parseData._buildDeck(data, "test.org")
 
-    assert(actualDeck.getQuestions()[0].getQuestions()[0] == 'Question <img src="https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM" />')
+    # Assert that the url is not used
+    # By default name is "downloaded_image_" follows by some characters
+    assert('Question <img src="downloaded_image_' in actualDeck.getQuestions()[0].getQuestions()[0])
+    assert("https" not in actualDeck.getQuestions()[0].getQuestions()[0])
     assert(len(actualDeck.getQuestions()[0].getMedia()[0].data) == 92858)
 
 # TODO assert url points to a file and not to the url
@@ -417,7 +420,7 @@ def testUrlIsNotUsedForName():
     data = ["* Question [image=https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM]", "** Answer"]
     actualDeck = parseData._buildDeck(data, "test.org")
 
-    print(actualDeck.getQuestions()[0].getMedia()[0].fileName != "https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM")
+    assert(actualDeck.getQuestions()[0].getMedia()[0].fileName != "https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM")
 
 def testClozeQuestionCreatedCorrectly():
 

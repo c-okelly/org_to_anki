@@ -28,7 +28,7 @@ class DeckBuilderUtils:
                         urlName = "downloaded_image_" + ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
                         currentDeck.addImage(urlName, imageData)
 
-                        imageHtml = '<img src="{}" />'.format(url)
+                        imageHtml = '<img src="{}" />'.format(urlName)
                         formattedAnswerLine = answerLine.split(urlSection)[0] + imageHtml + answerLine.split(urlSection)[1]
 
                         return formattedAnswerLine
