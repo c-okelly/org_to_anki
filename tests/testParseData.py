@@ -408,8 +408,10 @@ def testCardWithImageUrl_CommandLineMode_imageInQuestion_bug():
     data = ["* Question [image=https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM]", "** Answer"]
     actualDeck = parseData._buildDeck(data, "test.org")
 
-    assert(actualDeck.getQuestions()[0].getQuestions()[0] == '<img src="https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM" />')
+    assert(actualDeck.getQuestions()[0].getQuestions()[0] == 'Question <img src="https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM" />')
     assert(len(actualDeck.getQuestions()[0].getMedia()[0].data) == 92858)
+
+# TODO assert url points to a file and not to the url
 
 def testClozeQuestionCreatedCorrectly():
 

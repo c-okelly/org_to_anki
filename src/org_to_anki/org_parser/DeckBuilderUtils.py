@@ -3,6 +3,7 @@ from .ParserUtils import getImageFromUrl
 
 import os
 import re
+import random, string
 
 class DeckBuilderUtils:
 
@@ -21,12 +22,18 @@ class DeckBuilderUtils:
                     # TODO names should make some sense
                     potentialUrls = re.findall("\[image=[^]]+\]", answerLine.strip())
                     if len(potentialUrls) != 0:
-                        url = potentialUrls[0].split("=")[1][:-1]
+                        urlSection = potentialUrls[0]
+                        url = urlSection.split("=")[1][:-1]
                         imageData = getImageFromUrl(url)
-                        currentDeck.addImage(url, imageData)
-                        answerLine = '<img src="' + url + '" />'
+                        urlName = "downloaded_image_" + ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+                        currentDeck.addImage(urlName, imageData)
 
-            # Get image from 
+                        imageHtml = '<img src="{}" />'.format(url)
+                        formattedAnswerLine = answerLine.split(urlSection)[0] + imageHtml + answerLine.split(urlSection)[1]
+
+                        return formattedAnswerLine
+
+            # Get image from local file
             elif answerLine.count("[") == 1 and answerLine.count("]") == 1:
                 relativeImagePath = answerLine.split("[")[1].split("]")[0]
                 fileName = os.path.basename(relativeImagePath)
@@ -39,6 +46,9 @@ class DeckBuilderUtils:
                         currentDeck.addImage(fileName, data)
 
                     answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
+
+                    return answerLine
+
                 else:
                     print("Could not find image on line:", answerLine)
             else:
