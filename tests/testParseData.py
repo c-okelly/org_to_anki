@@ -409,9 +409,8 @@ def testCardWithImageUrl_CommandLineMode_imageInQuestion_bug():
     actualDeck = parseData._buildDeck(data, "test.org")
 
     # Assert that the url is not used
-    # By default name is "downloaded_image_" follows by some characters
-    assert('Question <img src="downloaded_image_' in actualDeck.getQuestions()[0].getQuestions()[0])
-    assert("https" not in actualDeck.getQuestions()[0].getQuestions()[0])
+    # hash of url is used instead
+    assert(actualDeck.getQuestions()[0].getQuestions()[0] == 'Question <img src="downloaded_image_8c9773be01c71c9b07bcad50cd83dd1b" />')
     assert(len(actualDeck.getQuestions()[0].getMedia()[0].data) == 92858)
 
 # TODO assert url points to a file and not to the url

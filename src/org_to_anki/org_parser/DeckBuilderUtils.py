@@ -3,7 +3,7 @@ from .ParserUtils import getImageFromUrl
 
 import os
 import re
-import random, string
+import hashlib
 
 class DeckBuilderUtils:
 
@@ -25,7 +25,8 @@ class DeckBuilderUtils:
                         urlSection = potentialUrls[0]
                         url = urlSection.split("=")[1][:-1]
                         imageData = getImageFromUrl(url)
-                        urlName = "downloaded_image_" + ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+                        print(hashlib.md5(url.encode()).hexdigest())
+                        urlName = "downloaded_image_" + hashlib.md5(url.encode()).hexdigest()
                         currentDeck.addImage(urlName, imageData)
 
                         imageHtml = '<img src="{}" />'.format(urlName)
