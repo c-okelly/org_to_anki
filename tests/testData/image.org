@@ -3,3 +3,5 @@
 * What it the UML diagram for the visitor pattern?
 ** The diagram is dispalyed below
 ** [imageFolder/image.png]
+* Image question bug  [image=test.image]
+** Answer

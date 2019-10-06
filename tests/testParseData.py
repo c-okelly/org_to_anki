@@ -403,6 +403,23 @@ def testCardWithImageUrl_CommandLineMode():
 
     assert(len(actualDeck.getQuestions()[0].getMedia()[0].data) == 92858)
 
+def testCardWithImageUrl_CommandLineMode_imageInQuestion_bug():
+
+    data = ["* Question [image=https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM]", "** Answer"]
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    # Assert that the url is not used
+    # hash of url is used instead
+    assert(actualDeck.getQuestions()[0].getQuestions()[0] == 'Question <img src="downloaded_image_8c9773be01c71c9b07bcad50cd83dd1b" />')
+    assert(len(actualDeck.getQuestions()[0].getMedia()[0].data) == 92858)
+
+# TODO assert url points to a file and not to the url
+def testUrlIsNotUsedForName():
+
+    data = ["* Question [image=https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM]", "** Answer"]
+    actualDeck = parseData._buildDeck(data, "test.org")
+
+    assert(actualDeck.getQuestions()[0].getMedia()[0].fileName != "https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM")
 
 def testClozeQuestionCreatedCorrectly():
 
