@@ -16,7 +16,7 @@ def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 def buildNamedDeck(orgList, deckName):
 
     deckBuilder = DeckBuilder()
-    deck = deckBuilder.buildDeck(orgList, deckName, None)
+    deck = deckBuilder.buildDeck(orgList, deckName, "onlyData")
     return deck
 
     # deckBuilder = DeckBuilder()
