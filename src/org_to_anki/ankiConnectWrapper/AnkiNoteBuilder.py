@@ -2,8 +2,8 @@ from .. import config
 
 class AnkiNoteBuilder:
 
-    def __init__(self):
-        self.defaultDeck = config.defaultDeck
+    def __init__(self, defaultDeck=config.defaultDeck):
+        self.defaultDeck = defaultDeck
 
     def buildNote(self, ankiQuestion):
 

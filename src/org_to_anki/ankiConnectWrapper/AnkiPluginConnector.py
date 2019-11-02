@@ -20,10 +20,10 @@ except:
 
 class AnkiPluginConnector:
 
-    def __init__(self):
+    def __init__(self, defaultDeck=config.defaultDeck):
         self.AnkiBridge = AnkiBridge()
-        self.defaultDeck = config.defaultDeck
-        self.AnkiNoteBuilder = AnkiNoteBuilder()
+        self.defaultDeck = defaultDeck
+        self.AnkiNoteBuilder = AnkiNoteBuilder(self.defaultDeck)
 
     def uploadNewDeck(self, deck): # AnkiDeck
 
@@ -98,3 +98,37 @@ class AnkiPluginConnector:
             allNotes.append(self.AnkiNoteBuilder.buildNote(i))
         
         return allNotes
+
+    ### These methods are still in beta and are subject to change ###
+
+    # Get deck Notes
+    def getDeckNotes(self, deckName):
+        # TODO => revisit return type
+        return self.AnkiBridge.getDeckNotes(deckName)
+
+    # Add new notes
+    def addNote(self, note):
+        # TODO need to verify this note is logically correct
+        if isinstance(note, list) == False:
+            note = [note]
+
+        builtNotes = self.buildIndividualAnkiNotes(note)
+        for note in builtNotes:
+            self.AnkiBridge.addNote(note)
+
+    # Delete notes
+    def deleteNotes(self, noteIds):
+        # TODO ensure that noteID is an array
+        self.AnkiBridge.deleteNotes(noteIds)
+
+    # Update Note fields
+    def updateNoteFields(self, note):
+
+        # TODO ensure note is logically correct
+        self.AnkiBridge.updateNoteFields(note)
+
+    def getConfig(self):
+        return aqt.mw.addonManager.getConfig(__name__)
+        
+    def writeConfig(self, config):
+        aqt.mw.addonManager.writeConfig(__name__, config)

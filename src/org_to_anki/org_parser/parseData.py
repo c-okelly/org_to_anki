@@ -13,25 +13,29 @@ def parse(filePath): # (filePath: str): -> ([AnkiDeck]):
 
 # TODO test properly
 
-# def buildNamedDeck(orgList, deckName):
+def buildNamedDeck(orgList, deckName):
 
-#     deckBuilder = DeckBuilder()
-#     filePath = ""
+    deckBuilder = DeckBuilder()
+    deck = deckBuilder.buildDeck(orgList, deckName, "onlyData")
+    return deck
 
-#     comments, content = _sortData(orgList)
+    # deckBuilder = DeckBuilder()
+    # filePath = ""
 
-#     globalParameters = ParserUtils.convertCommentsToParameters(comments)
-#     fileType = globalParameters.get("fileType", "basic")
+    # comments, content = _sortData(orgList)
 
-#     deck = deckBuilder.buildDeck(content, deckName, filePath, fileType)
+    # globalParameters = ParserUtils.convertCommentsToParameters(comments)
+    # fileType = globalParameters.get("fileType", "basic")
 
-#     # TODO refactor this section into DeckBuilder
-#     for key in globalParameters:
-#         deck.addParameter(key, globalParameters[key])
-#     for comment in comments:
-#         deck.addComment(comment)
+    # deck = deckBuilder.buildDeck(content, deckName, filePath, fileType)
+
+    # # TODO refactor this section into DeckBuilder
+    # for key in globalParameters:
+    #     deck.addParameter(key, globalParameters[key])
+    # for comment in comments:
+    #     deck.addComment(comment)
     
-#     return deck
+    # return deck
 
 def _buildDeck(data, filePath):
 
