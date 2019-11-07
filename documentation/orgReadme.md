@@ -275,6 +275,13 @@ Allow reference to objects via an interface
 ** [images_folder/composite pattern.png]
 ```
 
+* Image style can also be specified with the following
+
+```org
+* Size test
+** [imageFolder/image.png] # width=100px, height=100px
+```
+
 ## Supported parameters
 
 * Each line must start with a hashtag

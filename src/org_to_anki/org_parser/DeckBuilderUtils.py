@@ -1,5 +1,6 @@
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .ParserUtils import getImageFromUrl
+from .ParserUtils import convertLineToParameters
 
 import os
 import re
@@ -12,8 +13,10 @@ class DeckBuilderUtils:
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
-            # print(answerLine)
-            # print(filePath)
+            # Image metadata
+            potentialLineParamtmeters = {}
+            if len(answerLine.split("#")) > 1:
+                potentialLineParamtmeters = convertLineToParameters(answerLine.split("#")[1].strip())
 
             if "http" in answerLine or "www." in answerLine:
                 if "[image=" in answerLine:
@@ -29,7 +32,7 @@ class DeckBuilderUtils:
                         urlName = "downloaded_image_" + hashlib.md5(url.encode()).hexdigest()
                         currentDeck.addImage(urlName, imageData)
 
-                        imageHtml = '<img src="{}" />'.format(urlName)
+                        imageHtml = self.buildImageLine(urlName, potentialLineParamtmeters)
                         formattedAnswerLine = answerLine.split(urlSection)[0] + imageHtml + answerLine.split(urlSection)[1]
 
                         return formattedAnswerLine
@@ -46,7 +49,7 @@ class DeckBuilderUtils:
                         data = file.read()
                         currentDeck.addImage(fileName, data)
 
-                    answerLine = '<img src="' + os.path.basename(imagePath) + '" />'
+                    answerLine = self.buildImageLine(os.path.basename(imagePath), potentialLineParamtmeters)
 
                     return answerLine
 
@@ -57,6 +60,17 @@ class DeckBuilderUtils:
         
         return answerLine
     
+    def buildImageLine(self, imagePath, paramters={}):
+
+        # Check if any specific line paramters
+        if len(paramters) > 0:
+            styles = ""
+            for key in paramters.keys():
+                styles += "{}:{};".format(key, paramters.get(key))
+            return '<img src="{}" style="{}" />'.format(imagePath, styles)
+        else:
+            return '<img src="{}" />'.format(imagePath)
+
     def removeAsterisk(self, line): # (str)
         if line.strip()[0] == "*":
             line = line.strip().split(" ")[1:]
