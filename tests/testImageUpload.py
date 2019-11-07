@@ -35,3 +35,10 @@ def testImageCorrectlyUploaded():
     with open(fullImagePath, 'rb') as data:
         encodedImage = base64.b64encode(data.read()).decode("utf-8")
     assert(preparedMedia[0].get("data") == encodedImage)
+
+def testImageWithSize():
+
+    filename = "tests/testData/image.org"
+    actualDeck = parseData.parse(os.path.abspath(filename))
+
+    assert(actualDeck.getQuestions()[2].getAnswers()[0] == '<img src="image.png" style="width:100px;height:100px;" />')

@@ -5,3 +5,5 @@
 ** [imageFolder/image.png]
 * Image question bug  [image=test.image]
 ** Answer
+* Size test
+** [imageFolder/image.png] # width=100px, height=100px
