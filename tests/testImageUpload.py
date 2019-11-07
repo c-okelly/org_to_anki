@@ -41,4 +41,6 @@ def testImageWithSize():
     filename = "tests/testData/image.org"
     actualDeck = parseData.parse(os.path.abspath(filename))
 
-    assert(actualDeck.getQuestions()[2].getAnswers()[0] == '<img src="image.png" style="width:100px;height:100px;" />')
+    assert('<img src="image.png" style="' in actualDeck.getQuestions()[2].getAnswers()[0])
+    assert('width:100px;' in actualDeck.getQuestions()[2].getAnswers()[0])
+    assert('height:100px;' in actualDeck.getQuestions()[2].getAnswers()[0])
