@@ -19,41 +19,12 @@ def buildNamedDeck(orgList, deckName):
     deck = deckBuilder.buildDeck(orgList, deckName, "onlyData")
     return deck
 
-    # deckBuilder = DeckBuilder()
-    # filePath = ""
-
-    # comments, content = _sortData(orgList)
-
-    # globalParameters = ParserUtils.convertCommentsToParameters(comments)
-    # fileType = globalParameters.get("fileType", "basic")
-
-    # deck = deckBuilder.buildDeck(content, deckName, filePath, fileType)
-
-    # # TODO refactor this section into DeckBuilder
-    # for key in globalParameters:
-    #     deck.addParameter(key, globalParameters[key])
-    # for comment in comments:
-    #     deck.addComment(comment)
-    
-    # return deck
-
 def _buildDeck(data, filePath):
 
     deckBuilder = DeckBuilder()
     fileName = filePath.split("/")[-1].split(".")[0]
 
-    # comments, content = _sortData(data)
-
-    # globalParameters = ParserUtils.convertCommentsToParameters(comments)
-    # fileType = globalParameters.get("fileType", "basic")
-
     deck = deckBuilder.buildDeck(data, fileName, filePath)
-
-    # # TODO refactor this section into DeckBuilder
-    # for key in globalParameters:
-    #     deck.addParameter(key, globalParameters[key])
-    # for comment in comments:
-    #     deck.addComment(comment)
     
     return deck
 
@@ -63,7 +34,6 @@ def _loadFile(filePath):
     fileExtension = filePath.split(".")[-1] # Unhandled index error here
     if (fileExtension == "org" or fileExtension == "txt"):
         data = _formatFile(filePath)
-    # 
     elif ((fileExtension == "html") or (fileExtension == "htm")):
         formatedData = convertBulletPointsDocument(filePath)
         data = formatedData.split("\n")
