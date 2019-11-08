@@ -44,3 +44,11 @@ def testImageWithSize():
     assert('<img src="image.png" style="' in actualDeck.getQuestions()[2].getAnswers()[0])
     assert('width:100px;' in actualDeck.getQuestions()[2].getAnswers()[0])
     assert('height:100px;' in actualDeck.getQuestions()[2].getAnswers()[0])
+
+def testImageWithSize_url():
+
+    filename = "tests/testData/image_url.org"
+    actualDeck = parseData.parse(os.path.abspath(filename))
+
+    # Test that comments are removed from the line
+    assert("#" not in actualDeck.getQuestions()[0].getAnswers()[0])
