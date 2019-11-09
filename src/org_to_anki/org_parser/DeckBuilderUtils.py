@@ -34,6 +34,9 @@ class DeckBuilderUtils:
 
                         imageHtml = self.buildImageLine(urlName, potentialLineParamtmeters)
                         formattedAnswerLine = answerLine.split(urlSection)[0] + imageHtml + answerLine.split(urlSection)[1]
+                        # Remove comments
+                        if len(potentialLineParamtmeters) > 0:
+                            formattedAnswerLine = formattedAnswerLine.split("#")[0]
 
                         return formattedAnswerLine
 
