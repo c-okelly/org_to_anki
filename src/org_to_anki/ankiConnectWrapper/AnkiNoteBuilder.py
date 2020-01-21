@@ -4,15 +4,21 @@ class AnkiNoteBuilder:
 
     def __init__(self, defaultDeck=config.defaultDeck):
         self.defaultDeck = defaultDeck
+        self.oldDefaultDeck = defaultDeck
 
     def buildNote(self, ankiQuestion):
+
+        # Check if should use no base deck
+        if ankiQuestion.getParameter("baseDeck", "true").lower() == "false": 
+            self.defaultDeck = None
+        else:
+            self.defaultDeck = self.oldDefaultDeck
 
         # All decks stored under default deck
         if ankiQuestion.deckName == "" or ankiQuestion.deckName is None:
             # TODO log note was built on default deck
             deckName = self.defaultDeck
-        else:
-            deckName = self._getFullDeckPath(ankiQuestion.deckName)
+        deckName = self._getFullDeckPath(ankiQuestion.deckName)
 
         # TODO: Verify model name correctly and use parameters
         # Defaults to basic type by default
@@ -98,7 +104,10 @@ class AnkiNoteBuilder:
         return answerString
 
     def _getFullDeckPath(self, deckName): # (str)
-        return str(self.defaultDeck + "::" + deckName)
+        if self.defaultDeck == None:
+            return str(deckName)
+        else:
+            return str(self.defaultDeck + "::" + deckName)
 
     def _formatString(self, unformattedString):
 

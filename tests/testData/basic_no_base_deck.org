@@ -1,0 +1,5 @@
+# Quick Anki notes
+# baseDeck=False
+
+* Basic no holder question
+** Basic no holder Answer
