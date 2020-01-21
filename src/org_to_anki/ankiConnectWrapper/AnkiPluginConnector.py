@@ -87,7 +87,7 @@ class AnkiPluginConnector:
 
     def _checkForDefaultDeck(self):
         self.currentDecks = self.AnkiBridge.deckNames()
-        if self.defaultDeck not in self.currentDecks:
+        if self.defaultDeck != None and self.defaultDeck not in self.currentDecks:
             self.AnkiBridge.createDeck(self.defaultDeck)
 
     # TODO => refactor

@@ -77,7 +77,7 @@ class AnkiConnector:
 
     def _checkForDefaultDeck(self):
         self.currentDecks = self.connector.getDeckNames()
-        if self.defaultDeck not in self.currentDecks:
+        if self.defaultDeck != None and self.defaultDeck not in self.currentDecks:
             self.connector.createDeck(self.defaultDeck)
 
     def buildAnkiNotes(self, ankiQuestions): # [AnkiQuestion]
