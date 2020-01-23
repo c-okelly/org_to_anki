@@ -54,4 +54,4 @@ def test_getImageFromUrl_CommandLineMode():
     imageData = ParserUtils.getImageFromUrl(googleDocsImageUrl)
 
     # Poor way to assert an image
-    assert(len(imageData) == 92858)
+    assert(len(imageData) == 68035)

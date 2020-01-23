@@ -23,9 +23,16 @@ class AnkiPluginConnector:
     def __init__(self, defaultDeck=config.defaultDeck):
         self.AnkiBridge = AnkiBridge()
         self.defaultDeck = defaultDeck
+        self.oldDefaulDeck = defaultDeck
         self.AnkiNoteBuilder = AnkiNoteBuilder(self.defaultDeck)
 
     def uploadNewDeck(self, deck): # AnkiDeck
+
+        # Check if should use base deck
+        if deck.getParameter("baseDeck", "true").lower() == "false": 
+            self.defaultDeck = None
+        else:
+            self.defaultDeck = self.oldDefaulDeck
 
         ### Upload deck to Anki in embedded mode ###
         self._checkForDefaultDeck()
@@ -73,11 +80,14 @@ class AnkiPluginConnector:
             self.AnkiBridge.createDeck(deck)
 
     def _getFullDeckPath(self, deckName): # (str)
-        return str(self.defaultDeck + "::" + deckName)
+        if self.defaultDeck == None:
+            return str(deckName)
+        else:
+            return str(self.defaultDeck + "::" + deckName)
 
     def _checkForDefaultDeck(self):
         self.currentDecks = self.AnkiBridge.deckNames()
-        if self.defaultDeck not in self.currentDecks:
+        if self.defaultDeck != None and self.defaultDeck not in self.currentDecks:
             self.AnkiBridge.createDeck(self.defaultDeck)
 
     # TODO => refactor

@@ -37,8 +37,8 @@ class AnkiDeck:
     def getParameters(self):
         return dict(self._parameters)
 
-    def getParameter(self, key):
-        return self._parameters.get(key, None)
+    def getParameter(self, key, default=None):
+        return self._parameters.get(key, default)
 
     def getQuestions(self, parentName = None, parentParamaters = None, joiner = '::'): # (str, dict, str)
         ankiQuestions = []

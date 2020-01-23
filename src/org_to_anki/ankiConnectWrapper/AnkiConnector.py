@@ -14,6 +14,7 @@ class AnkiConnector:
             defaultDeck=config.defaultDeck):
         self.url = url  # TODO remove
         self.defaultDeck = defaultDeck
+        self.oldDefaulDeck = defaultDeck
         self.currentDecks = []
         self.connector = AnkiConnectorUtils(self.url)
         self.AnkiNoteBuilder = AnkiNoteBuilder()
@@ -25,6 +26,12 @@ class AnkiConnector:
                 "Failed to connect to Anki Connect. \
                 Ensure Anki is open and AnkiConnect is installed")
             return False
+
+        # Check if should use base deck
+        if deck.getParameter("baseDeck", "true").lower() == "false": 
+            self.defaultDeck = None
+        else:
+            self.defaultDeck = self.oldDefaulDeck
 
         self._checkForDefaultDeck()
         self._buildNewDecksAsRequired(deck.getDeckNames())
@@ -63,11 +70,14 @@ class AnkiConnector:
             self.connector.createDeck(deck)
 
     def _getFullDeckPath(self, deckName):
-        return self.defaultDeck + "::" + deckName
+        if self.defaultDeck == None:
+            return deckName
+        else:
+            return self.defaultDeck + "::" + deckName
 
     def _checkForDefaultDeck(self):
         self.currentDecks = self.connector.getDeckNames()
-        if self.defaultDeck not in self.currentDecks:
+        if self.defaultDeck != None and self.defaultDeck not in self.currentDecks:
             self.connector.createDeck(self.defaultDeck)
 
     def buildAnkiNotes(self, ankiQuestions): # [AnkiQuestion]

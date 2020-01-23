@@ -318,6 +318,14 @@ Allow reference to objects via an interface
 
 For more information on support models => [Supported Note Models](#supported-note-models)
 
+### Turning of the base deck
+
+If you would like to remove the base deck and instead have each file upload as a top level deck
+
+```org
+# baseDeck=False
+```
+
 ### HTML list types => ```list```
 
     * Answers on cards are displayed as list

@@ -232,3 +232,21 @@ def testMultiLevelListWith_listEqualToFalseParameter():
     a = AnkiNoteBuilder()
     noteData = a.buildNote(deck.getQuestions()[0])
     assert(noteData.get("fields").get("Back") == "answer 1<br>sub answer 1<br>")
+
+def test_no_base_deck_paramters():
+
+    q = AnkiQuestion("Question")
+    q.addAnswer("answer 1")
+    deck = AnkiDeck("test")
+    deck.addQuestion(q)
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+    assert(noteData["deckName"] != "test")
+
+    # Remove default deck
+    q.addParameter("baseDeck","false")
+
+    a = AnkiNoteBuilder()
+    noteData = a.buildNote(deck.getQuestions()[0])
+    assert(noteData.get("deckName", "test"))
