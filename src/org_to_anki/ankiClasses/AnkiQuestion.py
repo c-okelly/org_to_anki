@@ -34,6 +34,9 @@ class AnkiQuestion:
     def addImage(self, fileName, fileData): 
         self._media.append(AnkiQuestionMedia("image", fileName, fileData))
 
+    def addLazyImage(self, fileName, url, imageFunc): 
+        self._media.append(AnkiQuestionMedia("image", fileName, data=None, imageUrl=url, imageFunction=imageFunc))
+
     def hasMedia(self):
         return len(self._media) > 0
 
