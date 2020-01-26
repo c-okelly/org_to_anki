@@ -3,12 +3,13 @@ import sys
 # sys.path.insert(0, "org_to_anki/anki-connect/AnkiConnect.py")
 import os
 
-# TODO This was missing due to poor testing
 import base64
 
 from .. import config
 from .AnkiBridge import AnkiBridge
 from .AnkiNoteBuilder import AnkiNoteBuilder
+
+from ..noteModels.models import NoteModels
 
 # Anki imports
 try:
@@ -33,6 +34,9 @@ class AnkiPluginConnector:
             self.defaultDeck = None
         else:
             self.defaultDeck = self.oldDefaulDeck
+
+        ### Check for base models
+        self.checkForDefaultModelsInEnglish()
 
         ### Upload deck to Anki in embedded mode ###
         self._checkForDefaultDeck()
@@ -155,3 +159,31 @@ class AnkiPluginConnector:
 
     def stopEditing(self):
         self.AnkiBridge.stopEditing()
+
+    # Check for note models and add them if they do not exists
+
+    def checkForDefaultModelsInEnglish(self):
+        # Be default we expect the following english named models
+        # Basic, Basic (and reversed card) and Cloze
+
+        models = self.AnkiBridge.modelNames()
+        localModels = NoteModels()
+
+        # Create Basic
+        if "Basic" not in models:
+            model = localModels.getBasicModel()
+
+            self.AnkiBridge.createModel(model.get("name"), model.get("inOrderFields"), model.get("cardTemplates"), model.get("css"))
+
+        # Create Basic and reversed
+        if "Basic (and reversed card)" not in models:
+            model = localModels.getRevseredModel()
+
+            self.AnkiBridge.createModel(model.get("name"), model.get("inOrderFields"), model.get("cardTemplates"), model.get("css"))
+
+        # Create Close
+        if "Cloze" not in models:
+            model = localModels.getClozeModel()
+
+            self.AnkiBridge.createModel(model.get("name"), model.get("inOrderFields"), model.get("cardTemplates"), model.get("css"))
+
