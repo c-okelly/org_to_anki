@@ -125,6 +125,7 @@ class AnkiPluginConnector:
 
     # Add new notes
     def addNote(self, note):
+        self.checkForDefaultModelsInEnglish()
         # TODO need to verify this note is logically correct
         if isinstance(note, list) == False:
             note = [note]
