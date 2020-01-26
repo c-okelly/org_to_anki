@@ -29,6 +29,8 @@ URL_TIMEOUT = 10
 
 import base64
 import hashlib
+import os
+import unicodedata
 
 # This class imports anki and is used to interact with the database
 class AnkiBridge:
@@ -250,4 +252,14 @@ class AnkiBridge:
             })
 
         return result
+    
+    def checkForMediaFile(self, filename):
+        filename = os.path.basename(filename)
+        filename = unicodedata.normalize('NFC', filename)
+        filename = self.media().stripIllegal(filename)
 
+        path = os.path.join(self.media().dir(), filename)
+        if os.path.exists(path):
+            return True
+        else:
+            return False

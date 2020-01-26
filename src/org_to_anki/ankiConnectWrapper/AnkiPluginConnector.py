@@ -142,3 +142,7 @@ class AnkiPluginConnector:
         
     def writeConfig(self, config):
         aqt.mw.addonManager.writeConfig(__name__, config)
+    
+    # Check for a file
+    def checkForMediaFile(self, filename):
+        return self.AnkiBridge.checkForMediaFile(filename)
