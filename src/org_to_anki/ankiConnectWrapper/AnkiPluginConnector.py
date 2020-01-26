@@ -148,3 +148,9 @@ class AnkiPluginConnector:
     # Check for a file
     def checkForMediaFile(self, filename):
         return self.AnkiBridge.checkForMediaFile(filename)
+
+    def startEditing(self):
+        self.AnkiBridge.startEditing()
+
+    def stopEditing(self):
+        self.AnkiBridge.stopEditing()
