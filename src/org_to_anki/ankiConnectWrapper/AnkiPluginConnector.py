@@ -64,7 +64,10 @@ class AnkiPluginConnector:
             return formattedMedia
         else:
             for i in ankiMedia:
-                formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
+                if self.AnkiBridge.checkForMediaFile(i.fileName) == False:
+                    if i.lazyLoad == True:
+                        i.lazyLoadImage()
+                    formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
         return formattedMedia
 
     def _buildNewDecksAsRequired(self, deckNames): # ([str])
@@ -142,3 +145,13 @@ class AnkiPluginConnector:
         
     def writeConfig(self, config):
         aqt.mw.addonManager.writeConfig(__name__, config)
+    
+    # Check for a file
+    def checkForMediaFile(self, filename):
+        return self.AnkiBridge.checkForMediaFile(filename)
+
+    def startEditing(self):
+        self.AnkiBridge.startEditing()
+
+    def stopEditing(self):
+        self.AnkiBridge.stopEditing()

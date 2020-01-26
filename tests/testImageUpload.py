@@ -5,6 +5,7 @@ sys.path.append('../org_to_anki')
 from org_to_anki.org_parser import parseData
 from org_to_anki.ankiClasses.AnkiQuestionMedia import AnkiQuestionMedia
 from org_to_anki.ankiConnectWrapper.AnkiConnector import AnkiConnector
+from org_to_anki import config
 
 def testImageTagCorrectProccesed():
 
@@ -52,3 +53,27 @@ def testImageWithSize_url():
 
     # Test that comments are removed from the line
     assert("#" not in actualDeck.getQuestions()[0].getAnswers()[0])
+
+def testImagesAreLazyLoad():
+
+    # Set config
+    config.lazyLoadImages = True
+
+    try:
+        filename = "tests/testData/image_url.org"
+        actualDeck = parseData.parse(os.path.abspath(filename))
+
+        assert(actualDeck.getMedia()[0].lazyLoad == True)
+        assert(actualDeck.getMedia()[0].data == None)
+
+        # Test image can still be loaded
+        actualDeck.getMedia()[0].lazyLoadImage()
+
+        assert(actualDeck.getMedia()[0].lazyLoad == False)
+        assert(actualDeck.getMedia()[0].data != None)
+
+    finally:
+        # Revert config to default
+        config.lazyLoadImages = False
+
+

@@ -1,6 +1,7 @@
 from ..ankiClasses.AnkiDeck import AnkiDeck
 from .ParserUtils import getImageFromUrl
 from .ParserUtils import convertLineToParameters
+from .. import config
 
 import os
 import re
@@ -8,8 +9,12 @@ import hashlib
 
 class DeckBuilderUtils:
 
+    def __init__(self):
+
+        self.lazyLoadImages = config.lazyLoadImages
+
     # Used to check if extra data is containted within the line
-    def parseAnswerLine(self, answerLine, filePath, currentDeck): # (str, str, AnkiDeck)
+    def parseAnswerLine(self, answerLine, filePath, currentQuestion): # (str, str, AnkiQuestion)
 
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
@@ -18,19 +23,26 @@ class DeckBuilderUtils:
             if len(answerLine.split("#")) > 1:
                 potentialLineParamtmeters = convertLineToParameters(answerLine.split("#")[1].strip())
 
+            # Image from urls will be lazy loaded
             if "http" in answerLine or "www." in answerLine:
                 if "[image=" in answerLine:
                     print("Trying to get image using: {}".format(answerLine.encode("utf-8")))
+                    print("lazyLoading is currently: {}".format(config.lazyLoadImages))
 
                     # TODO names should make some sense
                     potentialUrls = re.findall("\[image=[^]]+\]", answerLine.strip())
                     if len(potentialUrls) != 0:
                         urlSection = potentialUrls[0]
                         url = urlSection.split("=")[1][:-1]
-                        imageData = getImageFromUrl(url)
-                        print(hashlib.md5(url.encode()).hexdigest())
+                        # print(hashlib.md5(url.encode()).hexdigest())
                         urlName = "downloaded_image_" + hashlib.md5(url.encode()).hexdigest()
-                        currentDeck.addImage(urlName, imageData)
+
+                        # Lazy load images
+                        if config.lazyLoadImages == True:
+                            currentQuestion.addLazyImage(urlName, url, getImageFromUrl)
+                        else:
+                            imageData = getImageFromUrl(url)
+                            currentQuestion.addImage(urlName, imageData)
 
                         imageHtml = self.buildImageLine(urlName, potentialLineParamtmeters)
                         formattedAnswerLine = answerLine.split(urlSection)[0] + imageHtml + answerLine.split(urlSection)[1]
@@ -50,7 +62,7 @@ class DeckBuilderUtils:
                 if len(relativeImagePath) > 0 and os.path.exists(imagePath) and os.path.isfile(imagePath):
                     with open(imagePath, "rb") as file:
                         data = file.read()
-                        currentDeck.addImage(fileName, data)
+                        currentQuestion.addImage(fileName, data)
 
                     answerLine = self.buildImageLine(os.path.basename(imagePath), potentialLineParamtmeters)
 
