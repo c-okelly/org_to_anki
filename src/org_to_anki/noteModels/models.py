@@ -48,7 +48,7 @@ class NoteModels:
         cloze = r"""
         {
             "name": "Cloze",
-            "inOrderFields": ["Test", "Extra"],
+            "inOrderFields": ["Text", "Extra"],
             "cardTemplates": [
                 {
                     "Front": "{{cloze:Text}}",
