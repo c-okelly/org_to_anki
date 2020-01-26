@@ -64,9 +64,10 @@ class AnkiPluginConnector:
             return formattedMedia
         else:
             for i in ankiMedia:
-                if i.lazyLoad == True:
-                    i.lazyLoadImage()
-                formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
+                if self.AnkiBridge.checkForMediaFile(i.fileName) == False:
+                    if i.lazyLoad == True:
+                        i.lazyLoadImage()
+                    formattedMedia.append({"fileName": i.fileName, "data": base64.b64encode(i.data).decode("utf-8")})
         return formattedMedia
 
     def _buildNewDecksAsRequired(self, deckNames): # ([str])
