@@ -9,13 +9,13 @@ from .. import config
 from .AnkiBridge import AnkiBridge
 from .AnkiNoteBuilder import AnkiNoteBuilder
 
-from ..noteModels.models import NoteModels
 
 # Anki imports
 try:
     import anki
     import aqt
     from aqt.utils import showInfo
+    from ..noteModels.models import NoteModels
 except:
     pass
 
