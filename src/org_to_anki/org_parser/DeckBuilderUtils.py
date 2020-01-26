@@ -20,7 +20,7 @@ class DeckBuilderUtils:
 
             if "http" in answerLine or "www." in answerLine:
                 if "[image=" in answerLine:
-                    print("Trying to get image using: " + answerLine)
+                    print("Trying to get image using: {}".format(answerLine.encode("utf-8")))
 
                     # TODO names should make some sense
                     potentialUrls = re.findall("\[image=[^]]+\]", answerLine.strip())
@@ -57,9 +57,9 @@ class DeckBuilderUtils:
                     return answerLine
 
                 else:
-                    print("Could not find image on line:", answerLine)
+                    print("Could not find image on line: {}".format(answerLine.encode("utf-8")))
             else:
-                print("Could not parse image from line: " + answerLine)
+                print("Could not parse image from line: {}".format(answerLine.encode("utf-8")))
         
         return answerLine
     

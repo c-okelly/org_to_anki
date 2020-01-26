@@ -225,7 +225,7 @@ class DeckBuilder:
                         codeSection.append(codeLine)
                 questionFactory.addCode(language, codeSection) 
             else:
-                print("Current line is not recognised: " + line)
+                print("Current line is not recognised: {}".format(line.encode("utf-8")))
         
         # Add last question
         if questionFactory.isValidQuestion():
