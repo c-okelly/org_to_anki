@@ -46,7 +46,6 @@ def testCommaSeperatedDataForTags():
     data = ParserUtils.convertLineToParameters("# tag=a, tag=b, tag=c")
     assert(data == {'tag': 'a,b,c'})
 
-
 def test_getImageFromUrl_CommandLineMode():
 
     googleDocsImageUrl = "https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM"
@@ -55,3 +54,14 @@ def test_getImageFromUrl_CommandLineMode():
 
     # Poor way to assert an image
     assert(len(imageData) == 68035)
+
+
+def testParseInvalidLine():
+
+    # Malformatted line
+    line = '222222;font-style:italic;"> [broad, fast, wobbly ventricles] </span><span style="color:'
+
+    params = ParserUtils.convertLineToParameters(line)
+    print(params)
+
+    assert(True)
