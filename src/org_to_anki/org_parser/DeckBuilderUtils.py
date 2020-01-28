@@ -19,6 +19,7 @@ class DeckBuilderUtils:
         # Check if line needs to be parsed
         if "[" in answerLine and "]" in answerLine:
             # Image metadata
+            # TODO we are getting Spans in here and are creating nonsense characters
             potentialLineParamtmeters = {}
             if len(answerLine.split("#")) > 1:
                 potentialLineParamtmeters = convertLineToParameters(answerLine.split("#")[1].strip())

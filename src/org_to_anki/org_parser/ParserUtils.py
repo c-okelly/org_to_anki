@@ -47,7 +47,7 @@ def convertLineToParameters(line): # str
     # This is for comma seperated lists
     formattedPairs = []
     for i in pairs:
-        if "=" not in i:
+        if "=" not in i and len(formattedPairs) > 0:
             formattedPairs[-1] += "," + i
         else:
             formattedPairs.append(i)
