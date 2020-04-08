@@ -92,7 +92,10 @@ class AnkiBridge:
         return self.decks().allNames()
 
     def deleteMediaFile(self, filename):
-        self.media().syncDelete(filename)
+        try:
+            self.media().syncDelete(filename)
+        except AttributeError:
+            self.media().trash_files([filename])
 
     ### Helper functions ###
     def startEditing(self):
