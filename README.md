@@ -4,7 +4,7 @@
 
 Python module to convert org or txt files into Anki question decks. Also offered as an Add-on for Anki [Lists to Anki](https://ankiweb.net/shared/info/1029306148)
 
-Provides two command line scripts. First is to upload an org or txt files to Anki. The second allow quick notetaking and storage.
+Provides a command line script to upload an org or txt file to Anki.
  
 Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for Anki that provides a HTTP api for Anki.
 
