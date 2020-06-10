@@ -128,7 +128,7 @@ class AnkiQuestionFactory:
                 newQuestion.addAnswer(line, fieldName)
 
             # Sublist in question
-            elif noAsterisks > noQuestionAsterisk:
+            else: # noAsterisks > noQuestionAsterisk:
 
                 subList = []
                 subList.append(line)
@@ -144,6 +144,4 @@ class AnkiQuestionFactory:
                 formatedSubList = self.utils.generateSublist(subList)
                 newQuestion.addAnswer(formatedSubList, fieldName)
 
-            else:
-                raise Exception("Line incorrectly processed.")
 
