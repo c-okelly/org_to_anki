@@ -250,3 +250,11 @@ def test_no_base_deck_paramters():
     a = AnkiNoteBuilder()
     noteData = a.buildNote(deck.getQuestions()[0])
     assert(noteData.get("deckName", "test"))
+
+def test_sub_sub_list_improper_formatting():
+
+    answers = [["level3"],"level2",["level3",["level4"]]]
+    a = AnkiNoteBuilder()
+    answerString = a.createAnswerString({}, answers)
+
+    assert(answerString == "<ul style='list-style-position: inside;'><ul style='list-style-position: inside;'><li>level3</li></ul><li>level2</li><ul style='list-style-position: inside;'><li>level3</li><ul style='list-style-position: inside;'><li>level4</li></ul></ul></ul>")

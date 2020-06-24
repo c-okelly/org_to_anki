@@ -422,6 +422,24 @@ def testUrlIsNotUsedForName():
 
     assert(actualDeck.getQuestions()[0].getMedia()[0].fileName != "https://lh3.googleusercontent.com/gdEMfGtrSRTvbTiXwysYJ_5XxqieWt0Z9vtFw0jQxOlbjo43_PJYa4kCusZjmkbe_euwGa4KAWEo2xJvEzHkwIpVN3H-XvCxVXCpQNOcH9_tERcVodYf75t18hYlargfKgYtHYvM")
 
+def testMultipleSubListsBug():
+
+    filename = "tests/testData/missingListLevel.org"
+    actualDeck = parseData.parse(filename)
+
+    print(actualDeck.getQuestions()[0].getAnswers())
+    # Assert that a deck is built
+    assert(actualDeck)
+    # TODO generate correctly formated strange list
+    assert(actualDeck.getQuestions()[0].getAnswers() == ['Level 3A Answer', ['level 2B answer'], 'Level 3B Answer'])
+    
+def testMultiSubLists():
+
+    filename = "tests/testData/multiSubList.org"
+    actualDeck = parseData.parse(filename)
+
+    assert(actualDeck.getQuestions()[0].getAnswers() == ['Level 2A Answer', ['Level 3A Answer'], 'level 2B answer', ['Level 3B Answer']])
+
 def testClozeQuestionCreatedCorrectly():
 
     # TODO

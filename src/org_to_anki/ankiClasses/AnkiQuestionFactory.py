@@ -50,7 +50,7 @@ class AnkiQuestionFactory:
             self.codeLanguage = codeLanguage
             self.codeSection = codeSection
         else:
-            raise Exception("Only one code section per a question is supported.")
+            raise Exception("Only one code section per a question is supported. Attempted to add the following setcion: {}".format(codeSection))
 
     ### Utility
     def isValidQuestion(self):
@@ -107,13 +107,6 @@ class AnkiQuestionFactory:
     
     def addAnswerToNewQuestion(self, answers, newQuestion, noQuestionAsterisk):
         
-        # newAnswers = []
-        # for answer in answers:
-        #     newAnswers.append(answer.get("line"))
-            
-        # answers = newAnswers
-
-
         while len(answers) > 0:
             dataLine = answers.pop(0)
             line = dataLine.get("line")
@@ -127,9 +120,7 @@ class AnkiQuestionFactory:
                 line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
                 newQuestion.addAnswer(line, fieldName)
 
-            # Sublist in question
-            elif noAsterisks > noQuestionAsterisk:
-
+            else:
                 subList = []
                 subList.append(line)
 
@@ -143,7 +134,4 @@ class AnkiQuestionFactory:
 
                 formatedSubList = self.utils.generateSublist(subList)
                 newQuestion.addAnswer(formatedSubList, fieldName)
-
-            else:
-                raise Exception("Line incorrectly processed.")
 

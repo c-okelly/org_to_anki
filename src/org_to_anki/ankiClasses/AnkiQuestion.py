@@ -83,7 +83,8 @@ class AnkiQuestion:
     
     def addCode(self, codeLanguage, codeSection):
         if type(codeSection) != list:
-            raise Exception("Only list can be added as code section to Anki Question.")
+            errorMessage = "Failed to add the following section: {}".format(codeSection)
+            raise Exception("Only lists can be added as code section to Anki Question. {}".format(errorMessage))
         self._codeLanguage = codeLanguage
         self._codeSection = codeSection
         self._hasCode = True
