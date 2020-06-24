@@ -50,7 +50,7 @@ class AnkiQuestionFactory:
             self.codeLanguage = codeLanguage
             self.codeSection = codeSection
         else:
-            raise Exception("Only one code section per a question is supported.")
+            raise Exception("Only one code section per a question is supported. Attempted to add the following setcion: {}".format(codeSection))
 
     ### Utility
     def isValidQuestion(self):
