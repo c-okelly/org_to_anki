@@ -427,8 +427,10 @@ def testMultipleSubListsBug():
     filename = "tests/testData/missingListLevel.org"
     actualDeck = parseData.parse(filename)
 
+    print(actualDeck.getQuestions()[0].getAnswers())
     # Assert that a deck is built
-    # TODO Could try and fail smarter
+    assert(actualDeck)
+    # TODO generate correctly formated strange list
     assert(actualDeck.getQuestions()[0].getAnswers() == ['Level 3A Answer', ['level 2B answer'], 'Level 3B Answer'])
     
 def testMultiSubLists():

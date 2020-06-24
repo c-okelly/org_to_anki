@@ -107,13 +107,6 @@ class AnkiQuestionFactory:
     
     def addAnswerToNewQuestion(self, answers, newQuestion, noQuestionAsterisk):
         
-        # newAnswers = []
-        # for answer in answers:
-        #     newAnswers.append(answer.get("line"))
-            
-        # answers = newAnswers
-
-
         while len(answers) > 0:
             dataLine = answers.pop(0)
             line = dataLine.get("line")
@@ -127,9 +120,7 @@ class AnkiQuestionFactory:
                 line = self.utils.parseAnswerLine(line, self.filePath, newQuestion)
                 newQuestion.addAnswer(line, fieldName)
 
-            # Sublist in question
-            else: # noAsterisks > noQuestionAsterisk:
-
+            else:
                 subList = []
                 subList.append(line)
 
@@ -143,5 +134,4 @@ class AnkiQuestionFactory:
 
                 formatedSubList = self.utils.generateSublist(subList)
                 newQuestion.addAnswer(formatedSubList, fieldName)
-
 
