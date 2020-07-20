@@ -1,5 +1,5 @@
 
-# Word or LibreOffice files
+LibreOffice files
 
 1. [File syntax](#File-syntax) 
 2. [Saving files](#Saving-Word-or-LibreOffice-files) 
@@ -7,14 +7,18 @@
 4. [Supported parameters](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#Supported-parameters)
 5. [HTML code and LaTeX](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md#html-code-and-latex)
 
-## Microsoft Word support
+## Word files to LibreOffice migraiton path
 
-Currently Microsoft Word is partially supported. I am experianced a number of bugs from users and working to get back to full support. In the mean time I would advice users to use [LibreOffce](https://www.libreoffice.org/) instead. This is free, open source.
+Users with existing Word files can migarte them to Libre office by doing the following:
+
+1. Install LibreOffice (Free / OpenSource Word equvilant)
+2. Open the file in LibreOffice
+3. Save file as ODT format
 
 
 ## File syntax
 
-Word and LibreOffice files are now support using bulletpoints for the question answers.
+LibreOffice files are now support using bulletpoints for the question answers.
 
 Instead of using * or ** you can use bulletpoint list instead. All other syntax rules apply.
 
@@ -40,15 +44,9 @@ Question with sublists are also currently supported. Example below:
 		* Item D
 
 
-## Saving Word or LibreOffice files 
+## Saving or LibreOffice files 
 
-In order to parse Word or LibreOffice files these must first be saved as HTML / HTM files. Unsaved examples are both located in `exampleLibreOfficeAndWordFiles` folder.
-
-Saving a Word file
-```
-File > Save As
-```
-For "File Format" select "Web Page (.htm)"
+In order to parse LibreOffice files these must first be saved as HTML / HTM files. Unsaved examples are both located in `exampleLibreOfficeAndWordFiles` folder.
 
 Saving a LibreOffice file
 ```
