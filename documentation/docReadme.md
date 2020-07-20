@@ -46,7 +46,7 @@ Question with sublists are also currently supported. Example below:
 
 ## Saving or LibreOffice files 
 
-In order to parse LibreOffice files these must first be saved as HTML / HTM files. Unsaved examples are both located in `exampleLibreOfficeAndWordFiles` folder.
+In order to parse LibreOffice files these must first be saved as HTML / HTM files. Unsaved examples are both located in `exampleLibreOfficeFiles` folder.
 
 Saving a LibreOffice file
 ```
