@@ -14,7 +14,7 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 0. [Supported file types](#supported-file-types) 
 1. [What is an org file](#what-is-an-org-file)
 2. [Using Org or text files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md)
-3. [Using Word or LibreOffice files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/docReadme.md) 
+3. [Using LibreOffice files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/docReadme.md) 
 4. [Installation](#installation)
 5. [Comand line scripts](#command-line-scripts)
 6. [Running tests](#testing)
@@ -22,9 +22,19 @@ Based on [AnkiConnect](https://ankiweb.net/shared/info/2055492159). An addon for
 
 ## Supported file types
 
-This project supports reading from both .org, .txt, .docx (Word) and odt (LibreOffice) files. 
+This project supports reading from both .org, .txt and odt (LibreOffice) files. 
 
-To use Word or LibreOffice files these must first be saved as HTML files. Please read the documentation on this.
+To use LibreOffice files these must first be saved as HTML files. Please read the documentation on this.
+
+Microsoft Word (.docx) files are no longer supported. Migration path is below
+
+### Word files to LibreOffice migraiton path
+
+Users with existing Word files can migarte them to Libre office by doing the following:
+
+1. Install LibreOffice (Free / OpenSource Word equvilant)
+2. Open the file in LibreOffice
+3. Save file as ODT format
 
 ## What is an org file?
 
@@ -62,9 +72,9 @@ Org mode is for keeping notes, maintaining TODO lists, planning projects, and au
 
 [Documentation on Org and Text files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/orgReadme.md)
 
-## LibreOffice and Word
+## LibreOffice
 
-[Documentation on LibreOffice or Word files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/docReadme.md)
+[Documentation on LibreOffice files](https://github.com/c-okelly/org_to_anki/blob/master/documentation/docReadme.md)
 
 
 ## Installation
@@ -129,4 +139,3 @@ python3 setup.py nosetests
 ## Contributing 
 
 All contributions are welcome. Please open a issue first to discuss your ideas!
-4. [Using Word or LibreOffice files](#word-or-libreoffice-files) 
