@@ -261,7 +261,7 @@ class AnkiBridge:
         # TODO should check if deck name is in the correct format
 
         # Make query to Anki
-        queryTemplate = "'deck:{}'"
+        queryTemplate = "deck:\"{}\""
 
         query = queryTemplate.format(deckName)
         # showInfo("{}".format(query))
