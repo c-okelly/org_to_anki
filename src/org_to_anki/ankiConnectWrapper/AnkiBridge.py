@@ -198,11 +198,11 @@ class AnkiBridge:
         mm = collection.models
 
         # Generate new Note
-        m = mm.new(anki.lang._(modelName))
+        m = mm.new(modelName)
 
         # Create fields and add them to Note
         for field in inOrderFields:
-            fm = mm.newField(anki.lang._(field))
+            fm = mm.newField(field)
             mm.addField(m, fm)
 
         # Add shared css to model if exists. Use default otherwise
@@ -212,7 +212,7 @@ class AnkiBridge:
         # Generate new card template(s)
         cardCount = 1
         for card in cardTemplates:
-            t = mm.newTemplate(anki.lang._('Card ' + str(cardCount)))
+            t = mm.newTemplate('Card ' + str(cardCount))
             cardCount += 1
             t['qfmt'] = card['Front']
             t['afmt'] = card['Back']
