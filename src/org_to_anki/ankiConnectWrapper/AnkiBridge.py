@@ -20,6 +20,7 @@ try:
     import anki
     import aqt
     from anki.sync import AnkiRequestsClient
+    from aqt.utils import showInfo
 except:
     anki = {}
     aqt = {}
