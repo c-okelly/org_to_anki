@@ -170,16 +170,16 @@ class AnkiBridge:
 
         duplicateOrEmpty = ankiNote.dupeOrEmpty()
         if duplicateOrEmpty == 1:
-            raise Exception('cannot create note because it is empty')
+            showInfo("Warning. The following note could note be created:\nPossible reasons include strangely configured local note models\n{}".format(note))
         elif duplicateOrEmpty == 2:
           if not allowDuplicate:
-            raise Exception('cannot create note because it is a duplicate')
+            showInfo("Warning. The following note could note be created because it is a duplicate:\n{}".format(note))
           else:
             return ankiNote
         elif duplicateOrEmpty == False:
             return ankiNote
         else:
-            raise Exception('cannot create note for unknown reason')
+            showInfo("Warning. The following note could note be created. Reason unknown:\n{}".format(note))
 
     # Check if models are present 
     def modelNames(self):
