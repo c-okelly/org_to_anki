@@ -43,6 +43,8 @@ class AnkiBridge:
     ### Core methods ###
     def addNote(self, note):
         ankiNote = self.createNote(note)
+        if ankiNote == None:
+            return
 
         audio = note.get('audio')
         if audio is not None and len(audio['fields']) > 0:
