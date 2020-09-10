@@ -176,7 +176,8 @@ class AnkiBridge:
             showInfo("Warning. The following note could note be created:\nPossible reasons include strangely configured local note models\n{}".format(note))
         elif duplicateOrEmpty == 2:
           if not allowDuplicate:
-            showInfo("Warning. The following note could note be created because it is a duplicate:\n{}".format(note))
+              return None 
+            # showInfo("Warning. The following note could note be created because it is a duplicate:\n{}".format(note))
           else:
             return ankiNote
         elif duplicateOrEmpty == False:
