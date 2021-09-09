@@ -34,8 +34,10 @@ class DeckBuilderUtils:
                     potentialUrls = re.findall("\[image=[^]]+\]", answerLine.strip())
                     if len(potentialUrls) != 0:
                         urlSection = potentialUrls[0]
-                        url = urlSection.split("=")[1][:-1]
-                        # print(hashlib.md5(url.encode()).hexdigest())
+                        if ("[image=" in urlSection):
+                            url = urlSection.replace("[image=", "")[:-1]
+                        else:
+                            raise Exception("Unknown media format")
                         urlName = "downloaded_image_" + hashlib.md5(url.encode()).hexdigest()
 
                         # Lazy load images
