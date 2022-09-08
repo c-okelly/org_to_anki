@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 
 import re
 import codecs
-import chardet
 
 
 ## TODO => review these
